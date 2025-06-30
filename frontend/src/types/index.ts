@@ -13,7 +13,6 @@ export interface Jogador {
   email?: string
   telefone?: string
   apelido?: string
-  avatar_url?: string
   bio?: string
   cidade?: string
   data_nascimento?: string

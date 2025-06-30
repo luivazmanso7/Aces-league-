@@ -124,7 +124,6 @@ export default function RankingDialog({ open, onClose, temporada, ranking }: Ran
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
-                          src={item.jogador.avatar_url}
                           alt={item.jogador.nome}
                           sx={{ width: 32, height: 32 }}
                         >

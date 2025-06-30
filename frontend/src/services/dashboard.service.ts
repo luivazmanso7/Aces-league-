@@ -217,25 +217,8 @@ export const dashboardService = {
           return meses.indexOf(mesA.toLowerCase()) - meses.indexOf(mesB.toLowerCase());
         });
     } catch (error) {
-      console.log('❌ Erro ao buscar participações por mês:', error);
-      console.log('🔄 USANDO DADOS REALISTAS DE FALLBACK');
-      // Retornar dados mais realistas baseados na temporada atual
-      const mesAtual = new Date().getMonth();
-      const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-      
-      return Array.from({ length: 6 }, (_, i) => {
-        const mesIndex = (mesAtual - 5 + i + 12) % 12;
-        const mes = meses[mesIndex];
-        // Simular dados realistas: entre 6-12 participantes por torneio, 1-2 torneios por mês
-        const torneios = Math.floor(Math.random() * 2) + 1;
-        const participacoesPorTorneio = Math.floor(Math.random() * 7) + 6; // 6-12 jogadores
-        
-        return {
-          mes,
-          participacoes: torneios * participacoesPorTorneio,
-          torneios
-        };
-      });
+      console.error('❌ Erro ao buscar participações por mês:', error);
+      throw error;
     }
   },
 
@@ -253,17 +236,7 @@ export const dashboardService = {
       ];
     } catch (error) {
       console.error('❌ Erro ao buscar distribuição de jogadores:', error);
-      console.log('🔄 USANDO DADOS REALISTAS DE FALLBACK');
-      // Simular dados realistas baseados no tamanho típico de um clube de poker
-      const totalJogadores = 45; // Clube médio
-      const percentualAtivos = 0.75; // 75% ativos é realista
-      const ativos = Math.floor(totalJogadores * percentualAtivos);
-      const inativos = totalJogadores - ativos;
-
-      return [
-        { name: 'Ativos', value: ativos, color: '#22c55e' },
-        { name: 'Inativos', value: inativos, color: '#ef4444' }
-      ];
+      throw error;
     }
   },
 
@@ -307,31 +280,7 @@ export const dashboardService = {
       return rankingMedio;
     } catch (error) {
       console.error('❌ Erro ao buscar ranking médio por torneio:', error);
-      console.log('🔄 USANDO DADOS REALISTAS DE FALLBACK');
-      // Retornar dados baseados em sistema de pontuação real do poker
-      const nomesTorneios = [
-        'Torneio Mensal Jan',
-        'Championship Fev', 
-        'Weekly Mar #1',
-        'Especial Abr',
-        'Torneio Mai',
-        'Final de Temporada'
-      ];
-      
-      return nomesTorneios.map((nome, index) => {
-        // Pontuação típica: 100 para último lugar, aumentando por posição
-        // Com 8-12 jogadores, média fica entre 400-800 pontos
-        const participantes = Math.floor(Math.random() * 5) + 8; // 8-12 jogadores
-        const bonusPorParticipante = 50;
-        const mediaPontos = 100 + (participantes * bonusPorParticipante) + Math.floor(Math.random() * 200);
-        
-        return {
-          torneio: nome.length > 15 ? nome.substring(0, 15) + '...' : nome,
-          mediaPontos,
-          participantes,
-          data: `${10 + index}/0${index + 1}`
-        };
-      });
+      throw error;
     }
   },
 
@@ -364,63 +313,12 @@ export const dashboardService = {
         throw new Error('Nenhum ranking encontrado');
       }
 
-      // Simular evolução do ranking ao longo dos meses
-      // Na implementação real, seria necessário calcular o ranking progressivo
-      const evolucao: EvolucaoRanking[] = [];
-      
-      // Agrupar torneios por mês
-      const torneiosPorMes = torneiosTemporada.reduce((acc, torneio) => {
-        const data = new Date(torneio.data_hora);
-        const mes = data.toLocaleDateString('pt-BR', { month: 'short' });
-        
-        if (!acc[mes]) {
-          acc[mes] = [];
-        }
-        acc[mes].push(torneio);
-        
-        return acc;
-      }, {} as Record<string, typeof torneiosTemporada>);
-
-      // Simular evolução baseada nos dados disponíveis
-      Object.keys(torneiosPorMes).forEach((mes, index) => {
-        const dataPoint: EvolucaoRanking = { mes };
-        
-        top3Jogadores.forEach((jogador, jogadorIndex) => {
-          const nomeJogador = jogador.jogador.apelido || jogador.jogador.nome;
-          // Simular variação na posição (1-3) com base no progresso da temporada
-          const variacao = Math.floor(Math.random() * 3) + 1;
-          dataPoint[nomeJogador] = Math.min(3, Math.max(1, (jogadorIndex + 1) + (index % 2 === 0 ? 0 : variacao - 1)));
-        });
-        
-        evolucao.push(dataPoint);
-      });
-
-      return evolucao;
+      // Para implementação completa, seria necessário calcular o ranking progressivo
+      // Por enquanto, retornamos erro para não mostrar dados falsos
+      throw new Error('Funcionalidade de evolução do ranking ainda não implementada completamente');
     } catch (error) {
       console.error('❌ Erro ao buscar evolução do ranking:', error);
-      console.log('🔄 USANDO DADOS REALISTAS DE FALLBACK');
-      // Retornar dados baseados em nomes brasileiros típicos e variação realista de ranking
-      const jogadoresTipo = ['João Silva', 'Maria Santos', 'Pedro Costa'];
-      const mesesRecentes = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
-      
-      return mesesRecentes.map((mes, index) => {
-        const dataPoint: EvolucaoRanking = { mes };
-        
-        // Simular variação realista: líderes tendem a manter posições, mas há algumas mudanças
-        jogadoresTipo.forEach((jogador, jogadorIndex) => {
-          let posicao = jogadorIndex + 1; // Posição base
-          
-          // Adicionar variação sutil (±1 posição ocasionalmente)
-          if (index > 0 && Math.random() < 0.3) { // 30% chance de mudança
-            const variacao = Math.random() < 0.5 ? -1 : 1;
-            posicao = Math.max(1, Math.min(3, posicao + variacao));
-          }
-          
-          dataPoint[jogador] = posicao;
-        });
-        
-        return dataPoint;
-      });
+      throw error;
     }
   },
 

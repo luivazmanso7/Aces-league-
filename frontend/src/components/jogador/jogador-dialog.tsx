@@ -12,13 +12,10 @@ import {
   Switch,
   Box,
   Alert,
-  Avatar,
   IconButton,
-  Tooltip,
 } from '@mui/material';
 import {
   Close as CloseIcon,
-  PhotoCamera as PhotoCameraIcon,
 } from '@mui/icons-material';
 
 import type { Jogador, CreateJogadorDto, UpdateJogadorDto } from '@/types/jogador';
@@ -37,7 +34,6 @@ export default function JogadorDialog({ open, onClose, onSuccess, jogador }: Jog
     email: '',
     telefone: '',
     apelido: '',
-    avatar_url: '',
     bio: '',
     cidade: '',
     data_nascimento: '',
@@ -60,7 +56,6 @@ export default function JogadorDialog({ open, onClose, onSuccess, jogador }: Jog
           email: jogador.email || '',
           telefone: jogador.telefone || '',
           apelido: jogador.apelido || '',
-          avatar_url: jogador.avatar_url || '',
           bio: jogador.bio || '',
           cidade: jogador.cidade || '',
           data_nascimento: jogador.data_nascimento ? jogador.data_nascimento.split('T')[0] : '',
@@ -73,7 +68,6 @@ export default function JogadorDialog({ open, onClose, onSuccess, jogador }: Jog
           email: '',
           telefone: '',
           apelido: '',
-          avatar_url: '',
           bio: '',
           cidade: '',
           data_nascimento: '',
@@ -199,33 +193,6 @@ export default function JogadorDialog({ open, onClose, onSuccess, jogador }: Jog
           </Alert>
         )}
 
-        {/* Avatar */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-          <Box sx={{ position: 'relative' }}>
-            <Avatar
-              src={formData.avatar_url}
-              sx={{ width: 80, height: 80, bgcolor: 'primary.main' }}
-            >
-              {formData.nome.charAt(0).toUpperCase()}
-            </Avatar>
-            <Tooltip title="Adicionar foto">
-              <IconButton
-                sx={{
-                  position: 'absolute',
-                  bottom: -8,
-                  right: -8,
-                  bgcolor: 'background.paper',
-                  boxShadow: 1,
-                  '&:hover': { bgcolor: 'background.paper' }
-                }}
-                size="small"
-              >
-                <PhotoCameraIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Box>
-
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
@@ -300,20 +267,6 @@ export default function JogadorDialog({ open, onClose, onSuccess, jogador }: Jog
             InputLabelProps={{ shrink: true }}
             disabled={loading}
           />
-
-          {/* URL do Avatar */}
-          <Box sx={{ gridColumn: '1 / -1' }}>
-            <TextField
-              label="URL do Avatar"
-              fullWidth
-              value={formData.avatar_url}
-              onChange={handleInputChange('avatar_url')}
-              error={!!errors.avatar_url}
-              helperText={errors.avatar_url || 'URL da foto do perfil'}
-              placeholder="https://exemplo.com/foto.jpg"
-              disabled={loading}
-            />
-          </Box>
 
           {/* Bio */}
           <Box sx={{ gridColumn: '1 / -1' }}>

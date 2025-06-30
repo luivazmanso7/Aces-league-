@@ -32,7 +32,18 @@ export class TorneioService {
     }
 
     return this.prisma.torneio.create({
-      data: createTorneioDto,
+      data: {
+        nome: createTorneioDto.nome,
+        data_hora: new Date(createTorneioDto.data_hora),
+        local: createTorneioDto.local,
+        buy_in: createTorneioDto.buy_in,
+        valor_staff: createTorneioDto.valor_staff,
+        observacoes: createTorneioDto.observacoes,
+        ativo: createTorneioDto.ativo ?? true,
+        temporada: {
+          connect: { id: createTorneioDto.id_temporada }
+        }
+      },
       include: {
         temporada: true,
       },
@@ -97,7 +108,15 @@ export class TorneioService {
 
     return this.prisma.torneio.update({
       where: { id },
-      data: updateTorneioDto,
+      data: {
+        ...(updateTorneioDto.nome && { nome: updateTorneioDto.nome }),
+        ...(updateTorneioDto.data_hora && { data_hora: new Date(updateTorneioDto.data_hora) }),
+        ...(updateTorneioDto.local && { local: updateTorneioDto.local }),
+        ...(updateTorneioDto.buy_in !== undefined && { buy_in: updateTorneioDto.buy_in }),
+        ...(updateTorneioDto.valor_staff !== undefined && { valor_staff: updateTorneioDto.valor_staff }),
+        ...(updateTorneioDto.observacoes !== undefined && { observacoes: updateTorneioDto.observacoes }),
+        ...(updateTorneioDto.ativo !== undefined && { ativo: updateTorneioDto.ativo }),
+      },
       include: {
         temporada: true,
       },

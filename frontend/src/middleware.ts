@@ -42,14 +42,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  // Redireciona a raiz para o dashboard se estiver logado, senão para login
-  if (pathname === '/') {
-    if (token && isValidTokenFormat(token)) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    } else {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-  }
+  // Permitir acesso à landing page na raiz
+  // Removido o redirecionamento automático da raiz para permitir a landing page
+  // if (pathname === '/') {
+  //   if (token && isValidTokenFormat(token)) {
+  //     return NextResponse.redirect(new URL('/dashboard', request.url));
+  //   } else {
+  //     return NextResponse.redirect(new URL('/login', request.url));
+  //   }
+  // }
 
   // Adicionar headers de segurança a todas as respostas
   const response = NextResponse.next();

@@ -28,7 +28,6 @@ export interface Ranking {
     id: number;
     nome: string;
     apelido?: string;
-    avatar_url?: string;
   };
 }
 

@@ -5,6 +5,8 @@ export interface Torneio {
   nome: string;
   data_hora: string;
   local: string;
+  buy_in: string | number;
+  valor_staff: string | number;
   observacoes?: string;
   ativo: boolean;
   created_at: string;
@@ -51,6 +53,8 @@ export interface CreateTorneioDto {
   nome: string;
   data_hora: string;
   local: string;
+  buy_in: number;
+  valor_staff: number;
   observacoes?: string;
   ativo?: boolean;
 }
@@ -59,6 +63,8 @@ export interface UpdateTorneioDto {
   nome?: string;
   data_hora?: string;
   local?: string;
+  buy_in?: number;
+  valor_staff?: number;
   observacoes?: string;
   ativo?: boolean;
 }
@@ -84,7 +90,6 @@ export interface ParticipacaoLote {
     id: number;
     nome: string;
     apelido?: string;
-    avatar_url?: string;
   };
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Typography,
   Box,
@@ -11,8 +12,11 @@ import {
   CardContent,
 } from '@mui/material';
 import {
-  Plus,
-  Zap,
+  Users,
+  Trophy,
+  Calendar,
+  FileText,
+  Camera
 } from 'lucide-react';
 import {
   ParticipacoesPorMesChart,
@@ -23,6 +27,12 @@ import {
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  // Funções de navegação
+  const navigateTo = (path: string) => {
+    router.push(path);
+  };
 
   // Simular carregamento inicial
   useEffect(() => {
@@ -238,29 +248,35 @@ export default function DashboardPage() {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' },
             gap: 2,
           }}
         >
+          {/* Novo Torneio */}
           <Button
-            variant="contained"
-            startIcon={<Plus />}
+            variant="outlined"
+            startIcon={<Trophy />}
+            onClick={() => navigateTo('/torneios')}
             sx={{
-              background: 'linear-gradient(135deg, #7c2d12 0%, #f59e0b 100%)',
+              borderColor: 'rgba(245, 158, 11, 0.5)',
+              color: '#f59e0b',
               py: 2,
               textTransform: 'none',
               fontWeight: 600,
               '&:hover': {
-                background: 'linear-gradient(135deg, #8b3a1f 0%, #f6a310 100%)',
+                borderColor: '#f59e0b',
+                background: 'rgba(245, 158, 11, 0.1)',
               },
             }}
           >
             Novo Torneio
           </Button>
 
+          {/* Novo Jogador */}
           <Button
             variant="outlined"
-            startIcon={<Plus />}
+            startIcon={<Users />}
+            onClick={() => navigateTo('/jogadores')}
             sx={{
               borderColor: 'rgba(245, 158, 11, 0.5)',
               color: '#f59e0b',
@@ -276,11 +292,51 @@ export default function DashboardPage() {
             Novo Jogador
           </Button>
 
-
-
+          {/* Nova Temporada */}
           <Button
             variant="outlined"
-            startIcon={<Zap />}
+            startIcon={<Calendar />}
+            onClick={() => navigateTo('/temporadas')}
+            sx={{
+              borderColor: 'rgba(245, 158, 11, 0.5)',
+              color: '#f59e0b',
+              py: 2,
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                borderColor: '#f59e0b',
+                background: 'rgba(245, 158, 11, 0.1)',
+              },
+            }}
+          >
+            Nova Temporada
+          </Button>
+
+          {/* Galeria de Fotos */}
+          <Button
+            variant="outlined"
+            startIcon={<Camera />}
+            onClick={() => navigateTo('/fotos')}
+            sx={{
+              borderColor: 'rgba(245, 158, 11, 0.5)',
+              color: '#f59e0b',
+              py: 2,
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                borderColor: '#f59e0b',
+                background: 'rgba(245, 158, 11, 0.1)',
+              },
+            }}
+          >
+            Galeria
+          </Button>
+
+          {/* Relatórios */}
+          <Button
+            variant="outlined"
+            startIcon={<FileText />}
+            onClick={() => alert('Funcionalidade em desenvolvimento')}
             sx={{
               borderColor: 'rgba(245, 158, 11, 0.5)',
               color: '#f59e0b',

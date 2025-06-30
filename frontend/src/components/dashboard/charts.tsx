@@ -17,11 +17,7 @@ import {
 } from 'recharts';
 import { Box, Typography, CircularProgress, Alert } from '@mui/material';
 import { 
-  dashboardService, 
-  type ParticipacaoMensal, 
-  type DistribuicaoJogadores, 
-  type RankingMedioTorneio, 
-  type EvolucaoRanking 
+  dashboardService
 } from '@/services/dashboard.service';
 
 // Tooltip customizado
@@ -59,8 +55,8 @@ const CustomTooltip = ({ active, payload, label }: {
 };
 
 // Hook para carregamento de dados
-function useChartData<T>(fetchData: () => Promise<T>, fallbackData: T) {
-  const [data, setData] = useState<T>(fallbackData);
+function useChartData<T>(fetchData: () => Promise<T>) {
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
@@ -74,8 +70,7 @@ function useChartData<T>(fetchData: () => Promise<T>, fallbackData: T) {
       } catch (err) {
         console.error('Erro ao carregar dados do gráfico:', err);
         setError('Erro ao carregar dados');
-        // Usar dados de fallback em caso de erro
-        setData(fallbackData);
+        setData(null);
       } finally {
         setLoading(false);
       }
@@ -90,18 +85,8 @@ function useChartData<T>(fetchData: () => Promise<T>, fallbackData: T) {
 
 // Gráfico de Participações por Mês
 export function ParticipacoesPorMesChart() {
-  const fallbackData: ParticipacaoMensal[] = [
-    { mes: 'Jan', participacoes: 45, torneios: 3 },
-    { mes: 'Fev', participacoes: 52, torneios: 4 },
-    { mes: 'Mar', participacoes: 38, torneios: 3 },
-    { mes: 'Abr', participacoes: 61, torneios: 4 },
-    { mes: 'Mai', participacoes: 49, torneios: 3 },
-    { mes: 'Jun', participacoes: 44, torneios: 3 }
-  ];
-
   const { data, loading, error } = useChartData(
-    dashboardService.getParticipacoesPorMes,
-    fallbackData
+    dashboardService.getParticipacoesPorMes
   );
 
   if (loading) {
@@ -112,10 +97,10 @@ export function ParticipacoesPorMesChart() {
     );
   }
 
-  if (error) {
+  if (error || !data || data.length === 0) {
     return (
       <Alert severity="warning" sx={{ bgcolor: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
-        {error} - Exibindo dados de exemplo
+        {error || 'Nenhum dado disponível'}
       </Alert>
     );
   }
@@ -155,14 +140,8 @@ export function ParticipacoesPorMesChart() {
 
 // Gráfico de Distribuição de Jogadores
 export function DistribuicaoJogadoresChart() {
-  const fallbackData: DistribuicaoJogadores[] = [
-    { name: 'Ativos', value: 75, color: '#22c55e' },
-    { name: 'Inativos', value: 25, color: '#ef4444' }
-  ];
-
   const { data, loading, error } = useChartData(
-    dashboardService.getDistribuicaoJogadores,
-    fallbackData
+    dashboardService.getDistribuicaoJogadores
   );
 
   if (loading) {
@@ -173,10 +152,10 @@ export function DistribuicaoJogadoresChart() {
     );
   }
 
-  if (error) {
+  if (error || !data || data.length === 0) {
     return (
       <Alert severity="warning" sx={{ bgcolor: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
-        {error} - Exibindo dados de exemplo
+        {error || 'Nenhum dado disponível'}
       </Alert>
     );
   }
@@ -207,18 +186,8 @@ export function DistribuicaoJogadoresChart() {
 
 // Gráfico de Ranking Médio por Torneio
 export function RankingMedioTorneioChart() {
-  const fallbackData: RankingMedioTorneio[] = [
-    { torneio: 'Torneio Jan', mediaPontos: 850, participantes: 8, data: '15/01' },
-    { torneio: 'Torneio Fev', mediaPontos: 920, participantes: 10, data: '18/02' },
-    { torneio: 'Torneio Mar', mediaPontos: 780, participantes: 7, data: '20/03' },
-    { torneio: 'Torneio Abr', mediaPontos: 1050, participantes: 12, data: '25/04' },
-    { torneio: 'Torneio Mai', mediaPontos: 890, participantes: 9, data: '15/05' },
-    { torneio: 'Torneio Jun', mediaPontos: 970, participantes: 11, data: '10/06' }
-  ];
-
   const { data, loading, error } = useChartData(
-    dashboardService.getRankingMedioTorneio,
-    fallbackData
+    dashboardService.getRankingMedioTorneio
   );
 
   if (loading) {
@@ -229,10 +198,10 @@ export function RankingMedioTorneioChart() {
     );
   }
 
-  if (error) {
+  if (error || !data || data.length === 0) {
     return (
       <Alert severity="warning" sx={{ bgcolor: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
-        {error} - Exibindo dados de exemplo
+        {error || 'Nenhum dado disponível'}
       </Alert>
     );
   }
@@ -305,18 +274,8 @@ export function RankingMedioTorneioChart() {
 
 // Gráfico de Evolução do Ranking
 export function EvolucaoRankingChart() {
-  const fallbackData: EvolucaoRanking[] = [
-    { mes: 'Jan', 'João Silva': 1, 'Maria Santos': 2, 'Pedro Costa': 3 },
-    { mes: 'Fev', 'João Silva': 1, 'Maria Santos': 3, 'Pedro Costa': 2 },
-    { mes: 'Mar', 'João Silva': 2, 'Maria Santos': 1, 'Pedro Costa': 3 },
-    { mes: 'Abr', 'João Silva': 1, 'Maria Santos': 2, 'Pedro Costa': 3 },
-    { mes: 'Mai', 'João Silva': 1, 'Maria Santos': 3, 'Pedro Costa': 2 },
-    { mes: 'Jun', 'João Silva': 2, 'Maria Santos': 1, 'Pedro Costa': 3 }
-  ];
-
   const { data, loading, error } = useChartData(
-    dashboardService.getEvolucaoRanking,
-    fallbackData
+    dashboardService.getEvolucaoRanking
   );
 
   if (loading) {
@@ -327,10 +286,10 @@ export function EvolucaoRankingChart() {
     );
   }
 
-  if (error) {
+  if (error || !data || data.length === 0) {
     return (
       <Alert severity="warning" sx={{ bgcolor: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
-        {error} - Exibindo dados de exemplo
+        {error || 'Nenhum dado disponível'}
       </Alert>
     );
   }

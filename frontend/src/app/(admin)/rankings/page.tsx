@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Container,
   Typography,
@@ -29,7 +29,6 @@ import {
   EmojiEvents as TrophyIcon,
   Star as StarIcon,
   Timeline as TimelineIcon,
-  Refresh as RefreshIcon,
   Download as DownloadIcon,
 } from '@mui/icons-material';
 import { temporadaApi } from '@/services/temporada.service';
@@ -43,11 +42,7 @@ export default function RankingsPage() {
   const [loadingRanking, setLoadingRanking] = useState(false);
   const [error, setError] = useState<string>('');
 
-  useEffect(() => {
-    carregarTemporadas();
-  }, []);
-
-  const carregarTemporadas = async () => {
+  const carregarTemporadas = useCallback(async () => {
     try {
       setLoading(true);
       const data = await temporadaApi.findAll();
@@ -65,7 +60,11 @@ export default function RankingsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    carregarTemporadas();
+  }, [carregarTemporadas]);
 
   const carregarRanking = async (temporadaId: number) => {
     try {
@@ -302,7 +301,7 @@ export default function RankingsPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {ranking.map((item, index) => (
+                {ranking.map((item) => (
                   <TableRow
                     key={item.id_jogador}
                     sx={{
@@ -333,7 +332,7 @@ export default function RankingsPage() {
                           </Typography>
                           {item.jogador.apelido && (
                             <Typography variant="body2" color="text.secondary">
-                              "{item.jogador.apelido}"
+                              &quot;{item.jogador.apelido}&quot;
                             </Typography>
                           )}
                         </div>

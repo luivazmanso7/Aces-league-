@@ -49,6 +49,8 @@ export default function TorneioDialog({
     nome: '',
     data_hora: new Date(),
     local: '',
+    buy_in: 0,
+    valor_staff: 0,
     observacoes: '',
     ativo: true,
   });
@@ -83,6 +85,8 @@ export default function TorneioDialog({
         nome: torneio.nome,
         data_hora: new Date(torneio.data_hora),
         local: torneio.local,
+        buy_in: Number(torneio.buy_in) || 0,
+        valor_staff: Number(torneio.valor_staff) || 0,
         observacoes: torneio.observacoes || '',
         ativo: torneio.ativo,
       });
@@ -93,6 +97,8 @@ export default function TorneioDialog({
         nome: '',
         data_hora: new Date(),
         local: '',
+        buy_in: 0,
+        valor_staff: 0,
         observacoes: '',
         ativo: true,
       });
@@ -109,6 +115,8 @@ export default function TorneioDialog({
           nome: '',
           data_hora: new Date(),
           local: '',
+          buy_in: 0,
+          valor_staff: 0,
           observacoes: '',
           ativo: true,
         });
@@ -136,6 +144,28 @@ export default function TorneioDialog({
       return;
     }
 
+    // Validações numéricas para Buy-in
+    if (isNaN(formData.buy_in) || formData.buy_in === null || formData.buy_in === undefined) {
+      setError('Buy-in deve ser um número');
+      return;
+    }
+
+    if (formData.buy_in < 0) {
+      setError('Buy-in deve ser maior ou igual a zero');
+      return;
+    }
+
+    // Validações numéricas para Valor do Staff
+    if (isNaN(formData.valor_staff) || formData.valor_staff === null || formData.valor_staff === undefined) {
+      setError('Valor do staff deve ser um número');
+      return;
+    }
+
+    if (formData.valor_staff < 0) {
+      setError('Valor do staff deve ser maior ou igual a zero');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -145,6 +175,8 @@ export default function TorneioDialog({
         local: formData.local.trim(),
         observacoes: formData.observacoes.trim() || undefined,
         data_hora: formData.data_hora.toISOString(),
+        buy_in: Number(formData.buy_in),
+        valor_staff: Number(formData.valor_staff),
       };
 
       if (isEditing) {
@@ -171,6 +203,21 @@ export default function TorneioDialog({
     setFormData(prev => ({
       ...prev,
       [field]: value,
+    }));
+    setError(null);
+  };
+
+  const handleNumericChange = (field: string, value: string) => {
+    const numericValue = value === '' ? 0 : Number(value);
+    
+    // Verificar se o valor é um número válido
+    if (value !== '' && (isNaN(numericValue) || !isFinite(numericValue))) {
+      return; // Não atualizar se não for um número válido
+    }
+    
+    setFormData(prev => ({
+      ...prev,
+      [field]: numericValue,
     }));
     setError(null);
   };
@@ -272,6 +319,32 @@ export default function TorneioDialog({
                 fullWidth
                 placeholder="Ex: Clube do Poker, Sala Principal"
               />
+
+              {/* Buy-in e Valor Staff */}
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <TextField
+                  label="Buy-in (R$)"
+                  type="number"
+                  value={formData.buy_in}
+                  onChange={(e) => handleNumericChange('buy_in', e.target.value)}
+                  required
+                  fullWidth
+                  inputProps={{ min: 0, step: 0.01 }}
+                  placeholder="0.00"
+                  helperText="Valor de entrada do torneio"
+                />
+                <TextField
+                  label="Valor Staff (R$)"
+                  type="number"
+                  value={formData.valor_staff}
+                  onChange={(e) => handleNumericChange('valor_staff', e.target.value)}
+                  required
+                  fullWidth
+                  inputProps={{ min: 0, step: 0.01 }}
+                  placeholder="0.00"
+                  helperText="Valor destinado ao staff"
+                />
+              </Box>
 
               {/* Observações */}
               <TextField

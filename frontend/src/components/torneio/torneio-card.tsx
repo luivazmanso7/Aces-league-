@@ -25,6 +25,8 @@ import {
   VisibilityOff as VisibilityOffIcon,
   PersonAdd as PersonAddIcon,
   Assignment as AssignmentIcon,
+  AttachMoney as AttachMoneyIcon,
+  AccountBalance as AccountBalanceIcon,
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { Torneio } from '@/types/torneio';
@@ -191,6 +193,22 @@ export default function TorneioCard({
               </Typography>
             </Box>
           )}
+
+          {/* Buy-in e Valor Staff */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <AttachMoneyIcon color="action" fontSize="small" />
+              <Typography variant="body2" color="text.secondary">
+                Buy-in: R$ {Number(torneio.buy_in).toFixed(2)}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <AccountBalanceIcon color="action" fontSize="small" />
+              <Typography variant="body2" color="text.secondary">
+                Staff: R$ {Number(torneio.valor_staff).toFixed(2)}
+              </Typography>
+            </Box>
+          </Box>
 
           {/* Observações */}
           {torneio.observacoes && (

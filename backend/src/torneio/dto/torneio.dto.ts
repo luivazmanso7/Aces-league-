@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsDateString, IsOptional, IsBoolean, Min } from 'class-validator';
+import { IsString, IsInt, IsDateString, IsOptional, IsBoolean, IsNumber, Min } from 'class-validator';
 
 export class CreateTorneioDto {
   @IsInt({ message: 'ID da temporada deve ser um número inteiro' })
@@ -12,6 +12,14 @@ export class CreateTorneioDto {
 
   @IsString({ message: 'Local deve ser uma string' })
   local: string;
+
+  @IsNumber({}, { message: 'Buy-in deve ser um número' })
+  @Min(0, { message: 'Buy-in deve ser maior ou igual a zero' })
+  buy_in: number;
+
+  @IsNumber({}, { message: 'Valor do staff deve ser um número' })
+  @Min(0, { message: 'Valor do staff deve ser maior ou igual a zero' })
+  valor_staff: number;
 
   @IsOptional()
   @IsString({ message: 'Observações devem ser uma string' })
@@ -34,6 +42,16 @@ export class UpdateTorneioDto {
   @IsOptional()
   @IsString({ message: 'Local deve ser uma string' })
   local?: string;
+
+  @IsOptional()
+  @IsNumber({}, { message: 'Buy-in deve ser um número' })
+  @Min(0, { message: 'Buy-in deve ser maior ou igual a zero' })
+  buy_in?: number;
+
+  @IsOptional()
+  @IsNumber({}, { message: 'Valor do staff deve ser um número' })
+  @Min(0, { message: 'Valor do staff deve ser maior ou igual a zero' })
+  valor_staff?: number;
 
   @IsOptional()
   @IsString({ message: 'Observações devem ser uma string' })

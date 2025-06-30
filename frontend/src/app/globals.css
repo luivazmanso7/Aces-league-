@@ -1,60 +1,58 @@
 @import "tailwindcss";
 
 :root {
-  /* Aces Poker Professional Color Palette */
+  /* Aces Poker Professional Color Palette - Light Theme */
   
-  /* Primary Colors - Deep Burgundy */
-  --primary: #7c2d12;
-  --primary-light: #a16207;
-  --primary-dark: #451a03;
-  --primary-50: #fef7f0;
-  --primary-100: #fdedd3;
-  --primary-200: #fcd9a6;
-  --primary-300: #fbbf6e;
-  --primary-400: #f59e0b;
-  --primary-500: #d97706;
-  --primary-600: #b45309;
-  --primary-700: #92400e;
-  --primary-800: #78350f;
-  --primary-900: #7c2d12;
+  /* Primary Colors - Dourado Claro e Elegante */
+  --primary-50: #fffdf7;
+  --primary-100: #fefce8;
+  --primary-200: #fef7c3;
+  --primary-300: #fef08a;
+  --primary-400: #fde047;
+  --primary-500: #facc15;
+  --primary-600: #eab308;
+  --primary-main: #eab308;
+  --primary: #eab308;
+  --primary-light: #facc15;
+  --primary-dark: #ca8a04;
   
-  /* Secondary Colors - Charcoal & Graphite */
-  --secondary: #374151;
-  --secondary-light: #4b5563;
-  --secondary-dark: #1f2937;
-  --secondary-50: #f9fafb;
-  --secondary-100: #f3f4f6;
-  --secondary-200: #e5e7eb;
-  --secondary-300: #d1d5db;
-  --secondary-400: #9ca3af;
-  --secondary-500: #6b7280;
-  --secondary-600: #4b5563;
-  --secondary-700: #374151;
-  --secondary-800: #1f2937;
-  --secondary-900: #111827;
+  /* Secondary Colors - Neutros Claros */
+  --secondary-50: #fafaf9;
+  --secondary-100: #f5f5f4;
+  --secondary-200: #e7e5e4;
+  --secondary-300: #d6d3d1;
+  --secondary-400: #a8a29e;
+  --secondary-500: #78716c;
+  --secondary-600: #57534e;
+  --secondary-700: #44403c;
+  --secondary-800: #292524;
+  --secondary-900: #1c1917;
+  --secondary: #78716c;
+  --secondary-light: #a8a29e;
+  --secondary-dark: #57534e;
   
-  /* Accent Colors - Gold & Amber */
-  --accent: #f59e0b;
-  --accent-light: #fbbf24;
-  --accent-dark: #d97706;
-  --accent-50: #fffbeb;
-  --accent-100: #fef3c7;
-  --accent-200: #fde68a;
-  --accent-300: #fcd34d;
-  --accent-400: #fbbf24;
-  --accent-500: #f59e0b;
-  --accent-600: #d97706;
-  --accent-700: #b45309;
-  --accent-800: #92400e;
-  --accent-900: #78350f;
+  /* Accent Colors - Verde Acentuado */
+  --accent-400: #4ade80;
+  --accent-500: #22c55e;
+  --accent-600: #16a34a;
+  --accent: #22c55e;
+  --accent-light: #4ade80;
+  --accent-dark: #16a34a;
+  --accent-50: #f0fdf4;
+  --accent-100: #dcfce7;
+  --accent-200: #bbf7d0;
+  --accent-300: #86efac;
+  --accent-700: #15803d;
+  --accent-800: #166534;
+  --accent-900: #14532d;
   
   /* Status Colors */
-  --success: #059669;
-  --success-light: #10b981;
-  --success-dark: #047857;
-  --warning: #d97706;
-  --warning-light: #f59e0b;
-  --warning-dark: #b45309;
+  --success: #16a34a;
+  --success-light: #22c55e;
+  --success-dark: #15803d;
+  --warning: #eab308;
+  --warning-light: #facc15;
+  --warning-dark: #ca8a04;
   --danger: #dc2626;
   --danger-light: #ef4444;
   --danger-dark: #b91c1c;
@@ -62,18 +60,19 @@
   --info-light: #38bdf8;
   --info-dark: #0284c7;
   
-  /* Neutral Colors - Dark Theme Optimized */
-  --background: #0f0f0f;
-  --background-light: #1a1a1a;
-  --surface: #1e1e1e;
-  --surface-light: #2a2a2a;
-  --surface-dark: #141414;
-  --border: #333333;
-  --border-light: #404040;
-  --text-primary: #ffffff;
-  --text-secondary: #d1d5db;
-  --text-muted: #9ca3af;
-  --text-disabled: #6b7280;
+  /* Neutral Colors - Light Theme Optimized */
+  --background: #ffffff;
+  --background-light: #fafaf9;
+  --background-secondary: #fafaf9;
+  --surface: #ffffff;
+  --surface-light: #fafaf9;
+  --surface-dark: #f5f5f4;
+  --border: #e7e5e4;
+  --border-light: #d6d3d1;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #78716c;
+  --text-disabled: #a8a29e;
   
   /* Poker-specific Colors */
   --poker-felt: #1b5e20;
@@ -96,8 +95,8 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   min-height: 100vh;
   background-image: 
-    radial-gradient(circle at 25% 25%, rgba(124, 45, 18, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+    radial-gradient(circle at 25% 25%, rgba(234, 179, 8, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(250, 204, 21, 0.02) 0%, transparent 50%);
   background-attachment: fixed;
 }
 
@@ -366,11 +365,29 @@ main::-webkit-scrollbar-thumb:hover,
   }
 }
 
-/* Animation */
+/* Animações para melhorar a experiência do usuário */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes titleGlow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(234, 179, 8, 0.3));
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(234, 179, 8, 0.6));
+  }
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -378,23 +395,98 @@ main::-webkit-scrollbar-thumb:hover,
   }
 }
 
-.animate-fadeInUp {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200px 0;
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
   }
-  100% {
-    background-position: calc(200px + 100%) 0;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-.loading-shimmer {
-  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-light) 50%, var(--surface) 75%);
-  background-size: 200px 100%;
-  animation: shimmer 1.5s infinite;
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Efeitos de hover e transições melhoradas */
+.card-hover-effect {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(234, 179, 8, 0.2);
+}
+
+/* Smooth scrolling para navegação */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Melhorar a aparência dos scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+/* Melhorias visuais globais */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+/* Efeitos de loading melhorados */
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Poker-specific Elements */

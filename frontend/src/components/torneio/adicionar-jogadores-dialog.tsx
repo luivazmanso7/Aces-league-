@@ -303,7 +303,6 @@ export default function AdicionarJogadoresDialog({
                   <CardContent sx={{ pb: 1 }}>
                     <Box display="flex" alignItems="center" gap={2}>
                       <Avatar
-                        src={jogador.avatar_url}
                         sx={{ width: 48, height: 48 }}
                       >
                         {jogador.nome.charAt(0)}

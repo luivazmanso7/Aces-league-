@@ -84,11 +84,6 @@ export default function GestaoParticipacaoDialog({
   torneio,
   onRefresh,
 }: GestaoParticipacaoDialogProps) {
-  // Helper para obter avatar
-  const getAvatarUrl = (jogador: { avatar_url?: string; foto?: string } | null | undefined): string | undefined => {
-    return jogador?.avatar_url || jogador?.foto;
-  };
-
   const [tabValue, setTabValue] = useState(0);
   const [participacoes, setParticipacoes] = useState<Participacao[]>([]);
   const [todosJogadores, setTodosJogadores] = useState<Jogador[]>([]);
@@ -470,6 +465,10 @@ export default function GestaoParticipacaoDialog({
                   // Calcular se jogador está disponível para adicionar
                   const disponivel = !jaNoTorneio;
                   
+                
+
+                  
+
                   return (
                     <Box 
                       component="li" 
@@ -491,7 +490,6 @@ export default function GestaoParticipacaoDialog({
                       }}
                     >
                       <Avatar 
-                        src={getAvatarUrl(jogador)}
                         sx={{ width: 32, height: 32 }}
                       >
                         {jogador.nome.charAt(0)}
@@ -541,7 +539,7 @@ export default function GestaoParticipacaoDialog({
                       {...getTagProps({ index })}
                       key={jogador.id}
                       avatar={
-                        <Avatar src={jogador.avatar_url}>
+                        <Avatar>
                           {jogador.nome.charAt(0)}
                         </Avatar>
                       }
@@ -722,7 +720,6 @@ export default function GestaoParticipacaoDialog({
                         <TableCell>
                           <Box display="flex" alignItems="center" gap={2}>
                             <Avatar 
-                              src={getAvatarUrl(item.jogador)}
                               sx={{ width: 40, height: 40 }}
                             >
                               {item.jogador?.nome.charAt(0)}
@@ -860,7 +857,6 @@ export default function GestaoParticipacaoDialog({
                           <TableCell>
                             <Box display="flex" alignItems="center" gap={2}>
                               <Avatar 
-                                src={getAvatarUrl(participacao.jogador)}
                                 sx={{ width: 40, height: 40 }}
                               >
                                 {participacao.jogador?.nome.charAt(0)}

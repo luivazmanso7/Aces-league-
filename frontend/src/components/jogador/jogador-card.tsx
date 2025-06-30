@@ -127,7 +127,6 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
         {/* Header com avatar e informações básicas */}
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Avatar
-            src={jogador.avatar_url}
             sx={{ 
               width: 56, 
               height: 56, 

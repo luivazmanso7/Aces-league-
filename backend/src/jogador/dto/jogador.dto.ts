@@ -5,7 +5,6 @@ import {
   IsOptional, 
   IsBoolean, 
   IsDateString,
-  IsUrl,
   Length,
   IsPhoneNumber
 } from 'class-validator';
@@ -29,10 +28,6 @@ export class CreateJogadorDto {
   @IsString({ message: 'Apelido deve ser uma string' })
   @Length(2, 50, { message: 'Apelido deve ter entre 2 e 50 caracteres' })
   apelido?: string;
-
-  @IsOptional()
-  @IsUrl({}, { message: 'Avatar URL deve ser uma URL válida' })
-  avatar_url?: string;
 
   @IsOptional()
   @IsString({ message: 'Bio deve ser uma string' })
@@ -72,10 +67,6 @@ export class UpdateJogadorDto {
   @IsString({ message: 'Apelido deve ser uma string' })
   @Length(2, 50, { message: 'Apelido deve ter entre 2 e 50 caracteres' })
   apelido?: string;
-
-  @IsOptional()
-  @IsUrl({}, { message: 'Avatar URL deve ser uma URL válida' })
-  avatar_url?: string;
 
   @IsOptional()
   @IsString({ message: 'Bio deve ser uma string' })

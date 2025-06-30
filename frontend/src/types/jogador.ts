@@ -5,7 +5,6 @@ export interface Jogador {
   email?: string;
   telefone?: string;
   apelido?: string;
-  avatar_url?: string;
   bio?: string;
   cidade?: string;
   data_nascimento?: string;
@@ -73,7 +72,6 @@ export interface CreateJogadorDto {
   email?: string;
   telefone?: string;
   apelido?: string;
-  avatar_url?: string;
   bio?: string;
   cidade?: string;
   data_nascimento?: string;
@@ -85,7 +83,6 @@ export interface UpdateJogadorDto {
   email?: string;
   telefone?: string;
   apelido?: string;
-  avatar_url?: string;
   bio?: string;
   cidade?: string;
   data_nascimento?: string;

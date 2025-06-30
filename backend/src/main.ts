@@ -36,6 +36,15 @@ async function bootstrap() {
     transformOptions: {
       enableImplicitConversion: true,
     },
+    exceptionFactory: (errors) => {
+      const result = errors.map((error) => ({
+        property: error.property,
+        value: error.value,
+        constraints: error.constraints,
+      }));
+      logger.error('Validation failed:', JSON.stringify(result, null, 2));
+      return new Error(`Validation failed: ${JSON.stringify(result)}`);
+    },
   }));
 
   // Prefixo global para API

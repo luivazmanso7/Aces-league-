@@ -366,7 +366,6 @@ export default function RegistroResultadosDialog({
                       <TableCell>
                         <Box display="flex" alignItems="center" gap={2}>
                           <Avatar 
-                            src={resultado.jogador?.avatar_url}
                             sx={{ width: 40, height: 40 }}
                           >
                             {resultado.jogador?.nome.charAt(0)}

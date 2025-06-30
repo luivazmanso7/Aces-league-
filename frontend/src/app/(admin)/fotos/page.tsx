@@ -45,6 +45,14 @@ const categorias = [
   { value: 'MELHORES_MOMENTOS', label: 'Melhores Momentos' }
 ]
 
+// Helper para construir URL completa da imagem
+const getImageUrl = (imageUrl: string) => {
+  if (imageUrl.startsWith('http')) {
+    return imageUrl
+  }
+  return `http://localhost:3001${imageUrl}`
+}
+
 export default function GerenciamentoFotosPage() {
   const [galeria, setGaleria] = useState<GaleriaOrganizada>({
     temporadas: [],
@@ -282,7 +290,7 @@ export default function GerenciamentoFotosPage() {
               <CardMedia
                 component="img"
                 height="200"
-                image={foto.imagem_url}
+                image={getImageUrl(foto.imagem_url)}
                 alt={foto.legenda}
                 sx={{ objectFit: 'cover' }}
               />

@@ -171,7 +171,6 @@ export default function JogadorDetalhesDialog({
             alignItems: 'center'
           }}>
             <Avatar
-              src={jogador.avatar_url}
               sx={{ width: 100, height: 100, bgcolor: 'primary.main' }}
             >
               {jogador.nome.charAt(0).toUpperCase()}  

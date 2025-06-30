@@ -35,7 +35,6 @@ model Jogador {
   email           String?        @unique @db.VarChar(150)
   telefone        String?        @db.VarChar(20)
   apelido         String?        @db.VarChar(50)
-  avatar_url      String?        @db.VarChar(255)
   bio             String?        @db.Text
   cidade          String?        @db.VarChar(100)
   data_nascimento DateTime?
@@ -60,6 +59,8 @@ model Torneio {
   local         String         @db.VarChar(200)
   observacoes   String?        @db.Text
   ativo         Boolean        @default(true)
+  buy_in        Decimal        @db.Decimal(10, 2)
+  valor_staff   Decimal        @db.Decimal(10, 2)
   fotos         Foto[]
   participacoes Participacao[]
   temporada     Temporada      @relation(fields: [id_temporada], references: [id], onDelete: Cascade)

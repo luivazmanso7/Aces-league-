@@ -18,7 +18,6 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Divider,
   useTheme,
   useMediaQuery,
 } from '@mui/material'
@@ -28,7 +27,6 @@ import {
   SportsEsports as TournamentIcon,
   People as UsersIcon,
   Leaderboard as RankingIcon,
-  Settings as SettingsIcon,
   ExitToApp as LogoutIcon,
   Menu as MenuIcon,
   AccountCircle,
@@ -44,9 +42,7 @@ const navigation = [
   { name: 'Torneios', href: '/torneios', icon: TournamentIcon },
   { name: 'Jogadores', href: '/jogadores', icon: UsersIcon },
   { name: 'Rankings', href: '/rankings', icon: RankingIcon },
-  { name: 'Galeria', href: '/galeria', icon: TrophyIcon },
   { name: 'Fotos', href: '/fotos', icon: TrophyIcon },
-  { name: 'Administração', href: '/admin', icon: SettingsIcon },
 ]
 
 const DRAWER_WIDTH = 280
@@ -108,13 +104,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         }}
       >
-        <Box
-          sx={{
-            fontSize: '1.5rem',
-          }}
-        >
-          🃏
-        </Box>
         <Box>
           <Typography
             variant="h6"
@@ -336,13 +325,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           },
         }}
       >
-        <MenuItem onClick={handleProfileMenuClose}>
-          <ListItemIcon>
-            <SettingsIcon fontSize="small" />
-          </ListItemIcon>
-          Configurações
-        </MenuItem>
-        <Divider />
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
