@@ -14,7 +14,7 @@ const pokerColors = {
     800: '#78350f',
     900: '#7c2d12',
     main: '#7c2d12',
-    light: '#a16207',
+    light: '#d97706',
     dark: '#451a03',
   },
   secondary: {

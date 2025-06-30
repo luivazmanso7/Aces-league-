@@ -1,8 +1,7 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
 import {
   Box,
   Container,
@@ -12,7 +11,6 @@ import {
   CardContent,
   AppBar,
   Toolbar,
-  Chip,
   Stack,
   Paper,
   CircularProgress,
@@ -97,7 +95,8 @@ export default function LandingPage() {
   }
 
   if (loading) {
-    return (      <Box 
+    return (
+      <Box 
         sx={{
           minHeight: '100vh', 
           bgcolor: '#ffffff', 
@@ -294,35 +293,6 @@ export default function LandingPage() {
               Sobre
             </Button>
           </Box>
-          
-          {/* Botão Admin Desktop */}
-          <Box sx={{ ml: 2, display: { xs: 'none', md: 'block' } }}>
-            <Button
-              variant="contained"
-              component={Link}
-              href="/login"
-              startIcon={<AdminIcon />}
-              sx={{
-                bgcolor: 'rgba(234, 179, 8, 0.15)',
-                color: '#ca8a04',
-                border: '1px solid rgba(234, 179, 8, 0.4)',
-                fontWeight: 600,
-                px: 3,
-                py: 1,
-                fontSize: '1rem',
-                borderRadius: 2,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  bgcolor: '#eab308',
-                  color: 'white',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 6px 20px rgba(234, 179, 8, 0.4)'
-                }
-              }}
-            >
-              Admin
-            </Button>
-          </Box>
 
           {/* Menu Mobile */}
           <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
@@ -403,30 +373,6 @@ export default function LandingPage() {
               <ListItemText primary="Sobre" />
             </ListItem>
           </List>
-          
-          <Box sx={{ px: 2, mt: 3 }}>
-            <Button
-              variant="contained"
-              component={Link}
-              href="/login"
-              startIcon={<AdminIcon />}
-              fullWidth
-              sx={{
-                bgcolor: 'rgba(234, 179, 8, 0.1)',
-                color: '#eab308',
-                border: '1px solid rgba(234, 179, 8, 0.3)',
-                fontWeight: 600,
-                py: 1.5,
-                borderRadius: 2,
-                '&:hover': {
-                  bgcolor: '#eab308',
-                  color: '#fff'
-                }
-              }}
-            >
-              Painel Admin
-            </Button>
-          </Box>
         </Box>
       </Drawer>
 
@@ -452,7 +398,7 @@ export default function LandingPage() {
         </Fab>
       )}
 
-      {/* Hero Section Aprimorado */}
+      {/* Hero Section - Dark Premium Design */}
       <Box
         sx={{
           minHeight: '100vh',
@@ -460,357 +406,276 @@ export default function LandingPage() {
           alignItems: 'center',
           position: 'relative',
           overflow: 'hidden',
-          background: `
-            linear-gradient(
-              135deg,
-              rgba(255, 255, 255, 0.98) 0%,
-              rgba(250, 250, 249, 0.95) 30%,
-              rgba(254, 252, 232, 0.98) 70%,
-              rgba(255, 255, 255, 0.98) 100%
-            )
-          `,
-          pt: 8
+          background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
+          pt: 8,
+          '@keyframes pulse': {
+            '0%': {
+              transform: 'scale(1)',
+              opacity: 1
+            },
+            '50%': {
+              transform: 'scale(1.2)',
+              opacity: 0.7
+            },
+            '100%': {
+              transform: 'scale(1)',
+              opacity: 1
+            }
+          },
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `url('/images/poker-hero.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.08,
+            zIndex: 0
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 50% 50%, rgba(234, 179, 8, 0.1) 0%, transparent 70%)',
+            zIndex: 0
+          }
         }}
       >
-        {/* Elementos decorativos de fundo */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '15%',
-            right: '15%',
-            width: '150px',
-            height: '150px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.08) 0%, transparent 70%)',
-            animation: 'float 6s ease-in-out infinite'
-          }}
-        />
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: '25%',
-            left: '8%',
-            width: '120px',
-            height: '120px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(250, 204, 21, 0.06) 0%, transparent 70%)',
-            animation: 'float 8s ease-in-out infinite reverse'
-          }}
-        />
+        {/* Elementos decorativos de poker */}
+        <Box sx={{
+          position: 'absolute',
+          top: '15%',
+          left: '5%',
+          width: '80px',
+          height: '80px',
+          opacity: 0.1,
+          zIndex: 0,
+          fontSize: '4rem'
+        }}>
+          ♠️
+        </Box>
+        <Box sx={{
+          position: 'absolute',
+          top: '70%',
+          right: '10%',
+          width: '60px',
+          height: '60px',
+          opacity: 0.1,
+          zIndex: 0,
+          fontSize: '3rem'
+        }}>
+          ♥️
+        </Box>
+        <Box sx={{
+          position: 'absolute',
+          bottom: '20%',
+          left: '15%',
+          width: '50px',
+          height: '50px',
+          opacity: 0.1,
+          zIndex: 0,
+          fontSize: '2.5rem'
+        }}>
+          ♦️
+        </Box>
         
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ 
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-            gap: 6,
-            alignItems: 'center',
-            minHeight: '80vh'
+            textAlign: 'center',
+            color: 'white',
+            mb: 8
           }}>
-            {/* Coluna Esquerda - Conteúdo */}
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column',
-              alignItems: 'flex-start'
-            }}>
-              <Typography
-                variant="h1"
-                sx={{
-                  fontSize: { xs: '3.5rem', sm: '4.5rem', md: '5.5rem' },
-                  fontWeight: 900,
-                  color: '#1c1917',
-                  mb: 2,
-                  background: 'linear-gradient(135deg, #eab308 0%, #facc15 50%, #ca8a04 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  letterSpacing: '-1px',
-                  lineHeight: 0.9,
-                  textShadow: '0 0 0 rgba(234, 179, 8, 0.1)',
-                  animation: 'titleGlow 3s ease-in-out infinite alternate'
-                }}
-              >
-                ACES
-                <br />
-                LEAGUE
-              </Typography>
-              
-              <Typography
-                variant="h4"
-                sx={{
-                  fontSize: { xs: '1.3rem', md: '2rem' },
-                  color: '#57534e',
-                  fontWeight: 300,
-                  mb: 4,
-                  letterSpacing: '2px',
-                  textTransform: 'uppercase',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-8px',
-                    left: 0,
-                    width: '60px',
-                    height: '3px',
-                    background: 'linear-gradient(90deg, #eab308, #facc15)',
-                    borderRadius: '2px'
-                  }
-                }}
-              >
-                Clube Premium de Poker
-              </Typography>
-              
-              <Typography
-                variant="h6"
-                sx={{
-                  color: '#78716c',
-                  mb: 5,
-                  lineHeight: 1.8,
-                  maxWidth: '550px',
-                  fontSize: '1.2rem',
-                  fontWeight: 400
-                }}
-              >
-                Junte-se à elite do poker brasileiro. Torneios profissionais, 
-                rankings competitivos e uma comunidade exclusiva de jogadores apaixonados.
-              </Typography>
-              
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ mb: 5 }}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  startIcon={<PlayIcon />}
-                  onClick={() => scrollToSection('torneios')}
-                  sx={{
-                    bgcolor: '#eab308',
-                    color: 'white',
-                    fontWeight: 600,
-                    px: 5,
-                    py: 2.5,
-                    fontSize: '1.1rem',
-                    borderRadius: '12px',
-                    textTransform: 'none',
-                    boxShadow: '0 8px 25px rgba(234, 179, 8, 0.3)',
-                    '&:hover': {
-                      bgcolor: '#ca8a04',
-                      transform: 'translateY(-3px)',
-                      boxShadow: '0 12px 35px rgba(234, 179, 8, 0.4)'
-                    },
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  Ver Próximos Torneios
-                </Button>
-                
-                <Button
-                  variant="outlined"
-                  size="large"
-                  startIcon={<TrophyIcon />}
-                  onClick={() => scrollToSection('ranking')}
-                  sx={{
-                    borderColor: '#eab308',
-                    color: '#eab308',
-                    fontWeight: 600,
-                    px: 5,
-                    py: 2.5,
-                    fontSize: '1.1rem',
-                    borderRadius: '12px',
-                    textTransform: 'none',
-                    borderWidth: '2px',
-                    '&:hover': {
-                      bgcolor: 'rgba(234, 179, 8, 0.1)',
-                      transform: 'translateY(-3px)',
-                      borderColor: '#facc15',
-                      borderWidth: '2px'
-                    },
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  Ver Rankings
-                </Button>
-              </Stack>
-              
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                <Chip 
-                  icon={<StarIcon sx={{ color: '#eab308 !important' }} />}
-                  label="Ambiente Profissional" 
-                  sx={{ 
-                    bgcolor: 'rgba(234, 179, 8, 0.1)', 
-                    color: '#ca8a04', 
-                    border: '1px solid rgba(234, 179, 8, 0.3)',
-                    fontWeight: 600,
-                    '&:hover': {
-                      bgcolor: 'rgba(234, 179, 8, 0.15)',
-                      transform: 'translateY(-2px)'
-                    },
-                    transition: 'all 0.3s ease'
-                  }} 
-                />
-                <Chip 
-                  icon={<PeopleIcon sx={{ color: '#eab308 !important' }} />}
-                  label="Comunidade Elite" 
-                  sx={{ 
-                    bgcolor: 'rgba(234, 179, 8, 0.1)', 
-                    color: '#ca8a04', 
-                    border: '1px solid rgba(234, 179, 8, 0.3)',
-                    fontWeight: 600,
-                    '&:hover': {
-                      bgcolor: 'rgba(234, 179, 8, 0.15)',
-                      transform: 'translateY(-2px)'
-                    },
-                    transition: 'all 0.3s ease'
-                  }} 
-                />
-                <Chip 
-                  icon={<TrophyIcon sx={{ color: '#eab308 !important' }} />}
-                  label="Prêmios Garantidos" 
-                  sx={{ 
-                    bgcolor: 'rgba(234, 179, 8, 0.1)', 
-                    color: '#ca8a04', 
-                    border: '1px solid rgba(234, 179, 8, 0.3)',
-                    fontWeight: 600,
-                    '&:hover': {
-                      bgcolor: 'rgba(234, 179, 8, 0.15)',
-                      transform: 'translateY(-2px)'
-                    },
-                    transition: 'all 0.3s ease'
-                  }} 
-                />
-              </Box>
-            </Box>
-
-           
-
-            {/* Versão mobile da imagem */}
-            <Box sx={{ 
-              display: { xs: 'flex', md: 'none' },
-              justifyContent: 'center',
-              mt: 4
-            }}>
-              <Box
-                sx={{
-                  width: '280px',
-                  height: '200px',
-                  backgroundImage: `url('/images/poker-hero.png')`,
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                  opacity: 0.8,
-                  filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.15))'
-                }}
-              />
-            </Box>
-          </Box>
-        </Container>
-      </Box>
-
-      {/* Seção de Estatísticas Impressionante */}
-      <Box sx={{ 
-        py: 8,
-        background: 'linear-gradient(135deg, rgba(75, 85, 99, 0.95) 0%, rgba(55, 65, 81, 0.98) 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `url('/images/poker-hero.png')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.1,
-          zIndex: 0
-        }
-      }}>
-        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
+            {/* Título Principal */}
             <Typography
-              variant="h3"
+              variant="h1"
               sx={{
-                color: 'white',
-                fontWeight: 'bold',
-                mb: 2,
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                fontSize: { xs: '4rem', sm: '5rem', md: '6rem' },
+                fontWeight: 900,
+                mb: 3,
+                background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                letterSpacing: '-2px',
+                lineHeight: 0.9,
+                textShadow: '0 0 30px rgba(255, 255, 255, 0.1)'
               }}
             >
-              Números que Impressionam
+              ACES LEAGUE
             </Typography>
+            
+            {/* Subtítulo */}
             <Typography
-              variant="h6"
+              variant="h5"
               sx={{
-                color: 'rgba(255, 255, 255, 0.9)',
-                maxWidth: '600px',
-                margin: '0 auto'
+                color: 'rgba(255, 255, 255, 0.8)',
+                mb: 6,
+                lineHeight: 1.6,
+                maxWidth: '800px',
+                margin: '0 auto 3rem auto',
+                fontSize: { xs: '1.1rem', md: '1.3rem' },
+                fontWeight: 400
               }}
             >
-              A ACES LEAGUE é o principal clube de poker do Brasil
+              Onde lendas nascem e campeões se destacam. Junte-se aos torneios de poker mais prestigiosos da região.
             </Typography>
-          </Box>
 
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-            gap: 4
-          }}>
-            {[
-              { number: '500+', label: 'Jogadores Ativos', icon: <PeopleIcon /> },
-              { number: '50+', label: 'Torneios Mensais', icon: <TrophyIcon /> },
-              { number: 'R$ 100K+', label: 'Prêmios Distribuídos', icon: <StarIcon /> },
-              { number: '3 Anos', label: 'de Tradição', icon: <CalendarIcon /> }
-            ].map((stat, index) => (
-              <Paper
-                key={index}
-                sx={{
-                  bgcolor: 'rgba(255, 255, 255, 0.95)',
-                  p: 4,
-                  textAlign: 'center',
-                  borderRadius: 4,
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(10px)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 15px 40px rgba(0,0,0,0.2)',
-                    bgcolor: 'rgba(255, 255, 255, 1)'
-                  }
-                }}
-              >
-                <Box sx={{ 
-                  color: '#eab308', 
-                  mb: 2,
-                  '& svg': { fontSize: 40 }
-                }}>
-                  {stat.icon}
-                </Box>
+            {/* Estatísticas em Destaque */}
+            <Box sx={{ 
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
+              gap: { xs: 4, md: 8 },
+              mb: 8,
+              maxWidth: '800px',
+              mx: 'auto'
+            }}>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    fontSize: '0.9rem',
+                    mb: 1,
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  Experiência
+                </Typography>
                 <Typography
                   variant="h3"
                   sx={{
-                    color: '#1c1917',
+                    fontSize: { xs: '2rem', md: '2.5rem' },
                     fontWeight: 900,
-                    mb: 1,
-                    background: 'linear-gradient(135deg, #eab308, #ca8a04)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
+                    color: '#fbbf24',
+                    textShadow: '0 0 20px rgba(251, 191, 36, 0.4)'
                   }}
                 >
-                  {stat.number}
+                  VIP
+                </Typography>
+              </Box>
+              
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    fontSize: '0.9rem',
+                    mb: 1,
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  Ambiente
                 </Typography>
                 <Typography
-                  variant="h6"
+                  variant="h3"
                   sx={{
-                    color: '#57534e',
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                    fontSize: '0.9rem'
+                    fontSize: { xs: '2rem', md: '2.5rem' },
+                    fontWeight: 900,
+                    color: '#fbbf24',
+                    textShadow: '0 0 20px rgba(251, 191, 36, 0.4)'
                   }}
                 >
-                  {stat.label}
+                  PRO
                 </Typography>
-              </Paper>
-            ))}
+              </Box>
+              
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    fontSize: '0.9rem',
+                    mb: 1,
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  Transmissões
+                </Typography>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontSize: { xs: '2rem', md: '2.5rem' },
+                    fontWeight: 900,
+                    color: '#fbbf24',
+                    textShadow: '0 0 20px rgba(251, 191, 36, 0.4)'
+                  }}
+                >
+                  LIVE
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Botões de Ação */}
+            <Stack 
+              direction={{ xs: 'column', sm: 'row' }} 
+              spacing={3} 
+              justifyContent="center"
+              sx={{ mb: 4 }}
+            >
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<PlayIcon />}
+                onClick={() => scrollToSection('torneios')}
+                sx={{
+                  background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                  color: '#1a1a1a',
+                  fontWeight: 700,
+                  px: 6,
+                  py: 2.5,
+                  fontSize: '1.1rem',
+                  borderRadius: '12px',
+                  textTransform: 'none',
+                  boxShadow: '0 8px 25px rgba(251, 191, 36, 0.4)',
+                  border: 'none',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 12px 35px rgba(251, 191, 36, 0.5)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Participar do Próximo Torneio
+              </Button>
+              
+              <Button
+                variant="outlined"
+                size="large"
+                startIcon={<TrophyIcon />}
+                onClick={() => scrollToSection('ranking')}
+                sx={{
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  fontWeight: 600,
+                  px: 6,
+                  py: 2.5,
+                  fontSize: '1.1rem',
+                  borderRadius: '12px',
+                  textTransform: 'none',
+                  borderWidth: '2px',
+                  backdropFilter: 'blur(10px)',
+                  '&:hover': {
+                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                    transform: 'translateY(-3px)',
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderWidth: '2px'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Ver Classificação
+              </Button>
+            </Stack>
           </Box>
         </Container>
       </Box>
@@ -831,7 +696,7 @@ export default function LandingPage() {
                 fontWeight: 'bold',
                 mb: 3,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
-                background: 'linear-gradient(135deg, #eab308 0%, #facc15 50%, #ca8a04 100%)',
+                background: 'linear-gradient(135deg, #1f2937 0%, #374151 50%, #111827 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent'
               }}
@@ -854,184 +719,6 @@ export default function LandingPage() {
               Experimente torneios de alto nível, eventos exclusivos e uma comunidade 
               apaixonada pelos jogos de cartas mais estratégicos do mundo.
             </Typography>
-
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} justifyContent="center" sx={{ mb: 8 }}>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => scrollToSection('torneios')}
-                sx={{
-                  bgcolor: '#22c55e',
-                  color: 'white',
-                  px: 6,
-                  py: 2.5,
-                  borderRadius: '12px',
-                  textTransform: 'none',
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
-                  boxShadow: '0 8px 25px rgba(34, 197, 94, 0.3)',
-                  '&:hover': {
-                    bgcolor: '#16a34a',
-                    transform: 'translateY(-3px)',
-                    boxShadow: '0 12px 35px rgba(34, 197, 94, 0.4)'
-                  },
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                Ver Eventos
-              </Button>
-              
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={() => scrollToSection('sobre')}
-                sx={{
-                  borderColor: '#eab308',
-                  color: '#eab308',
-                  px: 6,
-                  py: 2.5,
-                  borderRadius: '12px',
-                  textTransform: 'none',
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
-                  borderWidth: '2px',
-                  '&:hover': {
-                    bgcolor: 'rgba(234, 179, 8, 0.1)',
-                    transform: 'translateY(-3px)',
-                    borderColor: '#facc15',
-                    borderWidth: '2px'
-                  },
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                Saiba Mais
-              </Button>
-            </Stack>
-          </Box>
-
-          {/* Cards de Recursos Principais */}
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
-            gap: 4,
-            mb: 8
-          }}>
-            <Card sx={{ 
-              bgcolor: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(234, 179, 8, 0.2)',
-              borderRadius: 4,
-              p: 4,
-              textAlign: 'center',
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              overflow: 'hidden',
-              '&:hover': {
-                transform: 'translateY(-8px)',
-                boxShadow: '0 20px 40px rgba(234, 179, 8, 0.15)',
-                '&::before': {
-                  opacity: 1
-                }
-              },
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '4px',
-                background: 'linear-gradient(90deg, #eab308, #facc15)',
-                opacity: 0,
-                transition: 'opacity 0.3s ease'
-              }
-            }}>
-              <TrophyIcon sx={{ fontSize: 56, color: '#eab308', mb: 3 }} />
-              <Typography variant="h5" sx={{ color: '#1c1917', mb: 2, fontWeight: 'bold' }}>
-                Torneios Elite
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#57534e', lineHeight: 1.7 }}>
-                Eventos semanais com estruturas profissionais, prêmios garantidos e 
-                disputas de alto nível entre os melhores jogadores.
-              </Typography>
-            </Card>
-
-            <Card sx={{ 
-              bgcolor: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(234, 179, 8, 0.2)',
-              borderRadius: 4,
-              p: 4,
-              textAlign: 'center',
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              overflow: 'hidden',
-              '&:hover': {
-                transform: 'translateY(-8px)',
-                boxShadow: '0 20px 40px rgba(234, 179, 8, 0.15)',
-                '&::before': {
-                  opacity: 1
-                }
-              },
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '4px',
-                background: 'linear-gradient(90deg, #eab308, #facc15)',
-                opacity: 0,
-                transition: 'opacity 0.3s ease'
-              }
-            }}>
-              <PeopleIcon sx={{ fontSize: 56, color: '#eab308', mb: 3 }} />
-              <Typography variant="h5" sx={{ color: '#1c1917', mb: 2, fontWeight: 'bold' }}>
-                Comunidade VIP
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#57534e', lineHeight: 1.7 }}>
-                Conecte-se com jogadores experientes, compartilhe estratégias e 
-                faça parte de uma comunidade exclusiva e apaixonada.
-              </Typography>
-            </Card>
-
-            <Card sx={{ 
-              bgcolor: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(234, 179, 8, 0.2)',
-              borderRadius: 4,
-              p: 4,
-              textAlign: 'center',
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              overflow: 'hidden',
-              '&:hover': {
-                transform: 'translateY(-8px)',
-                boxShadow: '0 20px 40px rgba(234, 179, 8, 0.15)',
-                '&::before': {
-                  opacity: 1
-                }
-              },
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '4px',
-                background: 'linear-gradient(90deg, #eab308, #facc15)',
-                opacity: 0,
-                transition: 'opacity 0.3s ease'
-              }
-            }}>
-              <StarIcon sx={{ fontSize: 56, color: '#eab308', mb: 3 }} />
-              <Typography variant="h5" sx={{ color: '#1c1917', mb: 2, fontWeight: 'bold' }}>
-                Ambiente Premium
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#57534e', lineHeight: 1.7 }}>
-                Instalações de primeira classe, equipamentos profissionais e 
-                uma atmosfera elegante para uma experiência única.
-              </Typography>
-            </Card>
           </Box>
 
           {/* Showcase Visual com Imagem do Poker */}
@@ -1054,7 +741,7 @@ export default function LandingPage() {
                 }}
               >
                 Experiência{' '}
-                <Box component="span" sx={{ color: '#eab308' }}>
+                <Box component="span" sx={{ color: '#f59e0b' }}>
                   Autêntica
                 </Box>
               </Typography>
@@ -1073,21 +760,37 @@ export default function LandingPage() {
                 oferecemos a experiência mais autêntica do Brasil.
               </Typography>
 
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 4 }}>
                 {[
-                  { icon: <TrophyIcon />, title: 'Torneios Regulares', desc: 'Eventos todas as semanas' },
-                  { icon: <StarIcon />, title: 'Rankings Oficiais', desc: 'Sistema de pontuação profissional' },
-                  { icon: <PeopleIcon />, title: 'Network Exclusivo', desc: 'Conecte-se com a elite' }
+                  { icon: <TrophyIcon />, title: 'Torneios Regulares', desc: 'Eventos todas as semanas', color: '#10b981' },
+                  { icon: <StarIcon />, title: 'Rankings Oficiais', desc: 'Sistema de pontuação profissional', color: '#3b82f6' },
+                  { icon: <PeopleIcon />, title: 'Network Exclusivo', desc: 'Conecte-se com a elite', color: '#a855f7' }
                 ].map((item, index) => (
-                  <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                  <Box key={index} sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 3,
+                    p: 3,
+                    borderRadius: 3,
+                    bgcolor: 'rgba(255, 255, 255, 0.8)',
+                    border: '1px solid rgba(0, 0, 0, 0.05)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateX(8px)',
+                      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
+                      bgcolor: 'rgba(255, 255, 255, 0.95)'
+                    }
+                  }}>
                     <Box sx={{ 
-                      color: '#eab308',
-                      bgcolor: 'rgba(234, 179, 8, 0.1)',
-                      p: 2,
-                      borderRadius: 2,
+                      color: item.color,
+                      bgcolor: `rgba(${item.color === '#10b981' ? '16, 185, 129' : item.color === '#3b82f6' ? '59, 130, 246' : '168, 85, 247'}, 0.15)`,
+                      p: 2.5,
+                      borderRadius: 3,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      minWidth: '56px',
+                      minHeight: '56px'
                     }}>
                       {item.icon}
                     </Box>
@@ -1102,6 +805,8 @@ export default function LandingPage() {
                   </Box>
                 ))}
               </Box>
+
+              
             </Box>
 
             {/* Lado direito - Imagem do poker em destaque */}
@@ -1111,13 +816,13 @@ export default function LandingPage() {
               borderRadius: 4,
               overflow: 'hidden',
               boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
-              background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(250, 204, 21, 0.05) 100%)'
+              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(52, 211, 153, 0.05) 100%)'
             }}>
               <Box
                 sx={{
                   width: '100%',
                   height: '100%',
-                  backgroundImage: `url('/images/poker-hero.png')`,
+                  backgroundImage: `url('images/PHOTO-2025-06-30-12-16-16.jpg')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
@@ -1370,85 +1075,61 @@ export default function LandingPage() {
           </Paper>
 
           {/* Cards de características do torneio */}
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-            gap: 3,
-            mt: 8
-          }}>
-            {[
-              { title: 'Estrutura Profissional', desc: 'Blinds de 20 minutos', icon: <ScheduleIcon /> },
-              { title: 'Prêmios Garantidos', desc: 'Pool mínimo assegurado', icon: <StarIcon /> },
-              { title: 'Ambiente Premium', desc: 'Instalações de primeira', icon: <TrophyIcon /> },
-              { title: 'Comunidade Elite', desc: 'Jogadores experientes', icon: <PeopleIcon /> }
-            ].map((feature, index) => (
-              <Paper
-                key={index}
-                sx={{
-                  bgcolor: 'rgba(255, 255, 255, 0.9)',
-                  p: 3,
-                  textAlign: 'center',
-                  borderRadius: 3,
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  backdropFilter: 'blur(10px)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: '0 15px 30px rgba(0,0,0,0.15)',
-                    bgcolor: 'rgba(255, 255, 255, 1)'
-                  }
-                }}
-              >
-                <Box sx={{ color: '#eab308', mb: 2 }}>
-                  {React.cloneElement(feature.icon, { sx: { fontSize: 36 } })}
-                </Box>
-                <Typography variant="h6" sx={{ color: '#1c1917', mb: 1, fontWeight: 'bold', fontSize: '1rem' }}>
-                  {feature.title}
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#57534e' }}>
-                  {feature.desc}
-                </Typography>
-              </Paper>
-            ))}
-          </Box>
+
         </Container>
       </Box>
 
-      {/* Ranking Section - Light Theme */}
+      {/* Ranking Section - Dark Theme */}
       <Box id="ranking" sx={{ 
         py: 10, 
-        background: 'linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(250, 250, 249, 1) 100%)',
-        position: 'relative'
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `url('/images/poker-hero.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.03,
+          zIndex: 0
+        }
       }}>
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center', mb: 8 }}>
             <Typography
               variant="h2"
               sx={{
-                color: '#1c1917',
+                color: 'white',
                 fontWeight: 'bold',
                 mb: 3,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
-                background: 'linear-gradient(135deg, #eab308 0%, #facc15 50%, #ca8a04 100%)',
+                background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: 2
+                gap: 2,
+                textShadow: '0 4px 8px rgba(0,0,0,0.3)'
               }}
             >
-              <TrophyIcon sx={{ color: '#eab308', fontSize: { xs: '2.5rem', md: '3.5rem' } }} />
+              <TrophyIcon sx={{ color: '#fbbf24', fontSize: { xs: '2.5rem', md: '3.5rem' } }} />
               Top Jogadores
             </Typography>
             
             <Typography
               variant="h6"
               sx={{
-                color: '#57534e',
+                color: 'rgba(255, 255, 255, 0.8)',
                 fontSize: '1.2rem',
                 maxWidth: '600px',
-                margin: '0 auto'
+                margin: '0 auto',
+                textShadow: '0 2px 4px rgba(0,0,0,0.3)'
               }}
             >
               Os melhores jogadores da temporada atual - Elite da ACES LEAGUE
@@ -1601,7 +1282,7 @@ export default function LandingPage() {
               size="large"
               startIcon={<TrophyIcon />}
               sx={{
-                bgcolor: '#eab308',
+                background: 'linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)',
                 color: 'white',
                 px: 6,
                 py: 2.5,
@@ -1609,11 +1290,12 @@ export default function LandingPage() {
                 fontWeight: 600,
                 borderRadius: '12px',
                 textTransform: 'none',
-                boxShadow: '0 8px 25px rgba(234, 179, 8, 0.3)',
+                boxShadow: '0 8px 25px rgba(5, 150, 105, 0.3)',
+                border: 'none',
                 '&:hover': {
-                  bgcolor: '#ca8a04',
+                  background: 'linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%)',
                   transform: 'translateY(-3px)',
-                  boxShadow: '0 12px 35px rgba(234, 179, 8, 0.4)'
+                  boxShadow: '0 12px 35px rgba(5, 150, 105, 0.4)'
                 },
                 transition: 'all 0.3s ease'
               }}
@@ -1871,9 +1553,9 @@ export default function LandingPage() {
 
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {[
-                  { icon: '🏆', title: 'Excelência', desc: 'Torneios com estrutura profissional' },
-                  { icon: '🤝', title: 'Comunidade', desc: 'Ambiente acolhedor e respeitoso' },
-                  { icon: '🎯', title: 'Integridade', desc: 'Fair play e transparência sempre' }
+                  { icon: '', title: 'Excelência', desc: 'Torneios com estrutura profissional' },
+                  { icon: '', title: 'Comunidade', desc: 'Ambiente acolhedor e respeitoso' },
+                  { icon: '', title: 'Integridade', desc: 'Fair play e transparência sempre' }
                 ].map((value, index) => (
                   <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Typography variant="h4" sx={{ fontSize: '2rem' }}>
@@ -1926,66 +1608,6 @@ export default function LandingPage() {
                   showText={true}
                 />
               </Box>
-            </Box>
-          </Box>
-
-          {/* Estatísticas da comunidade */}
-          <Box sx={{
-            bgcolor: 'rgba(234, 179, 8, 0.05)',
-            borderRadius: 4,
-            p: 6,
-            border: '1px solid rgba(234, 179, 8, 0.2)'
-          }}>
-            <Typography
-              variant="h4"
-              sx={{
-                textAlign: 'center',
-                color: '#1c1917',
-                fontWeight: 'bold',
-                mb: 4
-              }}
-            >
-              Nossa Comunidade em Números
-            </Typography>
-
-            <Box sx={{ 
-              display: 'grid',
-              gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-              gap: 4,
-              textAlign: 'center'
-            }}>
-              {[
-                { number: '3+', label: 'Anos de História' },
-                { number: '500+', label: 'Membros Ativos' },
-                { number: '100+', label: 'Torneios Realizados' },
-                { number: 'R$ 50K+', label: 'Em Prêmios' }
-              ].map((stat, index) => (
-                <Box key={index}>
-                  <Typography
-                    variant="h2"
-                    sx={{
-                      color: '#eab308',
-                      fontWeight: 'bold',
-                      mb: 1,
-                      fontSize: { xs: '2rem', md: '3rem' }
-                    }}
-                  >
-                    {stat.number}
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: '#57534e',
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px',
-                      fontSize: '0.9rem'
-                    }}
-                  >
-                    {stat.label}
-                  </Typography>
-                </Box>
-              ))}
             </Box>
           </Box>
         </Container>
@@ -2043,24 +1665,6 @@ export default function LandingPage() {
                 O principal clube de poker do Brasil. Junte-se à nossa comunidade 
                 e experimente torneios profissionais em um ambiente premium.
               </Typography>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <Chip 
-                  label="Premium" 
-                  sx={{ 
-                    bgcolor: 'rgba(234, 179, 8, 0.2)', 
-                    color: '#eab308',
-                    fontWeight: 600
-                  }} 
-                />
-                <Chip 
-                  label="Profissional" 
-                  sx={{ 
-                    bgcolor: 'rgba(234, 179, 8, 0.2)', 
-                    color: '#eab308',
-                    fontWeight: 600
-                  }} 
-                />
-              </Box>
             </Box>
 
             {/* Links Rápidos */}
@@ -2126,7 +1730,7 @@ export default function LandingPage() {
                   📱 (11) 99999-9999
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                  📍 São Paulo, SP - Brasil
+                  📍 Recife, PE - Brasil
                 </Typography>
                 <Button
                   variant="outlined"
@@ -2173,7 +1777,7 @@ export default function LandingPage() {
                 textAlign: { xs: 'center', md: 'left' }
               }}
             >
-              © 2024 ACES LEAGUE. Todos os direitos reservados.
+              © 2025 ACES LEAGUE. Todos os direitos reservados.
             </Typography>
             <Typography
               variant="body2"

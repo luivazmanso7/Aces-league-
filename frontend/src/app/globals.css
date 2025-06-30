@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 :root {
+  /* Font Variables */
+  --font-geist-sans: var(--font-geist-sans);
+  --font-geist-mono: var(--font-geist-mono);
+  --font-orbitron: var(--font-orbitron);
+  --font-bebas-neue: var(--font-bebas-neue);
+  
   /* Aces Poker Professional Color Palette - Light Theme */
   
   /* Primary Colors - Dourado Claro e Elegante */
