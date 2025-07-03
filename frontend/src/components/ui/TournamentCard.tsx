@@ -20,6 +20,7 @@ import {
   People as UsersIcon,
   EmojiEvents as TrophyIcon
 } from '@mui/icons-material';
+import { openWhatsAppForTournament } from '@/utils/whatsapp';
 
 interface Tournament {
   id: number;
@@ -250,7 +251,13 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
           <Button
             variant="contained"
             fullWidth
-            onClick={onRegister}
+            onClick={() => {
+              if (tournament.status === 'completed') {
+                onRegister?.();
+              } else {
+                openWhatsAppForTournament(tournament.nome);
+              }
+            }}
             sx={{
               background: tournament.status === 'completed' 
                 ? 'linear-gradient(135deg, #6b7280 0%, #9ca3af 100%)'
