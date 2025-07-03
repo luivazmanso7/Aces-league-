@@ -9,6 +9,7 @@ import { TemporadaModule } from './temporada/temporada.module';
 import { JogadorModule } from './jogador/jogador.module';
 import { TorneioModule } from './torneio/torneio.module';
 import { FotoModule } from './foto/foto.module';
+import { PublicModule } from './public/public.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { FotoModule } from './foto/foto.module';
     TemporadaModule,
     JogadorModule,
     TorneioModule,
-    FotoModule
+    FotoModule,
+    PublicModule
   ],
   controllers: [AppController],
   providers: [AppService],
