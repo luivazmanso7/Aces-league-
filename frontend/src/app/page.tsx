@@ -27,9 +27,7 @@ import {
   EmojiEvents as TrophyIcon,
   People as PeopleIcon,
   AdminPanelSettings as AdminIcon,
-  Schedule as ScheduleIcon,
   Star as StarIcon,
-  CalendarToday as CalendarIcon,
   Menu as MenuIcon,
   Close as CloseIcon,
   ArrowUpward as ArrowUpIcon
@@ -37,6 +35,7 @@ import {
 import { PublicApiService } from '@/services/publicApi'
 import { JogadorRanking, ProximoTorneio, Foto } from '@/types/landing'
 import { Logo } from '@/components/ui/Logo'
+import TournamentCard from '@/components/ui/TournamentCard'
 
 export default function LandingPage() {
   const [loading, setLoading] = useState(true)
@@ -852,7 +851,7 @@ export default function LandingPage() {
         id="torneios" 
         sx={{ 
           py: 10,
-          background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.95) 0%, rgba(202, 138, 4, 0.98) 100%)',
+          background:'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
           position: 'relative',
           overflow: 'hidden',
           '&::before': {
@@ -862,7 +861,7 @@ export default function LandingPage() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: `url('/images/poker-hero.png')`,
+            backgroundImage: `url('/images/poker-chips.jpg')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.08,
@@ -879,203 +878,156 @@ export default function LandingPage() {
                 fontWeight: 'bold',
                 mb: 3,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
-                textShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 2
+                textShadow: '0 4px 8px rgba(0,0,0,0.3)'
               }}
             >
-              <TrophyIcon sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' } }} />
-              Próximo Grande Evento
+              Próximo Torneio
             </Typography>
             
             <Typography
               variant="h6"
               sx={{
-                color: 'rgba(255, 255, 255, 0.9)',
-                mb: 6,
+                color: 'rgba(255, 255, 255, 0.8)',
                 fontSize: '1.2rem',
-                textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                maxWidth: '600px',
+                margin: '0 auto'
               }}
             >
-              Não perca a oportunidade de participar do torneio mais aguardado!
+              Participe do próximo evento e mostre suas habilidades
             </Typography>
           </Box>
           
-          <Paper
-            elevation={0}
-            sx={{
-              bgcolor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(20px)',
-              border: '2px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: 6,
-              p: { xs: 4, md: 6 },
-              textAlign: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-              boxShadow: '0 25px 50px rgba(0,0,0,0.25)',
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '6px',
-                background: 'linear-gradient(90deg, #eab308, #facc15, #ca8a04)'
-              }
-            }}
-          >
-            <Typography
-              variant="h3"
-              sx={{
-                background: 'linear-gradient(135deg, #eab308, #facc15, #ca8a04)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 'bold',
-                mb: 4,
-                fontSize: { xs: '2rem', md: '2.8rem' }
-              }}
-            >
-              {proximoTorneio?.nome || 'Torneio de Natal 2024'}
-            </Typography>
-            
-            <Box sx={{ 
-              display: 'grid', 
-              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
-              gap: 3,
-              mb: 6
-            }}>
-              <Box sx={{ 
-                bgcolor: 'rgba(234, 179, 8, 0.1)',
-                borderRadius: 3,
-                p: 3,
-                border: '1px solid rgba(234, 179, 8, 0.2)'
-              }}>
-                <CalendarIcon sx={{ fontSize: 40, color: '#eab308', mb: 2 }} />
-                <Typography variant="h6" sx={{ color: '#1c1917', fontWeight: 'bold', mb: 1 }}>
-                  Data
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#57534e' }}>
-                  {proximoTorneio ? new Date(proximoTorneio.dataInicio).toLocaleDateString('pt-BR', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  }) : 'Sexta, 20 de Dezembro'}
-                </Typography>
-              </Box>
-
-              <Box sx={{ 
-                bgcolor: 'rgba(234, 179, 8, 0.1)',
-                borderRadius: 3,
-                p: 3,
-                border: '1px solid rgba(234, 179, 8, 0.2)'
-              }}>
-                <ScheduleIcon sx={{ fontSize: 40, color: '#eab308', mb: 2 }} />
-                <Typography variant="h6" sx={{ color: '#1c1917', fontWeight: 'bold', mb: 1 }}>
-                  Horário
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#57534e' }}>
-                  {proximoTorneio ? new Date(proximoTorneio.dataInicio).toLocaleTimeString('pt-BR', {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  }) : '19:00'}
-                </Typography>
-              </Box>
-
-              <Box sx={{ 
-                bgcolor: 'rgba(234, 179, 8, 0.1)',
-                borderRadius: 3,
-                p: 3,
-                border: '1px solid rgba(234, 179, 8, 0.2)'
-              }}>
-                <StarIcon sx={{ fontSize: 40, color: '#eab308', mb: 2 }} />
-                <Typography variant="h6" sx={{ color: '#1c1917', fontWeight: 'bold', mb: 1 }}>
-                  Buy-in
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#57534e' }}>
-                  {proximoTorneio?.preco ? `R$ ${proximoTorneio.preco.toFixed(2)}` : 'R$ 150,00'}
-                </Typography>
-              </Box>
-            </Box>
-
-            <Typography
-              variant="body1"
-              sx={{
-                color: '#57534e',
-                mb: 5,
-                lineHeight: 1.8,
-                fontSize: '1.1rem',
-                maxWidth: '600px',
-                margin: '0 auto 2rem auto'
-              }}
-            >
-              {proximoTorneio?.descricao || 
-                'Torneio especial de fim de ano com estrutura profissional, blinds lentos e prêmios garantidos. Uma oportunidade única para encerrar o ano com chave de ouro!'}
-            </Typography>
-            
-            <Stack 
-              direction={{ xs: 'column', sm: 'row' }} 
-              spacing={3} 
-              justifyContent="center"
-            >
-              <Button
-                variant="contained"
-                size="large"
-                startIcon={<PlayIcon />}
+          {/* Tournament Card */}
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center',
+            maxWidth: '600px',
+            mx: 'auto'
+          }}>
+            {proximoTorneio ? (
+              <TournamentCard
+                tournament={proximoTorneio}
+                onRegister={() => {
+                  console.log('Inscrever no torneio:', proximoTorneio.id);
+                  // Aqui você pode adicionar a lógica de inscrição
+                }}
+                onViewDetails={() => {
+                  console.log('Ver detalhes do torneio:', proximoTorneio.id);
+                  // Aqui você pode adicionar a lógica para mostrar detalhes
+                }}
+              />
+            ) : (
+              <Paper
+                elevation={0}
                 sx={{
-                  bgcolor: '#22c55e',
-                  color: 'white',
-                  px: 6,
-                  py: 2.5,
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
-                  borderRadius: '12px',
-                  textTransform: 'none',
-                  boxShadow: '0 8px 25px rgba(34, 197, 94, 0.3)',
-                  '&:hover': {
-                    bgcolor: '#16a34a',
-                    transform: 'translateY(-3px)',
-                    boxShadow: '0 12px 35px rgba(34, 197, 94, 0.4)'
-                  },
-                  transition: 'all 0.3s ease'
+                  bgcolor: 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(20px)',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: 6,
+                  p: { xs: 4, md: 6 },
+                  textAlign: 'center',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  boxShadow: '0 25px 50px rgba(0,0,0,0.25)',
+                  width: '100%',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '6px',
+                    background: 'linear-gradient(90deg, #eab308, #facc15, #ca8a04)'
+                  }
                 }}
               >
-                Inscrever-se Agora
-              </Button>
-              
-              <Button
-                variant="outlined"
-                size="large"
-                startIcon={<TrophyIcon />}
-                onClick={() => scrollToSection('ranking')}
-                sx={{
-                  borderColor: '#eab308',
-                  color: '#eab308',
-                  px: 6,
-                  py: 2.5,
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
-                  borderRadius: '12px',
-                  textTransform: 'none',
-                  borderWidth: '2px',
-                  '&:hover': {
-                    bgcolor: 'rgba(234, 179, 8, 0.1)',
-                    transform: 'translateY(-3px)',
-                    borderColor: '#facc15',
-                    borderWidth: '2px'
-                  },
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                Ver Rankings
-              </Button>
-            </Stack>
-          </Paper>
-
-          {/* Cards de características do torneio */}
-
+                <Typography
+                  variant="h3"
+                  sx={{
+                    background: 'linear-gradient(135deg, #eab308, #facc15, #ca8a04)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    fontWeight: 'bold',
+                    mb: 4,
+                    fontSize: { xs: '2rem', md: '2.8rem' }
+                  }}
+                >
+                  Torneio de Natal 2024
+                </Typography>
+                
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: '#57534e',
+                    mb: 4,
+                    lineHeight: 1.8,
+                    fontSize: '1.1rem'
+                  }}
+                >
+                  Torneio especial de fim de ano com estrutura profissional, blinds lentos e prêmios garantidos. 
+                  Uma oportunidade única para encerrar o ano com chave de ouro!
+                </Typography>
+                
+                <Stack 
+                  direction={{ xs: 'column', sm: 'row' }} 
+                  spacing={3} 
+                  justifyContent="center"
+                >
+                  <Button
+                    variant="contained"
+                    size="large"
+                    startIcon={<PlayIcon />}
+                    sx={{
+                      bgcolor: '#22c55e',
+                      color: 'white',
+                      px: 6,
+                      py: 2.5,
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      borderRadius: '12px',
+                      textTransform: 'none',
+                      boxShadow: '0 8px 25px rgba(34, 197, 94, 0.3)',
+                      '&:hover': {
+                        bgcolor: '#16a34a',
+                        transform: 'translateY(-3px)',
+                        boxShadow: '0 12px 35px rgba(34, 197, 94, 0.4)'
+                      },
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    Inscrever-se Agora
+                  </Button>
+                  
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    startIcon={<TrophyIcon />}
+                    onClick={() => scrollToSection('ranking')}
+                    sx={{
+                      borderColor: '#eab308',
+                      color: '#eab308',
+                      px: 6,
+                      py: 2.5,
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      borderRadius: '12px',
+                      textTransform: 'none',
+                      borderWidth: '2px',
+                      '&:hover': {
+                        bgcolor: 'rgba(234, 179, 8, 0.1)',
+                        transform: 'translateY(-3px)',
+                        borderColor: '#facc15',
+                        borderWidth: '2px'
+                      },
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    Ver Rankings
+                  </Button>
+                </Stack>
+              </Paper>
+            )}
+          </Box>
         </Container>
       </Box>
 
@@ -1483,7 +1435,7 @@ export default function LandingPage() {
                 gap: 2
               }}
             >
-              🃏 Sobre a ACES LEAGUE
+               Sobre a ACES LEAGUE
             </Typography>
             
             <Typography
