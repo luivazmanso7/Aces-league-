@@ -47,5 +47,31 @@ export const temporadaApi = {
   calculateRanking: async (id: number): Promise<Ranking[]> => {
     const response = await api.post(`/temporadas/${id}/calculate-ranking`);
     return response.data;
+  },
+
+  // Buscar ranking da temporada atual
+  getCurrentSeasonRanking: async (): Promise<Ranking[]> => {
+    const response = await api.get('/temporadas/current');
+    const temporadaAtual = response.data;
+    
+    if (temporadaAtual?.rankings) {
+      return temporadaAtual.rankings;
+    }
+    
+    return [];
+  },
+
+  // Buscar top 10 da temporada atual especificamente
+  getTop10CurrentSeason: async (): Promise<Ranking[]> => {
+    try {
+      const temporadaAtual = await temporadaApi.findCurrent();
+      if (temporadaAtual) {
+        return await temporadaApi.getRanking(temporadaAtual.id);
+      }
+      return [];
+    } catch (error) {
+      console.error('Erro ao buscar top 10 da temporada atual:', error);
+      return [];
+    }
   }
 };

@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Box,
   Container,
   Typography,
   Button,
   Card,
-  CardContent,
   AppBar,
   Toolbar,
   Stack,
@@ -20,7 +20,14 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  Fab
+  Fab,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Avatar,
+  Chip
 } from '@mui/material'
 import {
   PlayArrow as PlayIcon,
@@ -30,10 +37,17 @@ import {
   Star as StarIcon,
   Menu as MenuIcon,
   Close as CloseIcon,
-  ArrowUpward as ArrowUpIcon
+  ArrowUpward as ArrowUpIcon,
+  PhotoCamera as PhotoCameraIcon,
+  Email as EmailIcon,
+  Phone as PhoneIcon,
+  LocationOn as LocationOnIcon,
+  Info as InfoIcon
 } from '@mui/icons-material'
 import { PublicApiService } from '@/services/publicApi'
-import { JogadorRanking, ProximoTorneio, Foto } from '@/types/landing'
+import { temporadaApi } from '@/services/temporada.service'
+import { ProximoTorneio, Foto } from '@/types/landing'
+import { Ranking } from '@/types/temporada'
 import { Logo } from '@/components/ui/Logo'
 import TournamentCard from '@/components/ui/TournamentCard'
 
@@ -41,7 +55,7 @@ export default function LandingPage() {
   const [loading, setLoading] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [ranking, setRanking] = useState<JogadorRanking[]>([])
+  const [currentSeasonRanking, setCurrentSeasonRanking] = useState<Ranking[]>([])
   const [proximoTorneio, setProximoTorneio] = useState<ProximoTorneio | null>(null)
   const [fotos, setFotos] = useState<Foto[]>([])
 
@@ -60,13 +74,13 @@ export default function LandingPage() {
     const carregarDados = async () => {
       try {
         setLoading(true)
-        const [rankingData, torneioData, fotosData] = await Promise.all([
-          PublicApiService.getRankingJogadores(),
+        const [currentSeasonData, torneioData, fotosData] = await Promise.all([
+          temporadaApi.getTop10CurrentSeason(),
           PublicApiService.getProximoTorneio(),
           PublicApiService.getFotosGaleria()
         ])
 
-        setRanking(rankingData.slice(0, 3)) // Top 3
+        setCurrentSeasonRanking(currentSeasonData) // Top 10 da temporada atual
         setProximoTorneio(torneioData)
         setFotos(fotosData.slice(0, 6)) // Primeiras 6 fotos
       } catch (error) {
@@ -682,7 +696,7 @@ export default function LandingPage() {
       {/* Welcome Section Redesigned */}
       <Box sx={{ 
         py: 10, 
-        background: 'linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(250, 250, 249, 1) 100%)',
+        background: 'linear-gradient(180deg, rgba(248, 250, 252, 1) 0%, rgba(241, 245, 249, 1) 100%)',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -906,7 +920,10 @@ export default function LandingPage() {
           }}>
             {proximoTorneio ? (
               <TournamentCard
-                tournament={proximoTorneio}
+                tournament={{
+                  ...proximoTorneio,
+                  local: proximoTorneio.local || { nome: 'Local a definir' }
+                }}
                 onRegister={() => {
                   console.log('Inscrever no torneio:', proximoTorneio.id);
                   // Aqui você pode adicionar a lógica de inscrição
@@ -1031,228 +1048,195 @@ export default function LandingPage() {
         </Container>
       </Box>
 
-      {/* Ranking Section - Dark Theme */}
+      {/* Ranking Section - Minimalist Table Design */}
       <Box id="ranking" sx={{ 
         py: 10, 
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
+        background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
         position: 'relative',
-        overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `url('/images/poker-hero.png')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.03,
-          zIndex: 0
-        }
+        overflow: 'hidden'
       }}>
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center', mb: 8 }}>
             <Typography
               variant="h2"
               sx={{
-                color: 'white',
+                color: '#1e293b',
                 fontWeight: 'bold',
                 mb: 3,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
-                background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: 2,
-                textShadow: '0 4px 8px rgba(0,0,0,0.3)'
+                gap: 2
               }}
             >
-              <TrophyIcon sx={{ color: '#fbbf24', fontSize: { xs: '2.5rem', md: '3.5rem' } }} />
-              Top Jogadores
+              <TrophyIcon sx={{ color: '#eab308', fontSize: { xs: '2.5rem', md: '3.5rem' } }} />
+              Ranking Atual
             </Typography>
             
             <Typography
               variant="h6"
               sx={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: '1.2rem',
+                color: '#64748b',
+                fontSize: '1.1rem',
                 maxWidth: '600px',
-                margin: '0 auto',
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                margin: '0 auto'
               }}
             >
-              Os melhores jogadores da temporada atual - Elite da ACES LEAGUE
+              Top 10 jogadores da temporada atual
             </Typography>
           </Box>
           
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, justifyContent: 'center' }}>
-            {ranking.map((jogador, index) => {
-              const medals = ['🥇', '🥈', '🥉']
-              const gradients = [
-                'linear-gradient(135deg, #FFD700, #FFA500)',
-                'linear-gradient(135deg, #C0C0C0, #A8A8A8)', 
-                'linear-gradient(135deg, #CD7F32, #B8860B)'
-              ]
-              
-              return (
-                <Card
-                  key={jogador.id}
-                  sx={{
-                    flex: '1 1 320px',
-                    maxWidth: '380px',
-                    bgcolor: 'rgba(255, 255, 255, 0.95)',
-                    backdropFilter: 'blur(20px)',
-                    border: '2px solid rgba(234, 179, 8, 0.2)',
-                    borderRadius: 4,
-                    position: 'relative',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px) scale(1.02)',
-                      boxShadow: '0 20px 40px rgba(234, 179, 8, 0.2)',
-                      borderColor: '#eab308'
-                    },
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '6px',
-                      background: gradients[index] || 'linear-gradient(135deg, #eab308, #facc15)'
+          {/* Ranking Table */}
+          <Box sx={{ 
+            maxWidth: '900px', 
+            mx: 'auto',
+            bgcolor: 'white',
+            borderRadius: 4,
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+            overflow: 'hidden'
+          }}>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ 
+                  bgcolor: '#f8fafc',
+                  borderBottom: '2px solid #eab308'
+                }}>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#1e293b', py: 3 }}>
+                    Posição
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#1e293b', py: 3 }}>
+                    Jogador
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 'bold', color: '#1e293b', py: 3 }}>
+                    Pontuação
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 'bold', color: '#1e293b', py: 3 }}>
+                    Status
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {currentSeasonRanking.slice(0, 10).map((jogador, index) => {
+                  const posicao = index + 1;
+                  const getMedalIcon = () => {
+                    switch (posicao) {
+                      case 1: return '🥇';
+                      case 2: return '🥈';
+                      case 3: return '🥉';
+                      default: return posicao.toString();
                     }
-                  }}
-                >
-                  <CardContent sx={{ textAlign: 'center', p: 4 }}>
-                    <Typography variant="h1" sx={{ mb: 2, fontSize: '4rem' }}>
-                      {medals[index]}
-                    </Typography>
-                    
-                    <Typography
-                      variant="h4"
-                      sx={{
-                        color: '#1c1917',
-                        fontWeight: 'bold',
-                        mb: 1,
-                        fontSize: '1.8rem'
-                      }}
-                    >
-                      {jogador.nome}
-                    </Typography>
-                    
-                    <Typography
-                      variant="h2"
-                      sx={{
-                        background: 'linear-gradient(135deg, #eab308, #facc15)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        fontWeight: 'bold',
-                        mb: 2,
-                        fontSize: '2.5rem'
-                      }}
-                    >
-                      #{jogador.posicao}
-                    </Typography>
-                    
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        color: '#57534e',
-                        fontWeight: 600,
-                        mb: 3,
-                        fontSize: '1.5rem'
-                      }}
-                    >
-                      {jogador.pontuacao} pontos
-                    </Typography>
+                  };
 
-                    <Box sx={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: 'repeat(2, 1fr)',
-                      gap: 3,
-                      mt: 3
-                    }}>
-                      <Box sx={{ 
-                        textAlign: 'center',
-                        bgcolor: 'rgba(234, 179, 8, 0.1)',
-                        borderRadius: 2,
-                        p: 2
-                      }}>
-                        <Typography variant="body2" sx={{ 
-                          color: '#78716c',
-                          textTransform: 'uppercase',
-                          fontWeight: 600,
-                          fontSize: '0.8rem',
-                          mb: 1
-                        }}>
-                          Torneios
+                  return (
+                    <TableRow
+                      key={jogador.id || index}
+                      sx={{
+                        '&:hover': {
+                          bgcolor: '#f8fafc',
+                          transform: 'scale(1.01)',
+                        },
+                        transition: 'all 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <TableCell sx={{ py: 3, fontSize: '1.2rem', fontWeight: 'bold' }}>
+                        {posicao <= 3 ? getMedalIcon() : posicao}
+                      </TableCell>
+                      <TableCell sx={{ py: 3 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          <Avatar
+                            sx={{
+                              bgcolor: posicao <= 3 ? '#eab308' : '#64748b',
+                              fontWeight: 'bold'
+                            }}
+                          >
+                            {(jogador.jogador?.nome || 'J').charAt(0).toUpperCase()}
+                          </Avatar>
+                          <Box>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1e293b' }}>
+                              {jogador.jogador?.nome || 'Jogador Anônimo'}
+                            </Typography>
+                            {jogador.jogador?.apelido && (
+                              <Typography variant="body2" sx={{ color: '#64748b', fontStyle: 'italic' }}>
+                                &ldquo;{jogador.jogador.apelido}&rdquo;
+                              </Typography>
+                            )}
+                          </Box>
+                        </Box>
+                      </TableCell>
+                      <TableCell align="center" sx={{ py: 3 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1e293b' }}>
+                          {jogador.pontuacao?.toLocaleString() || 0}
                         </Typography>
-                        <Typography variant="h5" sx={{ 
-                          color: '#eab308',
-                          fontWeight: 'bold'
-                        }}>
-                          {jogador.torneiosParticipados}
-                        </Typography>
-                      </Box>
-                      
-                      <Box sx={{ 
-                        textAlign: 'center',
-                        bgcolor: 'rgba(234, 179, 8, 0.1)',
-                        borderRadius: 2,
-                        p: 2
-                      }}>
-                        <Typography variant="body2" sx={{ 
-                          color: '#78716c',
-                          textTransform: 'uppercase',
-                          fontWeight: 600,
-                          fontSize: '0.8rem',
-                          mb: 1
-                        }}>
-                          Vitórias
-                        </Typography>
-                        <Typography variant="h5" sx={{ 
-                          color: '#eab308',
-                          fontWeight: 'bold'
-                        }}>
-                          {jogador.vitorias}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
-              )
-            })}
+                      </TableCell>
+                      <TableCell align="center" sx={{ py: 3 }}>
+                        <Chip
+                          label={posicao <= 3 ? 'Pódio' : posicao <= 5 ? 'Top 5' : 'Top 10'}
+                          sx={{
+                            bgcolor: posicao <= 3 ? '#fef3c7' : posicao <= 5 ? '#dbeafe' : '#f1f5f9',
+                            color: posicao <= 3 ? '#92400e' : posicao <= 5 ? '#1e40af' : '#475569',
+                            fontWeight: 600
+                          }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </Box>
 
-          {/* Call to Action para ver ranking completo */}
+          {/* Call to Action */}
           <Box sx={{ textAlign: 'center', mt: 8 }}>
+            <Typography
+              variant="h5"
+              sx={{
+                color: '#1e293b',
+                fontWeight: 'bold',
+                mb: 3,
+                fontSize: { xs: '1.5rem', md: '1.8rem' }
+              }}
+            >
+              Quer estar no topo do ranking?
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: '#64748b',
+                mb: 4,
+                maxWidth: '600px',
+                mx: 'auto',
+                lineHeight: 1.6
+              }}
+            >
+              Participe dos nossos torneios e acumule pontos para subir no ranking. 
+              Cada torneio é uma nova oportunidade de mostrar suas habilidades!
+            </Typography>
             <Button
               variant="contained"
               size="large"
-              startIcon={<TrophyIcon />}
+              startIcon={<PlayIcon />}
+              onClick={() => scrollToSection('torneios')}
               sx={{
-                background: 'linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)',
-                color: 'white',
+                bgcolor: '#eab308',
+                color: '#1a1a1a',
                 px: 6,
                 py: 2.5,
                 fontSize: '1.1rem',
                 fontWeight: 600,
                 borderRadius: '12px',
                 textTransform: 'none',
-                boxShadow: '0 8px 25px rgba(5, 150, 105, 0.3)',
-                border: 'none',
+                boxShadow: '0 8px 25px rgba(234, 179, 8, 0.3)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%)',
+                  bgcolor: '#facc15',
                   transform: 'translateY(-3px)',
-                  boxShadow: '0 12px 35px rgba(5, 150, 105, 0.4)'
+                  boxShadow: '0 12px 35px rgba(234, 179, 8, 0.4)'
                 },
                 transition: 'all 0.3s ease'
               }}
             >
-              Ver Ranking Completo
+              Participar do Próximo Torneio
             </Button>
           </Box>
         </Container>
@@ -1295,7 +1279,8 @@ export default function LandingPage() {
                   gap: 2
                 }}
               >
-                📸 Galeria de Momentos
+                <PhotoCameraIcon sx={{ color: 'white', fontSize: { xs: '2.5rem', md: '3.5rem' } }} />
+                Galeria de Momentos
               </Typography>
               
               <Typography
@@ -1422,34 +1407,21 @@ export default function LandingPage() {
             <Typography
               variant="h2"
               sx={{
-                color: '#1c1917',
+                color: '#1e293b',
                 fontWeight: 'bold',
                 mb: 3,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
-                background: 'linear-gradient(135deg, #eab308 0%, #facc15 50%, #ca8a04 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 2
               }}
             >
-               Sobre a ACES LEAGUE
+              <InfoIcon sx={{ color: '#eab308', fontSize: { xs: '2.5rem', md: '3.5rem' } }} />
+              Sobre a ACES LEAGUE
             </Typography>
             
-            <Typography
-              variant="h6"
-              sx={{
-                color: '#57534e',
-                maxWidth: '800px',
-                margin: '0 auto',
-                lineHeight: 1.8,
-                fontSize: '1.2rem'
-              }}
-            >
-              Mais do que um clube de poker - somos uma família unida pela paixão pelos jogos estratégicos
-            </Typography>
+            
           </Box>
 
           <Box sx={{ 
@@ -1526,38 +1498,74 @@ export default function LandingPage() {
               </Box>
             </Box>
 
-            {/* Lado direito - Imagem/Logo em destaque */}
+            {/* Lado direito - Logos */}
             <Box sx={{ 
               display: 'flex',
+              flexDirection: 'row',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              gap: 4,
+              flexWrap: 'wrap'
             }}>
+              {/* Logo 1 */}
               <Box sx={{
-                width: '400px',
-                height: '400px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(250, 204, 21, 0.05) 100%)',
+                width: '200px',
+                height: '200px',
+                borderRadius: 3,
+                overflow: 'hidden',
+                boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
+                border: '2px solid rgba(234, 179, 8, 0.2)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                bgcolor: 'white',
+                transition: 'all 0.3s ease',
                 position: 'relative',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: '10%',
-                  left: '10%',
-                  right: '10%',
-                  bottom: '10%',
-                  borderRadius: '50%',
-                  border: '3px solid rgba(234, 179, 8, 0.3)',
-                  animation: 'float 4s ease-in-out infinite'
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 12px 35px rgba(0, 0, 0, 0.15)',
+                  borderColor: 'rgba(234, 179, 8, 0.4)'
                 }
               }}>
-                <Logo 
-                  variant="full"
-                  size={200}
-                  color="gold"
-                  showText={true}
+                <Image 
+                  src="/logo/image copy.png"
+                  alt="ACES LEAGUE Logo"
+                  width={180}
+                  height={180}
+                  style={{
+                    objectFit: 'contain'
+                  }}
+                />
+              </Box>
+
+              {/* Logo 2 */}
+              <Box sx={{
+                width: '200px',
+                height: '200px',
+                borderRadius: 3,
+                overflow: 'hidden',
+                boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
+                border: '2px solid rgba(234, 179, 8, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: 'white',
+                transition: 'all 0.3s ease',
+                position: 'relative',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 12px 35px rgba(0, 0, 0, 0.15)',
+                  borderColor: 'rgba(234, 179, 8, 0.4)'
+                }
+              }}>
+                <Image 
+                  src="/logo/PHOTO-2025-06-30-11-34-08.jpg"
+                  alt="ACES LEAGUE"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: 'cover'
+                  }}
                 />
               </Box>
             </Box>
@@ -1572,21 +1580,7 @@ export default function LandingPage() {
           color: 'white',
           py: 8,
           borderTop: '3px solid #eab308',
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: `url('/images/poker-hero.png')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.03,
-            zIndex: 0
-          }
+          position: 'relative'
         }}
       >
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
@@ -1599,11 +1593,14 @@ export default function LandingPage() {
             {/* Logo e Descrição */}
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                <Logo 
-                  variant="full"
-                  size={50}
-                  color="gold"
-                  showText={true}
+                <Image 
+                  src="/logo/image copy.png"
+                  alt="ACES LEAGUE"
+                  width={50}
+                  height={50}
+                  style={{
+                    objectFit: 'contain'
+                  }}
                 />
               </Box>
               <Typography
@@ -1675,15 +1672,24 @@ export default function LandingPage() {
                 Contato
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                  📧 contato@acesleague.com.br
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                  📱 (11) 99999-9999
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                  📍 Recife, PE - Brasil
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <EmailIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                    contato@acesleague.com.br
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <PhoneIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                    (11) 99999-9999
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <LocationOnIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                    Recife, PE - Brasil
+                  </Typography>
+                </Box>
                 <Button
                   variant="outlined"
                   component={Link}
@@ -1731,15 +1737,17 @@ export default function LandingPage() {
             >
               © 2025 ACES LEAGUE. Todos os direitos reservados.
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                color: 'rgba(255, 255, 255, 0.6)',
-                textAlign: { xs: 'center', md: 'right' }
-              }}
-            >
-              Jogue com responsabilidade. 🎰
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-end' }, gap: 1 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.6)'
+                }}
+              >
+                Jogue com responsabilidade.
+              </Typography>
+              
+            </Box>
           </Box>
         </Container>
       </Box>
