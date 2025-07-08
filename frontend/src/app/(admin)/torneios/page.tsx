@@ -11,7 +11,6 @@ import {
   CircularProgress,
   Container,
   Paper,
-  Fab,
   TextField,
   InputAdornment,
   FormControl,
@@ -423,20 +422,6 @@ export default function TorneiosPage() {
           </Grid>
         </Box>
       )}
-
-      {/* Floating Action Button */}
-      <Fab
-        color="primary"
-        aria-label="adicionar torneio"
-        sx={{
-          position: 'fixed',
-          bottom: 24,
-          right: 24,
-        }}
-        onClick={() => setDialogOpen(true)}
-      >
-        <AddIcon />
-      </Fab>
 
       {/* Dialogs */}
       <TorneioDialog
