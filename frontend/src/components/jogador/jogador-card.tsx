@@ -84,6 +84,7 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           transform: 'translateY(-2px)',
           boxShadow: 3,
         },
+        bgcolor: '#fff'
       }}
     >
       {/* Menu de ações */}
@@ -200,7 +201,7 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
         }}>
           <Tooltip title="Total de Torneios">
             <Box sx={{ textAlign: 'center' }}>
-              <TrendingUpIcon sx={{ fontSize: 20, color: 'primary.main', mb: 0.5 }} />
+              <TrendingUpIcon sx={{ fontSize: 20, color: '#fff', mb: 0.5 }} />
               <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
                 {jogador.total_torneios}
               </Typography>

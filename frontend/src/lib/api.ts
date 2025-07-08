@@ -49,8 +49,13 @@ api.interceptors.response.use(
         sameSite: 'strict'
       })
       
-      // Só redirecionar se não estiver já na página de login
-      if (!window.location.pathname.includes('/login')) {
+      // Rotas protegidas que precisam de autenticação
+      const protectedRoutes = ['/dashboard', '/torneios', '/jogadores', '/temporadas', '/galeria'];
+      const currentPath = window.location.pathname;
+      const isProtectedRoute = protectedRoutes.some(route => currentPath.startsWith(route));
+      
+      // Só redirecionar se estiver em uma rota protegida e não já na página de login
+      if (isProtectedRoute && !currentPath.includes('/login')) {
         window.location.href = '/login'
       }
     } else if (error.response?.status === 429) {

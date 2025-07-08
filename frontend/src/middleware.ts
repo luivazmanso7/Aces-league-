@@ -4,9 +4,13 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('auth-token')?.value;
 
+  console.log(`[MIDDLEWARE] Pathname: ${pathname}, Token exists: ${!!token}`);
+
   // Rotas que requerem autenticação
   const protectedRoutes = ['/dashboard', '/torneios', '/jogadores', '/temporadas', '/galeria'];
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+
+  console.log(`[MIDDLEWARE] Is protected route: ${isProtectedRoute}`);
 
   // Validação básica do formato do token JWT
   const isValidTokenFormat = (token: string): boolean => {
@@ -21,6 +25,7 @@ export function middleware(request: NextRequest) {
   // Se está tentando acessar uma rota protegida
   if (isProtectedRoute) {
     if (!token || !isValidTokenFormat(token)) {
+      console.log(`[MIDDLEWARE] Token inválido, redirecionando para login`);
       // Token inválido ou ausente - redirecionar para login
       const response = NextResponse.redirect(new URL('/login', request.url));
       
@@ -34,11 +39,14 @@ export function middleware(request: NextRequest) {
       }
       
       return response;
+    } else {
+      console.log(`[MIDDLEWARE] Token válido, permitindo acesso a ${pathname}`);
     }
   }
 
   // Se está logado e tentando acessar a página de login, redireciona para o dashboard
   if (pathname === '/login' && token && isValidTokenFormat(token)) {
+    console.log(`[MIDDLEWARE] Usuário logado tentando acessar login, redirecionando para dashboard`);
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 

@@ -307,6 +307,7 @@ export default function RankingsPage() {
                     sx={{
                       '&:nth-of-type(odd)': { bgcolor: 'action.hover' },
                       '&:hover': { bgcolor: 'action.selected' },
+                      bgcolor: '#fff'
                     }}
                   >
                     <TableCell>
@@ -323,7 +324,7 @@ export default function RankingsPage() {
                     </TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Avatar sx={{ bgcolor: 'primary.main' }}>
+                        <Avatar sx={{ bgcolor: '#fff' }}>
                           {item.jogador.nome.charAt(0)}
                         </Avatar>
                         <div>

@@ -125,41 +125,6 @@ export class PublicService {
     }
   }
 
-  async getFotosGaleria() {
-    // Buscar fotos públicas da galeria
-    const fotos = await this.prisma.foto.findMany({
-      orderBy: {
-        data: 'desc',
-      },
-      take: 12, // Últimas 12 fotos
-      select: {
-        id: true,
-        legenda: true,
-        imagem_url: true,
-        categoria: true,
-        data: true,
-        album: true,
-        torneio: {
-          select: {
-            id: true,
-            nome: true,
-            data_hora: true,
-          },
-        },
-      },
-    });
-
-    return fotos.map(foto => ({
-      id: foto.id,
-      nome: foto.album,
-      descricao: foto.legenda,
-      url: foto.imagem_url,
-      categoria: foto.categoria,
-      data_upload: foto.data,
-      torneio: foto.torneio,
-    }));
-  }
-
   async getTemporadas() {
     // Buscar todas as temporadas
     const temporadas = await this.prisma.temporada.findMany({

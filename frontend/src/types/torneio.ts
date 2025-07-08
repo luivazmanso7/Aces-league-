@@ -38,7 +38,6 @@ export interface Participacao {
     id: number;
     nome: string;
     apelido?: string;
-    foto?: string;
   };
   torneio?: {
     id: number;

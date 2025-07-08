@@ -15,11 +15,6 @@ export class PublicController {
     return this.publicService.getRankingJogadores();
   }
 
-  @Get('galeria')
-  async getFotosGaleria() {
-    return this.publicService.getFotosGaleria();
-  }
-
   @Get('temporadas')
   async getTemporadas() {
     return this.publicService.getTemporadas();

@@ -118,11 +118,14 @@ export class TemporadaService {
 
     // Ordenar por pontuação e atribuir posições
     const rankingArray = Object.entries(jogadorPontuacao)
-      .map(([jogadorId, data]) => ({
-        id_jogador: parseInt(jogadorId),
-        jogador: data.jogador,
-        pontuacao: data.pontuacaoTotal,
-      }))
+      .map(([jogadorId, data]) => {
+        const d = data as { jogador: any; pontuacaoTotal: number };
+        return {
+          id_jogador: parseInt(jogadorId),
+          jogador: d.jogador,
+          pontuacao: d.pontuacaoTotal,
+        };
+      })
       .sort((a, b) => b.pontuacao - a.pontuacao)
       .map((item, index) => ({
         ...item,

@@ -42,7 +42,6 @@ const navigation = [
   { name: 'Torneios', href: '/torneios', icon: TournamentIcon },
   { name: 'Jogadores', href: '/jogadores', icon: UsersIcon },
   { name: 'Rankings', href: '/rankings', icon: RankingIcon },
-  { name: 'Fotos', href: '/fotos', icon: TrophyIcon },
 ]
 
 const DRAWER_WIDTH = 280

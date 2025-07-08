@@ -244,9 +244,9 @@ export default function TorneiosPage() {
       <Paper elevation={0} sx={{ p: 3, mb: 4, bgcolor: 'background.paper' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <CasinoIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+            <CasinoIcon sx={{ fontSize: 32, color: '#fff' }} />
             <div>
-              <Typography variant="h4" component="h1" fontWeight="bold">
+              <Typography variant="h4" component="h1" fontWeight="bold" color="#fff">
                 Torneios
               </Typography>
               <Typography variant="body1" color="text.secondary">

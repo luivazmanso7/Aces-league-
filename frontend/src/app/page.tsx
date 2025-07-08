@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import {
   Box,
@@ -31,19 +30,20 @@ import {
   PlayArrow as PlayIcon,
   EmojiEvents as TrophyIcon,
   People as PeopleIcon,
-  AdminPanelSettings as AdminIcon,
   Star as StarIcon,
   Menu as MenuIcon,
   Close as CloseIcon,
   ArrowUpward as ArrowUpIcon,
-  Email as EmailIcon,
-  Phone as PhoneIcon,
-  LocationOn as LocationOnIcon,
   Info as InfoIcon,
   Schedule as ScheduleIcon,
   Stars as ExcellenceIcon,
   Diversity3 as CommunityIcon,
-  Verified as IntegrityIcon
+  Verified as IntegrityIcon,
+  Instagram as InstagramIcon,
+  Videocam as VideocamIcon,
+  LocationOn as LocationOnIcon,
+  Phone as PhoneIcon,
+  AdminPanelSettings as AdminIcon
 } from '@mui/icons-material'
 import { PublicApiService } from '@/services/publicApi'
 import { temporadaApi } from '@/services/temporada.service'
@@ -102,7 +102,14 @@ export default function LandingPage() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Calcular offset do header fixo (altura do AppBar + padding)
+      const headerHeight = scrolled ? 80 : 100 // Altura estimada do header baseada no py do Toolbar
+      const elementPosition = element.offsetTop - headerHeight
+      
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      })
     }
     setMobileMenuOpen(false)
   }
@@ -134,61 +141,134 @@ export default function LandingPage() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#ffffff' }}>
-      {/* Header Aprimorado */}
+    <Box sx={{ minHeight: '100vh', bgcolor: '#ffffff' }}>      {/* Header Premium Aprimorado */}
       <AppBar 
         position="fixed" 
         elevation={0}
         sx={{ 
-          bgcolor: scrolled 
-            ? 'rgba(255, 255, 255, 0.98)' 
-            : 'rgba(255, 255, 255, 0.95)',
+          background: scrolled 
+            ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 250, 250, 0.98) 100%)' 
+            : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 250, 250, 0.95) 100%)',
           backdropFilter: 'blur(20px)',
           borderBottom: scrolled 
-            ? '1px solid rgba(234, 179, 8, 0.3)' 
-            : '1px solid rgba(234, 179, 8, 0.15)',
-          transition: 'all 0.3s ease',
+            ? '1px solid rgba(234, 179, 8, 0.4)' 
+            : '1px solid rgba(234, 179, 8, 0.2)',
+          transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           transform: scrolled ? 'translateY(0)' : 'translateY(0)',
           boxShadow: scrolled 
-            ? '0 4px 20px rgba(0, 0, 0, 0.08)' 
-            : '0 2px 10px rgba(0, 0, 0, 0.04)'
+            ? '0 8px 32px rgba(234, 179, 8, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1)'
+            : '0 4px 16px rgba(234, 179, 8, 0.08), 0 1px 4px rgba(0, 0, 0, 0.05)',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            background: 'linear-gradient(90deg, transparent, #eab308, #facc15, #eab308, transparent)',
+            opacity: scrolled ? 1 : 0.7,
+            transition: 'opacity 0.3s ease'
+          }
         }}
       >
-        <Toolbar sx={{ py: scrolled ? 1.2 : 1.2, transition: 'all 0.3s ease' }}>
-          {/* Logo e Nome */}
+        <Toolbar sx={{ 
+          py: scrolled ? { xs: 0.8, sm: 1.2 } : { xs: 1.5, sm: 2 }, 
+          transition: 'all 0.4s ease', 
+          px: { xs: 2, sm: 3 } 
+        }}>
+          {/* Logo e Nome com Animação Premium */}
           <Box 
             sx={{ 
               display: 'flex', 
               alignItems: 'center', 
               flexGrow: 1,
-              cursor: 'pointer'
+              cursor: 'pointer',
+              transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              '&:hover': {
+                transform: 'scale(1.08) translateY(-2px)'
+              }
             }}
             onClick={scrollToTop}
           >
-            <Logo 
-              variant="full"
-              size={55}
-              color="dark"
-              showText={true}
-            />
+            {/* Container do Logo simplificado */}
+            <Box>
+              <Logo 
+                size={scrolled ? { xs: 50, sm: 70 } : { xs: 55, sm: 75 }}
+              />
+            </Box>
+
+            {/* Texto adicional do logo para mais destaque */}
+            <Box sx={{ 
+              ml: 2, 
+              display: { xs: 'none', sm: 'block' },
+              transition: 'all 0.3s ease'
+            }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 900,
+                  background: 'linear-gradient(135deg, #1c1917 0%, #374151 50%, #111827 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  fontSize: scrolled ? '1.4rem' : '1.6rem',
+                  letterSpacing: '-0.5px',
+                  transition: 'all 0.3s ease',
+                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                ACES LEAGUE
+              </Typography>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: '#eab308',
+                  fontWeight: 600,
+                  fontSize: '0.75rem',
+                  letterSpacing: '1px',
+                  textTransform: 'uppercase',
+                  display: 'block',
+                  lineHeight: 1
+                }}
+              >
+                Poker Elite
+              </Typography>
+            </Box>
           </Box>
           
-          {/* Menu Desktop */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5 }}>
+          
+          {/* Menu Desktop Premium */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
             <Button 
               onClick={() => scrollToSection('torneios')}
               sx={{ 
                 color: '#333',
                 fontWeight: 600,
-                px: 3,
-                py: 1,
-                fontSize: '1rem',
-                borderRadius: 2,
+                px: 3.5,
+                py: 1.2,
+                fontSize: '0.95rem',
+                borderRadius: 3,
                 position: 'relative',
-                transition: 'all 0.3s ease',
+                overflow: 'hidden',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                textTransform: 'none',
+                '&:before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: '-100%',
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.1), transparent)',
+                  transition: 'left 0.6s ease'
+                },
                 '&:hover': {
                   color: '#eab308',
                   transform: 'translateY(-2px)',
+                  bgcolor: 'rgba(234, 179, 8, 0.05)',
+                  boxShadow: '0 4px 20px rgba(234, 179, 8, 0.2)',
+                  '&:before': {
+                    left: '100%'
+                  },
                   '&::after': {
                     width: '100%'
                   }
@@ -200,9 +280,10 @@ export default function LandingPage() {
                   left: '50%',
                   transform: 'translateX(-50%)',
                   width: 0,
-                  height: '2px',
-                  bgcolor: '#eab308',
-                  transition: 'width 0.3s ease'
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #eab308, #facc15)',
+                  borderRadius: '2px',
+                  transition: 'width 0.4s ease'
                 }
               }}
             >
@@ -214,15 +295,32 @@ export default function LandingPage() {
               sx={{ 
                 color: '#333',
                 fontWeight: 600,
-                px: 3,
-                py: 1,
-                fontSize: '1rem',
-                borderRadius: 2,
+                px: 3.5,
+                py: 1.2,
+                fontSize: '0.95rem',
+                borderRadius: 3,
                 position: 'relative',
-                transition: 'all 0.3s ease',
+                overflow: 'hidden',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                textTransform: 'none',
+                '&:before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: '-100%',
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.1), transparent)',
+                  transition: 'left 0.6s ease'
+                },
                 '&:hover': {
                   color: '#eab308',
                   transform: 'translateY(-2px)',
+                  bgcolor: 'rgba(234, 179, 8, 0.05)',
+                  boxShadow: '0 4px 20px rgba(234, 179, 8, 0.2)',
+                  '&:before': {
+                    left: '100%'
+                  },
                   '&::after': {
                     width: '100%'
                   }
@@ -234,9 +332,10 @@ export default function LandingPage() {
                   left: '50%',
                   transform: 'translateX(-50%)',
                   width: 0,
-                  height: '2px',
-                  bgcolor: '#eab308',
-                  transition: 'width 0.3s ease'
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #eab308, #facc15)',
+                  borderRadius: '2px',
+                  transition: 'width 0.4s ease'
                 }
               }}
             >
@@ -248,15 +347,32 @@ export default function LandingPage() {
               sx={{ 
                 color: '#333',
                 fontWeight: 600,
-                px: 3,
-                py: 1,
-                fontSize: '1rem',
-                borderRadius: 2,
+                px: 3.5,
+                py: 1.2,
+                fontSize: '0.95rem',
+                borderRadius: 3,
                 position: 'relative',
-                transition: 'all 0.3s ease',
+                overflow: 'hidden',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                textTransform: 'none',
+                '&:before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: '-100%',
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.1), transparent)',
+                  transition: 'left 0.6s ease'
+                },
                 '&:hover': {
                   color: '#eab308',
                   transform: 'translateY(-2px)',
+                  bgcolor: 'rgba(234, 179, 8, 0.05)',
+                  boxShadow: '0 4px 20px rgba(234, 179, 8, 0.2)',
+                  '&:before': {
+                    left: '100%'
+                  },
                   '&::after': {
                     width: '100%'
                   }
@@ -268,17 +384,57 @@ export default function LandingPage() {
                   left: '50%',
                   transform: 'translateX(-50%)',
                   width: 0,
-                  height: '2px',
-                  bgcolor: '#eab308',
-                  transition: 'width 0.3s ease'
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #eab308, #facc15)',
+                  borderRadius: '2px',
+                  transition: 'width 0.4s ease'
                 }
               }}
             >
               Sobre
             </Button>
+
+            {/* Divisor */}
+            <Box sx={{ 
+              width: '2px', 
+              height: '32px', 
+              background: 'linear-gradient(180deg, transparent, rgba(234, 179, 8, 0.3), transparent)',
+              mx: 1
+            }} />
+
+            {/* Botão Transmissões ao Vivo */}
+            <Button 
+              onClick={() => window.open('https://www.twitch.tv/acesleague_/about', '_blank')}
+              variant="outlined"
+              sx={{ 
+                background: '#ffffff',
+                borderColor: '#9146ff',
+                color: '#9146ff',
+                fontWeight: 700,
+                px: 3,
+                py: 1.2,
+                fontSize: '0.9rem',
+                borderRadius: 3,
+                textTransform: 'none',
+                borderWidth: '2px',
+                boxShadow: '0 4px 16px rgba(145, 70, 255, 0.15)',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                '&:hover': {
+                  transform: 'translateY(-3px) scale(1.02)',
+                  borderColor: '#772ce8',
+                  borderWidth: '2px',
+                  backgroundColor: 'rgba(145, 70, 255, 0.05)',
+                  boxShadow: '0 8px 25px rgba(145, 70, 255, 0.3)',
+                  color: '#772ce8'
+                }
+              }}
+              startIcon={<VideocamIcon />}
+            >
+              Transmissões ao Vivo
+            </Button>
           </Box>
 
-          {/* Menu Mobile */}
+          {/* Menu Mobile Aprimorado */}
           <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
             <IconButton
               size="large"
@@ -287,8 +443,13 @@ export default function LandingPage() {
               onClick={() => setMobileMenuOpen(true)}
               sx={{ 
                 color: '#ca8a04',
+                background: 'rgba(234, 179, 8, 0.1)',
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                  bgcolor: 'rgba(234, 179, 8, 0.1)'
+                  bgcolor: 'rgba(234, 179, 8, 0.2)',
+                  transform: 'scale(1.1)',
+                  boxShadow: '0 4px 12px rgba(234, 179, 8, 0.3)'
                 }
               }}
             >
@@ -298,62 +459,206 @@ export default function LandingPage() {
         </Toolbar>
       </AppBar>
 
-      {/* Menu Mobile Drawer */}
+      {/* Menu Mobile Drawer Premium */}
       <Drawer
         anchor="right"
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         sx={{
           '& .MuiDrawer-paper': {
-            bgcolor: '#ffffff',
+            background: 'linear-gradient(135deg, #ffffff 0%, #fafafa 100%)',
             color: '#1c1917',
-            borderLeft: '1px solid rgba(234, 179, 8, 0.2)',
-            width: 280
+            borderLeft: '3px solid #eab308',
+            width: 300,
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)'
+          },
+          '& .MuiBackdrop-root': {
+            backdropFilter: 'blur(8px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)'
           }
         }}
       >
-        <Box sx={{ pt: 3, pb: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, mb: 3 }}>
-            <Logo 
-              variant="icon"
-              size={30}
-              color="gold"
-              showText={false}
-            />
+        <Box sx={{ pt: 3, pb: 2, height: '100%' }}>
+          {/* Header do Drawer */}
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            px: 3, 
+            mb: 4,
+            borderBottom: '2px solid rgba(234, 179, 8, 0.2)',
+            pb: 3
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Logo 
+                size={35}
+              />
+              <Typography variant="h6" sx={{ fontWeight: 700, color: '#1c1917' }}>
+                Menu
+              </Typography>
+            </Box>
             <IconButton 
               onClick={() => setMobileMenuOpen(false)}
-              sx={{ color: '#eab308' }}
+              sx={{ 
+                color: '#eab308',
+                background: 'rgba(234, 179, 8, 0.1)',
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  bgcolor: 'rgba(234, 179, 8, 0.2)',
+                  transform: 'scale(1.1)'
+                }
+              }}
             >
               <CloseIcon />
             </IconButton>
           </Box>
           
-          <List>
-            <ListItem onClick={() => scrollToSection('torneios')}>
+          <List sx={{ px: 2 }}>
+            {/* Torneios */}
+            <ListItem 
+              component="button"
+              onClick={() => scrollToSection('torneios')}
+              sx={{ 
+                borderRadius: 3,
+                mb: 1,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  bgcolor: 'rgba(234, 179, 8, 0.1)',
+                  transform: 'translateX(8px)',
+                  boxShadow: '0 4px 12px rgba(234, 179, 8, 0.2)'
+                }
+              }}
+            >
               <ListItemIcon>
-                <TrophyIcon sx={{ color: '#eab308' }} />
+                <TrophyIcon sx={{ color: '#eab308', fontSize: '1.5rem' }} />
               </ListItemIcon>
-              <ListItemText primary="Torneios" />
+              <ListItemText 
+                primary="Torneios" 
+                primaryTypographyProps={{ 
+                  fontWeight: 600,
+                  fontSize: '1rem'
+                }}
+              />
             </ListItem>
             
-            <ListItem onClick={() => scrollToSection('ranking')}>
+            {/* Ranking */}
+            <ListItem 
+              component="button"
+              onClick={() => scrollToSection('ranking')}
+              sx={{ 
+                borderRadius: 3,
+                mb: 1,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  bgcolor: 'rgba(234, 179, 8, 0.1)',
+                  transform: 'translateX(8px)',
+                  boxShadow: '0 4px 12px rgba(234, 179, 8, 0.2)'
+                }
+              }}
+            >
               <ListItemIcon>
-                <StarIcon sx={{ color: '#eab308' }} />
+                <StarIcon sx={{ color: '#eab308', fontSize: '1.5rem' }} />
               </ListItemIcon>
-              <ListItemText primary="Ranking" />
+              <ListItemText 
+                primary="Ranking" 
+                primaryTypographyProps={{ 
+                  fontWeight: 600,
+                  fontSize: '1rem'
+                }}
+              />
             </ListItem>
             
-            <ListItem onClick={() => scrollToSection('sobre')}>
+            {/* Sobre */}
+            <ListItem 
+              component="button"
+              onClick={() => scrollToSection('sobre')}
+              sx={{ 
+                borderRadius: 3,
+                mb: 1,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  bgcolor: 'rgba(234, 179, 8, 0.1)',
+                  transform: 'translateX(8px)',
+                  boxShadow: '0 4px 12px rgba(234, 179, 8, 0.2)'
+                }
+              }}
+            >
               <ListItemIcon>
-                <PlayIcon sx={{ color: '#eab308' }} />
+                <InfoIcon sx={{ color: '#eab308', fontSize: '1.5rem' }} />
               </ListItemIcon>
-              <ListItemText primary="Sobre" />
+              <ListItemText 
+                primary="Sobre" 
+                primaryTypographyProps={{ 
+                  fontWeight: 600,
+                  fontSize: '1rem'
+                }}
+              />
+            </ListItem>
+
+            {/* Divisor */}
+            <Box sx={{ 
+              my: 3,
+              height: '2px',
+              background: 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.3), transparent)',
+              mx: 2
+            }} />
+
+            {/* Transmissões */}
+            <ListItem 
+              component="button"
+              onClick={() => window.open('https://www.twitch.tv/acesleague_/about', '_blank')}
+              sx={{ 
+                borderRadius: 3,
+                mb: 1,
+                border: '2px solid rgba(145, 70, 255, 0.2)',
+                bgcolor: 'rgba(145, 70, 255, 0.05)',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  bgcolor: 'rgba(145, 70, 255, 0.1)',
+                  borderColor: 'rgba(145, 70, 255, 0.4)',
+                  transform: 'translateX(8px)',
+                  boxShadow: '0 4px 12px rgba(145, 70, 255, 0.2)'
+                }
+              }}
+            >
+              <ListItemIcon>
+                <VideocamIcon sx={{ color: '#9146ff', fontSize: '1.5rem' }} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Transmissões ao Vivo" 
+                primaryTypographyProps={{ 
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  color: '#9146ff'
+                }}
+              />
             </ListItem>
           </List>
+
+          {/* Footer do Menu */}
+          <Box sx={{
+            mt: 'auto',
+            px: 3,
+            py: 2,
+            borderTop: '2px solid rgba(234, 179, 8, 0.1)',
+            textAlign: 'center'
+          }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: 'rgba(28, 25, 23, 0.6)',
+                fontSize: '0.75rem',
+                fontWeight: 500
+              }}
+            >
+              ACES LEAGUE © 2025
+            </Typography>
+          </Box>
         </Box>
       </Drawer>
 
-      {/* Botão Voltar ao Topo */}
+      {/* Botão Voltar ao Topo Premium */}
       {scrolled && (
         <Fab
           onClick={scrollToTop}
@@ -361,14 +666,28 @@ export default function LandingPage() {
             position: 'fixed',
             bottom: 32,
             right: 32,
-            bgcolor: '#eab308',
-            color: '#fff',
+            background: 'linear-gradient(135deg, #eab308 0%, #facc15 100%)',
+            color: '#1a1a1a',
             zIndex: 1000,
+            width: 56,
+            height: 56,
+            boxShadow: '0 8px 25px rgba(234, 179, 8, 0.4), 0 0 0 1px rgba(234, 179, 8, 0.2)',
+            transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             '&:hover': {
-              bgcolor: '#facc15',
-              transform: 'scale(1.1)'
+              background: 'linear-gradient(135deg, #facc15 0%, #fde047 100%)',
+              transform: 'scale(1.15) translateY(-2px)',
+              boxShadow: '0 12px 40px rgba(234, 179, 8, 0.5), 0 0 0 2px rgba(234, 179, 8, 0.3)',
+              '& .MuiSvgIcon-root': {
+                transform: 'scale(1.2)'
+              }
             },
-            transition: 'all 0.3s ease'
+            '&:active': {
+              transform: 'scale(1.05) translateY(-1px)'
+            },
+            '& .MuiSvgIcon-root': {
+              transition: 'transform 0.3s ease',
+              fontSize: '1.5rem'
+            }
           }}
         >
           <ArrowUpIcon />
@@ -383,8 +702,12 @@ export default function LandingPage() {
           alignItems: 'center',
           position: 'relative',
           overflow: 'hidden',
-          background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
-          pt: 8,
+          // Substitui o background anterior pela nova imagem fornecida
+          backgroundImage: `url('/images/4A891E79-FD21-420E-B489-2A25819A94BD.PNG')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          pt: { xs: 12, sm: 10, md: 8 }, // Mais padding no mobile
           '@keyframes pulse': {
             '0%': {
               transform: 'scale(1)',
@@ -406,10 +729,8 @@ export default function LandingPage() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: `url('/images/poker-hero.png')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.08,
+            // Overlay escuro para contraste do texto
+            background: 'linear-gradient(135deg, rgba(26,26,26,0.82) 0%, rgba(45,45,45,0.82) 100%)',
             zIndex: 0
           },
           '&::after': {
@@ -607,9 +928,9 @@ export default function LandingPage() {
                   background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                   color: '#1a1a1a',
                   fontWeight: 700,
-                  px: 6,
-                  py: 2.5,
-                  fontSize: '1.1rem',
+                  px: { xs: 4, sm: 6 },
+                  py: { xs: 1.8, sm: 2.5 },
+                  fontSize: { xs: '0.95rem', sm: '1.1rem' },
                   borderRadius: '12px',
                   textTransform: 'none',
                   boxShadow: '0 8px 25px rgba(251, 191, 36, 0.4)',
@@ -634,9 +955,9 @@ export default function LandingPage() {
                   borderColor: 'rgba(255, 255, 255, 0.3)',
                   color: 'white',
                   fontWeight: 600,
-                  px: 6,
-                  py: 2.5,
-                  fontSize: '1.1rem',
+                  px: { xs: 4, sm: 6 },
+                  py: { xs: 1.8, sm: 2.5 },
+                  fontSize: { xs: '0.95rem', sm: '1.1rem' },
                   borderRadius: '12px',
                   textTransform: 'none',
                   borderWidth: '2px',
@@ -967,14 +1288,14 @@ export default function LandingPage() {
                   <Button
                     variant="contained"
                     size="large"
-                    startIcon={<PhoneIcon />}
+                    startIcon={<PlayIcon />}
                     onClick={() => openWhatsAppForTournament()}
                     sx={{
                       background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                       color: '#1a1a1a',
-                      px: 6,
-                      py: 2.5,
-                      fontSize: '1.1rem',
+                      px: { xs: 4, sm: 6 },
+                      py: { xs: 1.8, sm: 2.5 },
+                      fontSize: { xs: '0.95rem', sm: '1.1rem' },
                       fontWeight: 700,
                       borderRadius: '12px',
                       textTransform: 'none',
@@ -1121,13 +1442,13 @@ export default function LandingPage() {
               mx: 'auto',
               bgcolor: 'white',
               borderRadius: 3,
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)',
-              border: '1px solid rgba(0, 0, 0, 0.05)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.02)',
+              border: 'none',
               overflow: 'hidden'
             }}>
               <Table sx={{ 
                 '& .MuiTableCell-root': { 
-                  borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+                  borderBottom: 'none',
                   fontSize: '0.95rem'
                 }
               }}>
@@ -1139,11 +1460,12 @@ export default function LandingPage() {
                       color: '#2d3748',
                       fontSize: '0.85rem',
                       textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
+                      letterSpacing: '0.5px',
+                      borderBottom: '1px solid #e2e8f0'
                     }
                   }}>
                     <TableCell sx={{ width: '80px', textAlign: 'center' }}>
-                      #
+                      
                     </TableCell>
                     <TableCell>
                       Jogador
@@ -1270,9 +1592,9 @@ export default function LandingPage() {
               sx={{
                 background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                 color: '#1a1a1a',
-                px: 6,
-                py: 2.5,
-                fontSize: '1.1rem',
+                px: { xs: 4, sm: 6 },
+                py: { xs: 1.8, sm: 2.5 },
+                fontSize: { xs: '0.95rem', sm: '1.1rem' },
                 fontWeight: 700,
                 borderRadius: '12px',
                 textTransform: 'none',
@@ -1353,9 +1675,14 @@ export default function LandingPage() {
                   fontSize: '1.1rem'
                 }}
               >
-                Fundada em 2021, a ACES LEAGUE nasceu da paixão de um grupo de amigos 
-                pelo poker. O que começou como encontros casuais evoluiu para o principal 
-                clube de poker do Brasil, reunindo centenas de jogadores apaixonados.
+              ACES League
+Fundada em 2025, a ACES League nasceu da paixão verdadeira de um jovem pelo universo do poker. Disposto a abrir mão de seu tempo, energia e recursos, ele se uniu a dois parceiros que a vida colocou em seu caminho e, juntos, deram vida a um sonho: criar uma liga que representasse os jogadores e elevasse o nível do poker em Recife.
+
+Em colaboração com o Clube Poker do Rei, surgiu a ACES League – uma liga construída com base na dedicação, amizade e propósito. Nosso principal objetivo é simples e ambicioso: revolucionar o cenário do poker local, sempre ouvindo e respeitando a vontade dos jogadores.
+
+Cada torneio, cada evento, cada detalhe é pensado para oferecer uma experiência única, onde o jogador é o verdadeiro protagonista. Aqui, mais do que jogar poker, você vive o poker.
+
+ACES League – Onde o jogo é levado a sério. Onde o jogador vem em primeiro lugar
               </Typography>
 
               <Typography
@@ -1507,7 +1834,7 @@ export default function LandingPage() {
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ 
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' },
             gap: 6,
             mb: 6
           }}>
@@ -1515,10 +1842,10 @@ export default function LandingPage() {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Image 
-                  src="/logo/image copy.png"
+                  src="/logo/acesLogo.png"
                   alt="ACES LEAGUE"
-                  width={50}
-                  height={50}
+                  width={70}
+                  height={70}
                   style={{
                     objectFit: 'contain'
                   }}
@@ -1593,42 +1920,62 @@ export default function LandingPage() {
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <EmailIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
-                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                    contato@acesleague.com.br
+                  <InstagramIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        color: '#eab308',
+                        textDecoration: 'underline'
+                      }
+                    }}
+                    onClick={() => window.open('https://instagram.com/aces_league', '_blank')}
+                  >
+                    @aces_league
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <PhoneIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
-                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                    (81) 99110-6942
+                  <VideocamIcon sx={{ color: '#9146ff', fontSize: '1.2rem' }} />
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        color: '#9146ff',
+                        textDecoration: 'underline'
+                      }
+                    }}
+                    onClick={() => window.open('https://www.twitch.tv/acesleague_/about', '_blank')}
+                  >
+                    Twitch: acesleague_
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <LocationOnIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
                   <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                    Rua Caraçatuba, 370 - Pina, Recife - PE, Brasil
+                    Rua Caraçatuba, 370 - Pina, Recife - PE
                   </Typography>
                 </Box>
-                <Button
-                  variant="outlined"
-                  component={Link}
-                  href="/login"
-                  startIcon={<AdminIcon />}
-                  sx={{
-                    borderColor: '#eab308',
-                    color: '#eab308',
-                    mt: 2,
-                    borderWidth: '2px',
-                    '&:hover': {
-                      bgcolor: 'rgba(234, 179, 8, 0.1)',
-                      borderColor: '#facc15',
-                      borderWidth: '2px'
-                    }
-                  }}
-                >
-                  Painel Admin
-                </Button>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <PhoneIcon sx={{ color: '#eab308', fontSize: '1.2rem' }} />
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        color: '#eab308',
+                        textDecoration: 'underline'
+                      }
+                    }}
+                    onClick={() => window.open('tel:+5581991106942', '_blank')}
+                  >
+                    +55 81 99110-6942
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -1667,6 +2014,26 @@ export default function LandingPage() {
                 Jogue com responsabilidade.
               </Typography>
               
+              {/* Botão Admin discreto */}
+              <Box 
+                onClick={() => window.location.href = '/login'}
+                sx={{
+                  cursor: 'pointer',
+                  opacity: 0.3,
+                  transition: 'opacity 0.3s ease',
+                  ml: 2,
+                  '&:hover': {
+                    opacity: 0.7
+                  }
+                }}
+              >
+                <AdminIcon 
+                  sx={{ 
+                    color: 'rgba(255, 255, 255, 0.6)',
+                    fontSize: '1.2rem'
+                  }} 
+                />
+              </Box>
             </Box>
           </Box>
         </Container>

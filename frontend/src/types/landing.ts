@@ -29,21 +29,6 @@ export interface Torneio {
   temporada?: Temporada;
 }
 
-export interface Foto {
-  id: number;
-  url: string;
-  descricao?: string;
-  categoria: string;
-  torneioId?: number;
-  temporadaId?: number;
-  hallDaFama: boolean;
-  melhorMomento: boolean;
-  criadoEm: string;
-  atualizadoEm: string;
-  torneio?: Torneio;
-  temporada?: Temporada;
-}
-
 export interface EstatisticasLanding {
   totalJogadores: number;
   totalTorneios: number;

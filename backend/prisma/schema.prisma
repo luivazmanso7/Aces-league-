@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -22,7 +23,6 @@ model Temporada {
   nome      String    @db.VarChar(100)
   ano       Int
   criada_em DateTime  @default(now())
-  fotos     Foto[]
   rankings  Ranking[]
   torneios  Torneio[]
 
@@ -44,7 +44,6 @@ model Jogador {
   total_pontos    Int            @default(0)
   melhor_posicao  Int?
   vitorias        Int            @default(0)
-  fotos           Foto[]
   participacoes   Participacao[]
   rankings        Ranking[]
 
@@ -61,7 +60,6 @@ model Torneio {
   ativo         Boolean        @default(true)
   buy_in        Decimal        @db.Decimal(10, 2)
   valor_staff   Decimal        @db.Decimal(10, 2)
-  fotos         Foto[]
   participacoes Participacao[]
   temporada     Temporada      @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
 
@@ -97,30 +95,4 @@ model Ranking {
   @@unique([id_jogador, id_temporada])
   @@index([id_temporada], map: "ranking_id_temporada_fkey")
   @@map("ranking")
-}
-
-model Foto {
-  id           Int           @id @default(autoincrement())
-  id_torneio   Int?
-  id_temporada Int?
-  id_jogador   Int?
-  imagem_url   String        @db.VarChar(255)
-  legenda      String?       @db.VarChar(255)
-  data         DateTime      @default(now())
-  album        String        @db.VarChar(100)
-  categoria    CategoriaFoto @default(TEMPORADA)
-  jogador      Jogador?      @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
-  temporada    Temporada?    @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
-  torneio      Torneio?      @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
-
-  @@index([id_jogador], map: "fotos_id_jogador_fkey")
-  @@index([id_temporada], map: "fotos_id_temporada_fkey")
-  @@index([id_torneio], map: "fotos_id_torneio_fkey")
-  @@map("fotos")
-}
-
-enum CategoriaFoto {
-  TEMPORADA
-  HALL_DA_FAMA
-  MELHORES_MOMENTOS
 }

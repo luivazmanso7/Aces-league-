@@ -33,10 +33,14 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      console.log('Iniciando processo de login...')
       await login(credentials.email.trim(), credentials.password);
+      console.log('Login concluído, redirecionando para dashboard...')
       router.push('/dashboard');
+      console.log('Redirecionamento solicitado')
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Erro ao fazer login';
+      console.error('Erro no login:', errorMessage)
       setError(errorMessage);
     } finally {
       setLoading(false);

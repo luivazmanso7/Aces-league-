@@ -92,7 +92,6 @@ export class TorneioService {
           },
           orderBy: { posicao: 'asc' },
         },
-        fotos: true,
       },
     });
   }

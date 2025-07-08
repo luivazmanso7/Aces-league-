@@ -32,10 +32,32 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-
+.env
+.env.*
+.env.local
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Arquivos de cookies e credenciais temporárias
+cookies.txt
+
+# IDE/editor (garantia extra)
+.vscode/
+.idea/
+
+# Outros arquivos temporários
+*.log
+*.swp
+*.swo
+*~
+
+# Sistema operacional (garantia extra)
+Thumbs.db
+
+# Docker
+*.local
+docker-compose.override.yml

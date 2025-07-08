@@ -70,27 +70,6 @@ export interface Ranking {
   temporada?: Temporada
 }
 
-export interface Foto {
-  id: number
-  id_torneio?: number
-  id_temporada?: number
-  id_jogador?: number
-  imagem_url: string
-  legenda?: string
-  data: string
-  album: string
-  categoria: 'TEMPORADA' | 'HALL_DA_FAMA' | 'MELHORES_MOMENTOS'
-  torneio?: Torneio
-  temporada?: Temporada
-  jogador?: Jogador
-}
-
-export interface GaleriaOrganizada {
-  temporadas: Foto[]
-  hall_da_fama: Foto[]
-  melhores_momentos: Foto[]
-}
-
 // DTOs para criação/edição
 export interface CreateJogadorDto {
   nome: string
@@ -120,16 +99,6 @@ export interface CreateParticipacaoDto {
   id_jogador: number
   posicao: number
   pontuacao: number
-}
-
-export interface CreateFotoDto {
-  imagem_url: string
-  legenda?: string
-  album: string
-  categoria: 'TEMPORADA' | 'HALL_DA_FAMA' | 'MELHORES_MOMENTOS'
-  id_torneio?: number
-  id_temporada?: number
-  id_jogador?: number
 }
 
 // Tipos para estatísticas

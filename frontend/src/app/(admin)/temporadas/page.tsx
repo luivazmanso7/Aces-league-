@@ -12,7 +12,6 @@ import {
   Container,
   Paper,
   Chip,
-  Fab,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -179,7 +178,7 @@ export default function TemporadasPage() {
       <Paper elevation={0} sx={{ p: 3, mb: 4, bgcolor: 'background.paper' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <TrophyIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+            <TrophyIcon sx={{ fontSize: 32, color: '#fff' }} />
             <div>
               <Typography variant="h4" component="h1" fontWeight="bold">
                 Temporadas
@@ -252,20 +251,6 @@ export default function TemporadasPage() {
           </Grid>
         </Box>
       )}
-
-      {/* Floating Action Button */}
-      <Fab
-        color="primary"
-        aria-label="adicionar temporada"
-        sx={{
-          position: 'fixed',
-          bottom: 24,
-          right: 24,
-        }}
-        onClick={() => setDialogOpen(true)}
-      >
-        <AddIcon />
-      </Fab>
 
       {/* Dialogs */}
       <TemporadaDialog

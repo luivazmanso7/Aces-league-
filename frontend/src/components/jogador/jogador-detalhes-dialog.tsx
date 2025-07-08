@@ -171,7 +171,7 @@ export default function JogadorDetalhesDialog({
             alignItems: 'center'
           }}>
             <Avatar
-              sx={{ width: 100, height: 100, bgcolor: 'primary.main' }}
+              sx={{ width: 100, height: 100, bgcolor: '#fff' }}
             >
               {jogador.nome.charAt(0).toUpperCase()}  
             </Avatar>
@@ -258,7 +258,7 @@ export default function JogadorDetalhesDialog({
             gap: 3
           }}>
             <Box sx={{ textAlign: 'center' }}>
-              <TrendingUpIcon sx={{ fontSize: 40, color: 'primary.main', mb: 1 }} />
+              <TrendingUpIcon sx={{ fontSize: 40, color: '#fff', mb: 1 }} />
               <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
                 {jogador.total_torneios}
               </Typography>
