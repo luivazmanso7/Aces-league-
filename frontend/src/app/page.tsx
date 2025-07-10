@@ -24,7 +24,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Avatar
+  Avatar,
+  Chip
 } from '@mui/material'
 import {
   PlayArrow as PlayIcon,
@@ -531,7 +532,6 @@ export default function LandingPage() {
               }}
             >
               <ListItemIcon>
-                <TrophyIcon sx={{ color: '#eab308', fontSize: '1.5rem' }} />
               </ListItemIcon>
               <ListItemText 
                 primary="Torneios" 
@@ -1467,10 +1467,10 @@ export default function LandingPage() {
                     <TableCell sx={{ width: '80px', textAlign: 'center' }}>
                       
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ color: '#fff !important', fontWeight: 700, fontSize: '1rem', bgcolor: '#222 !important', border: 'none', letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center' }}>
                       Jogador
                     </TableCell>
-                    <TableCell align="center" sx={{ width: '120px' }}>
+                    <TableCell align="center" sx={{ color: '#fff !important', fontWeight: 700, fontSize: '1rem', bgcolor: '#222 !important', border: 'none', letterSpacing: '1px', textTransform: 'uppercase' }}>
                       Pontos
                     </TableCell>
                   </TableRow>

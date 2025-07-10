@@ -84,7 +84,9 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           transform: 'translateY(-2px)',
           boxShadow: 3,
         },
-        bgcolor: '#fff'
+        bgcolor: '#222',
+        color: '#fff',
+        border: '1px solid #333',
       }}
     >
       {/* Menu de ações */}
@@ -124,7 +126,7 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
         </Menu>
       </Box>
 
-      <CardContent sx={{ flex: 1, pb: 1 }}>
+      <CardContent sx={{ flex: 1, pb: 1, color: '#fff' }}>
         {/* Header com avatar e informações básicas */}
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Avatar
@@ -139,12 +141,12 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           </Avatar>
           
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h6" component="h3" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+            <Typography variant="h6" component="h3" sx={{ fontWeight: 'bold', mb: 0.5, color: '#fff' }}>
               {jogador.nome}
             </Typography>
             
             {jogador.apelido && (
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+              <Typography variant="body2" color="#ccc" sx={{ mb: 0.5 }}>
                 &quot;{jogador.apelido}&quot;
               </Typography>
             )}
@@ -159,11 +161,11 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
         </Box>
 
         {/* Informações de contato */}
-        <Stack spacing={0.5} sx={{ mb: 2 }}>
+        <Stack spacing={0.5} sx={{ mb: 2, color: '#fff' }}>
           {jogador.email && (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <EmailIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+              <Typography variant="body2" color="#ccc" sx={{ fontSize: '0.85rem' }}>
                 {jogador.email}
               </Typography>
             </Box>
@@ -172,7 +174,7 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           {jogador.telefone && (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <PhoneIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+              <Typography variant="body2" color="#ccc" sx={{ fontSize: '0.85rem' }}>
                 {jogadorService.formatTelefone(jogador.telefone)}
               </Typography>
             </Box>
@@ -181,7 +183,7 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           {jogador.cidade && (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <LocationIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+              <Typography variant="body2" color="#ccc" sx={{ fontSize: '0.85rem' }}>
                 {jogador.cidade}
                 {idade && ` • ${idade} anos`}
               </Typography>
@@ -195,17 +197,18 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           gridTemplateColumns: 'repeat(3, 1fr)', 
           gap: 1,
           p: 1.5,
-          bgcolor: 'grey.50',
+          bgcolor: '#333',
           borderRadius: 1,
-          mb: 1
+          mb: 1,
+          color: '#fff',
         }}>
           <Tooltip title="Total de Torneios">
             <Box sx={{ textAlign: 'center' }}>
               <TrendingUpIcon sx={{ fontSize: 20, color: '#fff', mb: 0.5 }} />
-              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#fff' }}>
                 {jogador.total_torneios}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" sx={{ color: '#ccc' }}>
                 Torneios
               </Typography>
             </Box>
@@ -214,10 +217,10 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           <Tooltip title="Vitórias">
             <Box sx={{ textAlign: 'center' }}>
               <TrophyIcon sx={{ fontSize: 20, color: 'success.main', mb: 0.5 }} />
-              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#fff' }}>
                 {jogador.vitorias}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" sx={{ color: '#ccc' }}>
                 Vitórias
               </Typography>
             </Box>
@@ -226,10 +229,10 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           <Tooltip title="Total de Pontos">
             <Box sx={{ textAlign: 'center' }}>
               <StarsIcon sx={{ fontSize: 20, color: 'warning.main', mb: 0.5 }} />
-              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#fff' }}>
                 {jogador.total_pontos.toLocaleString()}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" sx={{ color: '#ccc' }}>
                 Pontos
               </Typography>
             </Box>
@@ -260,8 +263,8 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
         </Stack>
       </CardContent>
 
-      <CardActions sx={{ pt: 0, justifyContent: 'space-between' }}>
-        <Typography variant="caption" color="text.secondary">
+      <CardActions sx={{ pt: 0, justifyContent: 'space-between', color: '#fff' }}>
+        <Typography variant="caption" sx={{ color: '#ccc' }}>
           Cadastro: {jogadorService.formatDataCadastro(jogador.criado_em)}
         </Typography>
         
@@ -269,6 +272,7 @@ export default function JogadorCard({ jogador, onEdit, onDelete, onViewDetails }
           size="small"
           variant="outlined"
           onClick={() => onViewDetails(jogador)}
+          sx={{ color: '#fff', borderColor: '#fff', '&:hover': { borderColor: '#eab308', color: '#eab308', background: 'rgba(234,179,8,0.08)' } }}
         >
           Ver Perfil
         </Button>

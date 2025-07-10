@@ -56,7 +56,7 @@ export class PublicApiService {
   // Buscar próximo torneio da API
   static async getProximoTorneio(): Promise<ProximoTorneio | null> {
     try {
-      const response = await fetch(`${API_BASE_URL}/public/torneios/proximo`);
+      const response = await fetch(`${API_BASE_URL}/public/api/proximo-torneio`);
       if (!response.ok) {
         console.error('Erro na API:', response.status, response.statusText);
         throw new Error(`Erro ao buscar próximo torneio: ${response.status}`);

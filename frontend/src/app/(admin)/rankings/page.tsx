@@ -305,12 +305,11 @@ export default function RankingsPage() {
                   <TableRow
                     key={item.id_jogador}
                     sx={{
-                      '&:nth-of-type(odd)': { bgcolor: 'action.hover' },
-                      '&:hover': { bgcolor: 'action.selected' },
-                      bgcolor: '#fff'
+                      background: '#222 !important',
+                      '&:hover': { background: '#222 !important' },
                     }}
                   >
-                    <TableCell>
+                    <TableCell sx={{ color: '#fff' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         {getMedalIcon(item.posicao)}
                         <Typography
@@ -322,25 +321,25 @@ export default function RankingsPage() {
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ color: '#fff' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Avatar sx={{ bgcolor: '#fff' }}>
+                        <Avatar sx={{ bgcolor: '#444', color: '#fff' }}>
                           {item.jogador.nome.charAt(0)}
                         </Avatar>
                         <div>
-                          <Typography variant="body1" fontWeight="medium">
+                          <Typography variant="body1" fontWeight="medium" sx={{ color: '#fff' }}>
                             {item.jogador.nome}
                           </Typography>
                           {item.jogador.apelido && (
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" sx={{ color: '#ccc' }}>
                               &quot;{item.jogador.apelido}&quot;
                             </Typography>
                           )}
                         </div>
                       </Box>
                     </TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>
-                      <Typography variant="h6" fontWeight="bold" color="primary">
+                    <TableCell sx={{ textAlign: 'center', color: '#fff' }}>
+                      <Typography variant="h6" fontWeight="bold" sx={{ color: '#fff' }}>
                         {item.pontuacao}
                       </Typography>
                     </TableCell>

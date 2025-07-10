@@ -17,7 +17,7 @@ import {
   Box,
   Chip,
   Paper,
-} from '@mui/material';
+} from '@mui/material';``
 import {
   EmojiEvents as TrophyIcon,
   Stars as StarsIcon,
@@ -97,20 +97,20 @@ export default function RankingDialog({ open, onClose, temporada, ranking }: Ran
             </Typography>
           </Box>
         ) : (
-          <TableContainer component={Paper} variant="outlined">
+          <TableContainer component={Paper} variant="outlined" sx={{ backgroundColor: '#222', boxShadow: 'none', borderRadius: 4 }}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell width="80px">Posição</TableCell>
-                  <TableCell>Jogador</TableCell>
-                  <TableCell align="right">Pontuação</TableCell>
-                  <TableCell align="right" width="140px">Atualizado</TableCell>
+                  <TableCell width="80px" sx={{ color: '#fff', fontWeight: 'bold', fontSize: '1rem', background: '#222', border: 'none' }}>Posição</TableCell>
+                  <TableCell sx={{ color: '#fff', fontWeight: 'bold', fontSize: '1rem', background: '#222', border: 'none' }}>Jogador</TableCell>
+                  <TableCell align="right" sx={{ color: '#fff', fontWeight: 'bold', fontSize: '1rem', background: '#222', border: 'none' }}>Pontuação</TableCell>
+                  <TableCell align="right" width="140px" sx={{ color: '#fff', fontWeight: 'bold', fontSize: '1rem', background: '#222', border: 'none' }}>Atualizado</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {ranking.map((item) => (
-                  <TableRow key={item.id} hover>
-                    <TableCell>
+                  <TableRow key={item.id} sx={{ background: '#222 !important' }}>
+                    <TableCell sx={{ color: '#fff' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         {getRankingIcon(item.posicao)}
                         <Chip
@@ -121,7 +121,7 @@ export default function RankingDialog({ open, onClose, temporada, ranking }: Ran
                         />
                       </Box>
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ color: '#fff' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
                           alt={item.jogador.nome}
@@ -130,24 +130,24 @@ export default function RankingDialog({ open, onClose, temporada, ranking }: Ran
                           {item.jogador.nome.charAt(0).toUpperCase()}
                         </Avatar>
                         <div>
-                          <Typography variant="body2" fontWeight="medium">
+                          <Typography variant="body2" fontWeight="medium" sx={{ color: '#fff' }}>
                             {item.jogador.nome}
                           </Typography>
                           {item.jogador.apelido && (
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography variant="caption" sx={{ color: '#ccc' }}>
                               &ldquo;{item.jogador.apelido}&rdquo;
                             </Typography>
                           )}
                         </div>
                       </Box>
                     </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body2" fontWeight="medium">
+                    <TableCell align="right" sx={{ color: '#fff' }}>
+                      <Typography variant="body2" fontWeight="medium" sx={{ color: '#fff' }}>
                         {item.pontuacao.toLocaleString()} pts
                       </Typography>
                     </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="caption" color="text.secondary">
+                    <TableCell align="right" sx={{ color: '#fff' }}>
+                      <Typography variant="caption" sx={{ color: '#ccc' }}>
                         {formatDate(item.atualizado_em)}
                       </Typography>
                     </TableCell>
