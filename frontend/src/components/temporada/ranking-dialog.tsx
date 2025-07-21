@@ -17,7 +17,7 @@ import {
   Box,
   Chip,
   Paper,
-} from '@mui/material';``
+} from '@mui/material';
 import {
   EmojiEvents as TrophyIcon,
   Stars as StarsIcon,
@@ -26,12 +26,12 @@ import { Temporada, Ranking } from '@/types/temporada';
 
 interface RankingDialogProps {
   open: boolean;
-  onClose: () => void;
+  onCloseAction: () => void;
   temporada: Temporada | null;
   ranking: Ranking[];
 }
 
-export default function RankingDialog({ open, onClose, temporada, ranking }: RankingDialogProps) {
+export default function RankingDialog({ open, onCloseAction, temporada, ranking }: RankingDialogProps) {
   if (!temporada) return null;
 
   const getRankingIcon = (posicao: number) => {
@@ -71,7 +71,7 @@ export default function RankingDialog({ open, onClose, temporada, ranking }: Ran
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={onCloseAction} maxWidth="md" fullWidth>
       <DialogTitle>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <TrophyIcon color="primary" />
@@ -160,7 +160,7 @@ export default function RankingDialog({ open, onClose, temporada, ranking }: Ran
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} variant="contained">
+        <Button onClick={onCloseAction} variant="contained">
           Fechar
         </Button>
       </DialogActions>

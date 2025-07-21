@@ -1,30 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState,} from 'react';
 import {
   Typography,
   Box,
   Paper,
   LinearProgress,
 } from '@mui/material';
-import { dashboardService } from '@/services/dashboard.service';
+
 
 export default function DashboardPage() {
-  const [loading, setLoading] = useState(true);
+  const [loading,] = useState(true);
   
-  // Carregar dados reais do gráfico de participações por mês
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await dashboardService.getParticipacoesPorMes();
-      } catch {
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  
 
   if (loading) {
     return (

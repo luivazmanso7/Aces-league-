@@ -25,7 +25,6 @@ import {
   TableHead,
   TableRow,
   Avatar,
-  Chip
 } from '@mui/material'
 import {
   PlayArrow as PlayIcon,

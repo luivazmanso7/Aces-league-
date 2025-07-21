@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import api from '@/lib/api'
 
@@ -18,7 +18,7 @@ interface AuthContextType {
   isAuthenticated: boolean
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType)
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -27,7 +27,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const token = Cookies.get('auth-token')
     if (token) {
-      // Verificar se o token ainda é válido
       api.get('/auth/profile')
         .then(response => {
           setUser(response.data)
@@ -45,28 +44,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      console.log('Tentando fazer login...', { email })
       const response = await api.post('/auth/login', { email, password })
       const { access_token, admin: userData } = response.data
-      
-      console.log('Login bem-sucedido:', { userData, token: access_token.substring(0, 20) + '...' })
-      
-      // Configurar cookie com flags de segurança
       Cookies.set('auth-token', access_token, { 
-        expires: 1, // 1 dia (reduzido para maior segurança)
-        secure: false, // Permitir HTTP em desenvolvimento
-        sameSite: 'lax', // Mais permissivo em desenvolvimento
-        httpOnly: false // Necessário false para acesso via JS no frontend
+        expires: 1,
+        secure: false,
+        sameSite: 'lax',
+        httpOnly: false
       })
-      
-      console.log('Token salvo no cookie')
       setUser(userData)
-      console.log('Usuário definido no contexto:', userData)
-    } catch (error) {
-      // Não expor detalhes do erro no console em produção
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Login error:', error);
-      }
+    } catch {
       throw new Error('Credenciais inválidas')
     }
   }
@@ -81,15 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        login,
-        logout,
-        isAuthenticated: !!user,
-      }}
-    >
+    <AuthContext.Provider value={{ user, loading, login, logout, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   )
@@ -97,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext)
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth deve ser usado dentro de AuthProvider')
   }
   return context

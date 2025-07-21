@@ -269,7 +269,7 @@ export default function TemporadasPage() {
 
       <RankingDialog
         open={rankingDialog.open}
-        onClose={() => setRankingDialog({ open: false, temporada: null, ranking: [] })}
+        onCloseAction={() => setRankingDialog({ ...rankingDialog, open: false })}
         temporada={rankingDialog.temporada}
         ranking={rankingDialog.ranking}
       />

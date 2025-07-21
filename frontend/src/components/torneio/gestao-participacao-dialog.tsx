@@ -52,7 +52,7 @@ import participacaoService from '@/services/participacao.service';
 
 interface GestaoParticipacaoDialogProps {
   open: boolean;
-  onClose: () => void;
+  onCloseAction: () => void; // <-- nome correto
   torneio: Torneio | null;
   onRefresh?: () => void;
 }
@@ -80,7 +80,7 @@ function TabPanel(props: TabPanelProps) {
 
 export default function GestaoParticipacaoDialog({
   open,
-  onClose,
+  onCloseAction,
   torneio,
   onRefresh,
 }: GestaoParticipacaoDialogProps) {
@@ -89,7 +89,7 @@ export default function GestaoParticipacaoDialog({
   const [todosJogadores, setTodosJogadores] = useState<Jogador[]>([]);
   const [jogadoresDisponiveis, setJogadoresDisponiveis] = useState<Jogador[]>([]);
   const [mostrarTodosJogadores, setMostrarTodosJogadores] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -337,7 +337,7 @@ export default function GestaoParticipacaoDialog({
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={onCloseAction}
       maxWidth="lg"
       fullWidth
       PaperProps={{
@@ -442,23 +442,27 @@ export default function GestaoParticipacaoDialog({
                   setSelectedJogadores(jogadoresValidos);
                 }}
                 getOptionDisabled={(option) => participacoes.some(p => p.id_jogador === option.id)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Selecionar Jogadores"
-                    placeholder="Buscar jogadores por nome, apelido ou cidade..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    InputProps={{
-                      ...params.InputProps,
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                )}
+                renderInput={(params) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const { ref, ...inputPropsWithoutRef } = params.InputProps;
+                  return (
+                    <TextField
+                      {...params}
+                      label="Pesquisar"
+                      InputProps={{
+                        ...inputPropsWithoutRef,
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon />
+                          </InputAdornment>
+                        ),
+                        className: 'text-sm',
+                        endAdornment: params.InputProps.endAdornment,
+                        onMouseDown: (e) => e.stopPropagation(),
+                      }}
+                    />
+                  );
+                }}
                 renderOption={(props, jogador) => {
                   // Verificar se o jogador já está no torneio
                   const jaNoTorneio = participacoes.some(p => p.id_jogador === jogador.id);
@@ -918,7 +922,7 @@ export default function GestaoParticipacaoDialog({
       </DialogContent>
 
       <DialogActions sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
-        <Button onClick={onClose} disabled={loading}>
+        <Button onClick={onCloseAction} disabled={loading}>
           Fechar
         </Button>
       </DialogActions>

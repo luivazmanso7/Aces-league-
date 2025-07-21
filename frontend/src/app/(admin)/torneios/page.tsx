@@ -34,6 +34,7 @@ import TorneioCard from '@/components/torneio/torneio-card';
 import TorneioDialog from '@/components/torneio/torneio-dialog-new';
 import GestaoParticipacaoDialog from '@/components/torneio/gestao-participacao-dialog';
 
+
 type SnackbarSeverity = 'success' | 'error' | 'warning' | 'info';
 
 interface SnackbarState {
@@ -440,7 +441,7 @@ export default function TorneiosPage() {
 
       <GestaoParticipacaoDialog
         open={participacaoDialog.open}
-        onClose={() => setParticipacaoDialog({ open: false, torneio: null })}
+        onCloseAction={() => setParticipacaoDialog({ open: false, torneio: null })}
         torneio={participacaoDialog.torneio}
         onRefresh={loadTorneios}
       />
