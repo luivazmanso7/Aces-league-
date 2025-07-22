@@ -13,10 +13,8 @@ import {
   Chip,
   Avatar,
   TextField,
-  Grid,
   Card,
   CardContent,
-  CardActions,
   Checkbox,
   Divider,
   InputAdornment,
@@ -64,16 +62,29 @@ export default function AdicionarJogadoresDialog({
       setError(null);
 
       try {
-        const [jogadoresData, participacoesData] = await Promise.all([
+        const [jogadoresRaw, participacoesData] = await Promise.all([
           jogadorService.findAll(),
-          torneioApi.getParticipacoes(torneio.id)
+          torneioApi.getParticipacoes(torneio.id),
         ]);
 
-        const jogadoresAtivos = jogadoresData.filter((j: Jogador) => j.ativo);
-        const disponiveis = participacaoService.filtrarJogadoresDisponiveis(
+        // garante que sempre teremos um array sem usar 'any'
+        let jogadoresData: Jogador[] = [];
+        if (Array.isArray(jogadoresRaw)) {
+          jogadoresData = jogadoresRaw as Jogador[];
+        } else if (jogadoresRaw && typeof jogadoresRaw === 'object' && 'data' in jogadoresRaw) {
+          jogadoresData = (jogadoresRaw as { data: Jogador[] }).data ?? [];
+        }
+
+        const jogadoresAtivos = jogadoresData.filter((j) => !!j.ativo);
+
+        // filtra quem já está no torneio, mas se vier vazio, mostra todos ativos
+        let disponiveis = participacaoService.filtrarJogadoresDisponiveis(
           jogadoresAtivos,
           participacoesData
         );
+        if (!Array.isArray(disponiveis) || disponiveis.length === 0) {
+          disponiveis = jogadoresAtivos;
+        }
 
         setJogadoresDisponiveis(disponiveis);
         setFilteredJogadores(disponiveis);
@@ -149,16 +160,29 @@ export default function AdicionarJogadoresDialog({
       setSelectedJogadores(new Set());
       
       // Recarregar lista de jogadores disponíveis
-      const [jogadoresData, participacoesData] = await Promise.all([
+      const [jogadoresRaw, participacoesData] = await Promise.all([
         jogadorService.findAll(),
-        torneioApi.getParticipacoes(torneio.id)
+        torneioApi.getParticipacoes(torneio.id),
       ]);
 
-      const jogadoresAtivos = jogadoresData.filter((j: Jogador) => j.ativo);
-      const disponiveis = participacaoService.filtrarJogadoresDisponiveis(
+      // garante que sempre teremos um array sem usar 'any'
+      let jogadoresData: Jogador[] = [];
+      if (Array.isArray(jogadoresRaw)) {
+        jogadoresData = jogadoresRaw as Jogador[];
+      } else if (jogadoresRaw && typeof jogadoresRaw === 'object' && 'data' in jogadoresRaw) {
+        jogadoresData = (jogadoresRaw as { data: Jogador[] }).data ?? [];
+      }
+
+      const jogadoresAtivos = jogadoresData.filter((j) => !!j.ativo);
+
+      // filtra quem já está no torneio, mas se vier vazio, mostra todos ativos
+      let disponiveis = participacaoService.filtrarJogadoresDisponiveis(
         jogadoresAtivos,
         participacoesData
       );
+      if (!Array.isArray(disponiveis) || disponiveis.length === 0) {
+        disponiveis = jogadoresAtivos;
+      }
 
       setJogadoresDisponiveis(disponiveis);
       setFilteredJogadores(disponiveis);
@@ -278,81 +302,36 @@ export default function AdicionarJogadoresDialog({
             }
           </Alert>
         ) : (
-          <Grid container spacing={2}>
+          <Box
+            display="grid"
+            gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
+            gap={2}
+          >
             {filteredJogadores.map((jogador) => (
-              <Grid key={jogador.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                <Card
-                  variant="outlined"
-                  sx={{
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    border: selectedJogadores.has(jogador.id) ? 2 : 1,
-                    borderColor: selectedJogadores.has(jogador.id) 
-                      ? 'primary.main' 
-                      : 'divider',
-                    backgroundColor: selectedJogadores.has(jogador.id)
-                      ? 'primary.50'
-                      : 'background.paper',
-                    '&:hover': {
-                      borderColor: 'primary.main',
-                      backgroundColor: 'primary.50',
-                    }
-                  }}
-                  onClick={() => handleToggleJogador(jogador.id)}
-                >
-                  <CardContent sx={{ pb: 1 }}>
-                    <Box display="flex" alignItems="center" gap={2}>
-                      <Avatar
-                        sx={{ width: 48, height: 48 }}
-                      >
-                        {jogador.nome.charAt(0)}
-                      </Avatar>
-                      <Box flex={1}>
-                        <Typography variant="body1" fontWeight="medium">
-                          {jogador.nome}
-                        </Typography>
-                        {jogador.apelido && (
-                          <Typography variant="body2" color="text.secondary">
-                            &quot;{jogador.apelido}&quot;
-                          </Typography>
-                        )}
-                        {jogador.cidade && (
-                          <Typography variant="caption" color="text.secondary">
-                            {jogador.cidade}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Box>
-                  </CardContent>
-                  <CardActions sx={{ pt: 0, justifyContent: 'space-between' }}>
-                    <Box display="flex" gap={1}>
-                      {jogador.total_torneios > 0 && (
-                        <Chip
-                          label={`${jogador.total_torneios} torneios`}
-                          size="small"
-                          variant="outlined"
-                        />
-                      )}
-                      {jogador.vitorias > 0 && (
-                        <Chip
-                          label={`${jogador.vitorias} vitórias`}
-                          size="small"
-                          color="warning"
-                          variant="outlined"
-                        />
-                      )}
-                    </Box>
-                    <Checkbox
-                      checked={selectedJogadores.has(jogador.id)}
-                      onChange={() => handleToggleJogador(jogador.id)}
-                      color="primary"
-                      size="small"
-                    />
-                  </CardActions>
-                </Card>
-              </Grid>
+              <Card key={jogador.id} variant="outlined" sx={{ height: '100%' }}>
+                <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Avatar>{(jogador.apelido ?? jogador.nome)?.charAt(0).toUpperCase()}</Avatar>
+                  <Box flex={1}>
+                    <Typography variant="subtitle1">{jogador.nome}</Typography>
+                    {jogador.apelido && (
+                      <Typography variant="body2" color="text.secondary">
+                        {jogador.apelido}
+                      </Typography>
+                    )}
+                    {jogador.cidade && (
+                      <Typography variant="body2" color="text.secondary">
+                        {jogador.cidade}
+                      </Typography>
+                    )}
+                  </Box>
+                  <Checkbox
+                    checked={selectedJogadores.has(jogador.id)}
+                    onChange={() => handleToggleJogador(jogador.id)}
+                  />
+                </CardContent>
+              </Card>
             ))}
-          </Grid>
+          </Box>
         )}
       </DialogContent>
 
