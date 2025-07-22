@@ -320,6 +320,7 @@ export default function AdicionarJogadoresDialog({
         )}
 
         {/* Lista de Jogadores */}
+        {void console.log('loading (render):', loading)}
         {loading && (
           <Box display="flex" justifyContent="center" py={4}>
             <Typography>Carregando jogadores...</Typography>
@@ -335,7 +336,7 @@ export default function AdicionarJogadoresDialog({
           </Alert>
         )}
 
-        {!loading && listaParaExibir.length > 0 && (
+        {listaParaExibir.length > 0 && (
           <Box
             display="grid"
             gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
