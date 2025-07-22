@@ -22,6 +22,7 @@ import {
   Avatar,
   Alert,
   CircularProgress,
+  Checkbox,
   TextField,
   Autocomplete,
   Tab,
@@ -431,6 +432,9 @@ export default function GestaoParticipacaoDialog({
               <Autocomplete
                 multiple
                 options={displayedOptions}
+                isOptionEqualToValue={(opt, val) => opt.id === val.id}
+                filterOptions={(opts) => opts}
+                disablePortal
                 inputValue={searchTerm}
                 onInputChange={(_, value) => setSearchTerm(value)}
                 openOnFocus
@@ -466,12 +470,13 @@ export default function GestaoParticipacaoDialog({
                     />
                   );
                 }}
-                renderOption={(props, jogador) => {
+                renderOption= {(props, jogador ) => {
                   // Verificar se o jogador já está no torneio
+                  console.log('opt', jogador.nome)
                   const jaNoTorneio = participacoes.some(p => p.id_jogador === jogador.id);
                   // Calcular se jogador está disponível para adicionar
                   const disponivel = !jaNoTorneio;
-                  
+                
                 
 
                   
@@ -557,6 +562,31 @@ export default function GestaoParticipacaoDialog({
                 }
                 disabled={loading}
               />
+              {/* Fallback de listagem visível (debug) */}
+              {displayedOptions.length > 0 && (
+                <Box mt={2}>
+                  {displayedOptions.map((j) => (
+                    <Box key={j.id} display="flex" alignItems="center" gap={1} mb={0.5}>
+                      <Checkbox
+                        size="small"
+                        checked={selectedJogadores.some((s) => s.id === j.id)}
+                        onChange={() => {
+                          setSelectedJogadores((prev) =>
+                            prev.some((s) => s.id === j.id)
+                              ? prev.filter((s) => s.id !== j.id)
+                              : [...prev, j]
+                          );
+                        }}
+                      />
+                      <Typography variant="body2">
+                        {j.nome}
+                        {j.apelido ? ` (${j.apelido})` : ''} 
+                        {j.cidade ? ` - ${j.cidade}` : ''}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              )}
             </Box>
 
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
