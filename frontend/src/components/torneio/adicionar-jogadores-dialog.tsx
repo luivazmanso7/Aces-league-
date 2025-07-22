@@ -320,18 +320,22 @@ export default function AdicionarJogadoresDialog({
         )}
 
         {/* Lista de Jogadores */}
-        {loading ? (
+        {loading && (
           <Box display="flex" justifyContent="center" py={4}>
             <Typography>Carregando jogadores...</Typography>
           </Box>
-        ) : listaParaExibir.length === 0 ? (
+        )}
+
+        {!loading && listaParaExibir.length === 0 && (
           <Alert severity="info">
             {jogadoresDisponiveis.length === 0
               ? 'Todos os jogadores ativos já estão participando deste torneio.'
               : 'Nenhum jogador encontrado com os termos de busca.'
             }
           </Alert>
-        ) : (
+        )}
+
+        {!loading && listaParaExibir.length > 0 && (
           <Box
             display="grid"
             gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
