@@ -89,7 +89,21 @@ export default function GestaoParticipacaoDialog({
   const [todosJogadores, setTodosJogadores] = useState<Jogador[]>([]);
   const [jogadoresDisponiveis, setJogadoresDisponiveis] = useState<Jogador[]>([]);
   const [mostrarTodosJogadores, setMostrarTodosJogadores] = useState(false);
-  const [searchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  // Lista base (todos ou apenas disponíveis)
+  const baseOptions = mostrarTodosJogadores ? todosJogadores : jogadoresDisponiveis;
+
+  // Filtra pelo termo digitado
+  const displayedOptions = searchTerm.trim()
+    ? baseOptions.filter(j => {
+        const s = searchTerm.toLowerCase();
+        return (
+          j.nome.toLowerCase().includes(s) ||
+          (j.apelido?.toLowerCase() ?? '').includes(s) ||
+          (j.cidade?.toLowerCase() ?? '').includes(s)
+        );
+      })
+    : baseOptions;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -416,22 +430,11 @@ export default function GestaoParticipacaoDialog({
               
               <Autocomplete
                 multiple
-                options={mostrarTodosJogadores ? 
-                  // Filtramos pelo termo de busca, mas mostramos todos jogadores
-                  todosJogadores.filter(j => 
-                    searchTerm === '' || 
-                    j.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    (j.apelido && j.apelido.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                    (j.cidade && j.cidade.toLowerCase().includes(searchTerm.toLowerCase()))
-                  ) : 
-                  // Filtramos pelo termo de busca, mas apenas jogadores disponíveis
-                  jogadoresDisponiveis.filter(j => 
-                    searchTerm === '' || 
-                    j.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    (j.apelido && j.apelido.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                    (j.cidade && j.cidade.toLowerCase().includes(searchTerm.toLowerCase()))
-                  )
-                }
+                options={displayedOptions}
+                inputValue={searchTerm}
+                onInputChange={(_, value) => setSearchTerm(value)}
+                openOnFocus
+                disableCloseOnSelect
                 getOptionLabel={(jogador) => `${jogador.nome} ${jogador.apelido ? `(${jogador.apelido})` : ''} ${jogador.cidade ? `- ${jogador.cidade}` : ''}`}
                 value={selectedJogadores}
                 onChange={(event, newValue) => {
