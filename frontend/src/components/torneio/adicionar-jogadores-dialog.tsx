@@ -53,6 +53,11 @@ export default function AdicionarJogadoresDialog({
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredJogadores, setFilteredJogadores] = useState<Jogador[]>([]);
 
+  // Lista final usada no render (fallback para quando não há busca)
+  const listaParaExibir = searchTerm.trim()
+    ? filteredJogadores
+    : jogadoresDisponiveis;
+
   // Carregar jogadores disponíveis
   useEffect(() => {
     const loadJogadores = async () => {
@@ -137,10 +142,10 @@ export default function AdicionarJogadoresDialog({
   };
 
   const handleSelectAll = () => {
-    if (selectedJogadores.size === filteredJogadores.length) {
+    if (selectedJogadores.size === listaParaExibir.length) {
       setSelectedJogadores(new Set());
     } else {
-      setSelectedJogadores(new Set(filteredJogadores.map(j => j.id)));
+      setSelectedJogadores(new Set(listaParaExibir.map(j => j.id)));
     }
   };
 
@@ -280,9 +285,9 @@ export default function AdicionarJogadoresDialog({
             <Button
               size="small"
               onClick={handleSelectAll}
-              disabled={filteredJogadores.length === 0}
+              disabled={listaParaExibir.length === 0}
             >
-              {selectedJogadores.size === filteredJogadores.length ? 'Desmarcar Todos' : 'Selecionar Todos'}
+              {selectedJogadores.size === listaParaExibir.length ? 'Desmarcar Todos' : 'Selecionar Todos'}
             </Button>
           </Box>
         </Box>
@@ -294,7 +299,7 @@ export default function AdicionarJogadoresDialog({
           <Box display="flex" justifyContent="center" py={4}>
             <Typography>Carregando jogadores...</Typography>
           </Box>
-        ) : filteredJogadores.length === 0 ? (
+        ) : listaParaExibir.length === 0 ? (
           <Alert severity="info">
             {jogadoresDisponiveis.length === 0
               ? 'Todos os jogadores ativos já estão participando deste torneio.'
@@ -307,7 +312,7 @@ export default function AdicionarJogadoresDialog({
             gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
             gap={2}
           >
-            {filteredJogadores.map((jogador) => (
+            {listaParaExibir.map((jogador) => (
               <Card key={jogador.id} variant="outlined" sx={{ height: '100%' }}>
                 <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Avatar>{(jogador.apelido ?? jogador.nome)?.charAt(0).toUpperCase()}</Avatar>
