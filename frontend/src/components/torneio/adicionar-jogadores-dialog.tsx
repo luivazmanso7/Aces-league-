@@ -55,10 +55,11 @@ export default function AdicionarJogadoresDialog({
 
   // DEBUG: logs para verificar estados
   useEffect(() => {
+    const finalList = searchTerm.trim() ? filteredJogadores : jogadoresDisponiveis;
     console.log('disp:', jogadoresDisponiveis.length, jogadoresDisponiveis);
     console.log('filt:', filteredJogadores.length, filteredJogadores);
-    console.log('final:', listaParaExibir.length, listaParaExibir);
-  }, [jogadoresDisponiveis, filteredJogadores, listaParaExibir]);
+    console.log('final:', finalList.length, finalList);
+  }, [jogadoresDisponiveis, filteredJogadores, searchTerm]);
 
   // Lista final usada no render (fallback para quando não há busca)
   const listaParaExibir = searchTerm.trim()
