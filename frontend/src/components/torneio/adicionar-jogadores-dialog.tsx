@@ -53,6 +53,13 @@ export default function AdicionarJogadoresDialog({
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredJogadores, setFilteredJogadores] = useState<Jogador[]>([]);
 
+  // DEBUG: logs para verificar estados
+  useEffect(() => {
+    console.log('disp:', jogadoresDisponiveis.length, jogadoresDisponiveis);
+    console.log('filt:', filteredJogadores.length, filteredJogadores);
+    console.log('final:', listaParaExibir.length, listaParaExibir);
+  }, [jogadoresDisponiveis, filteredJogadores, listaParaExibir]);
+
   // Lista final usada no render (fallback para quando não há busca)
   const listaParaExibir = searchTerm.trim()
     ? filteredJogadores
@@ -293,6 +300,23 @@ export default function AdicionarJogadoresDialog({
         </Box>
 
         <Divider sx={{ mb: 3 }} />
+
+        {/* DEBUG: remover após resolver */}
+        {process.env.NODE_ENV !== 'production' && listaParaExibir.length > 0 && (
+          <pre
+            style={{
+              color: '#0f0',
+              fontSize: 11,
+              maxHeight: 180,
+              overflow: 'auto',
+              background: '#111',
+              padding: 8,
+              marginBottom: 16
+            }}
+          >
+            {JSON.stringify(listaParaExibir, null, 2)}
+          </pre>
+        )}
 
         {/* Lista de Jogadores */}
         {loading ? (
