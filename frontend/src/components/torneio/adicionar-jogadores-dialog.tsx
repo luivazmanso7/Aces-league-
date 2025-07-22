@@ -240,7 +240,7 @@ export default function AdicionarJogadoresDialog({
         </Box>
       </DialogTitle>
 
-      <DialogContent dividers>
+      <DialogContent dividers sx={{ overflowY: 'auto' }}>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -341,30 +341,33 @@ export default function AdicionarJogadoresDialog({
             gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
             gap={2}
           >
-            {listaParaExibir.map((jogador) => (
-              <Card key={jogador.id} variant="outlined" sx={{ height: '100%' }}>
-                <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Avatar>{(jogador.apelido ?? jogador.nome)?.charAt(0).toUpperCase()}</Avatar>
-                  <Box flex={1}>
-                    <Typography variant="subtitle1">{jogador.nome}</Typography>
-                    {jogador.apelido && (
-                      <Typography variant="body2" color="text.secondary">
-                        {jogador.apelido}
-                      </Typography>
-                    )}
-                    {jogador.cidade && (
-                      <Typography variant="body2" color="text.secondary">
-                        {jogador.cidade}
-                      </Typography>
-                    )}
-                  </Box>
-                  <Checkbox
-                    checked={selectedJogadores.has(jogador.id)}
-                    onChange={() => handleToggleJogador(jogador.id)}
-                  />
-                </CardContent>
-              </Card>
-            ))}
+            {listaParaExibir.map((jogador) => {
+              console.log('render card', jogador.id, jogador.nome);
+              return (
+                <Card key={jogador.id} variant="outlined" sx={{ height: '100%', border: '1px solid #ccc' }}>
+                  <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Avatar>{(jogador.apelido ?? jogador.nome)?.charAt(0).toUpperCase()}</Avatar>
+                    <Box flex={1}>
+                      <Typography variant="subtitle1">{jogador.nome}</Typography>
+                      {jogador.apelido && (
+                        <Typography variant="body2" color="text.secondary">
+                          {jogador.apelido}
+                        </Typography>
+                      )}
+                      {jogador.cidade && (
+                        <Typography variant="body2" color="text.secondary">
+                          {jogador.cidade}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Checkbox
+                      checked={selectedJogadores.has(jogador.id)}
+                      onChange={() => handleToggleJogador(jogador.id)}
+                    />
+                  </CardContent>
+                </Card>
+              );
+            })}
           </Box>
         )}
       </DialogContent>
