@@ -32,7 +32,7 @@ import {
   Person as PersonIcon,
   EmojiEvents as TrophyIcon,
   TrendingUp as TrendingUpIcon,
-  
+  Download as DownloadIcon,
 } from '@mui/icons-material';
 
 import type { Jogador, JogadorFilters } from '@/types/jogador';
@@ -186,6 +186,34 @@ export default function JogadoresPage() {
     carregarJogadores();
   };
 
+  // ==== Exportação CSV ====
+  const gerarCSVJogadores = (lista: Jogador[]) => {
+    const headers = ['id', 'nome', 'apelido', 'email', 'telefone', 'cidade', 'ativo', 'vitorias'];
+    const escape = (val: unknown) => `"${String(val ?? '').replace(/"/g, '""')}"`;
+    const rows = lista.map((j) => [
+      j.id,
+      j.nome,
+      j.apelido,
+      j.email,
+      j.telefone,
+      j.cidade,
+      j.ativo,
+      j.vitorias,
+    ].map(escape).join(';'));
+    return [headers.join(';'), ...rows].join('\n');
+  };
+
+  const handleDownloadCSV = useCallback(() => {
+    const csv = gerarCSVJogadores(jogadores);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `jogadores-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [jogadores]);
+
   // Dados paginados
   const indiceInicio = (paginaAtual - 1) * ITEMS_POR_PAGINA;
   const indiceFim = indiceInicio + ITEMS_POR_PAGINA;
@@ -212,6 +240,13 @@ export default function JogadoresPage() {
             onClick={handleNovoJogador}
           >
             Novo Jogador
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadCSV}
+          >
+            Exportar CSV
           </Button>
         </Box>
       </Box>
