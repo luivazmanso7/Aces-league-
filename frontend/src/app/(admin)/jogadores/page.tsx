@@ -274,13 +274,6 @@ export default function JogadoresPage() {
           >
             Exportar CSV
           </Button>
-          <Button
-            variant="outlined"
-            startIcon={<DownloadIcon />}
-            onClick={handleDownloadCSV}
-          >
-            Exportar CSV
-          </Button>
         </Box>
       </Box>
 

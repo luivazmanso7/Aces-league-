@@ -53,13 +53,6 @@ export default function AdicionarJogadoresDialog({
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredJogadores, setFilteredJogadores] = useState<Jogador[]>([]);
 
-  // DEBUG: logs para verificar estados
-  useEffect(() => {
-    const finalList = searchTerm.trim() ? filteredJogadores : jogadoresDisponiveis;
-    console.log('disp:', jogadoresDisponiveis.length, jogadoresDisponiveis);
-    console.log('filt:', filteredJogadores.length, filteredJogadores);
-    console.log('final:', finalList.length, finalList);
-  }, [jogadoresDisponiveis, filteredJogadores, searchTerm]);
 
   // Lista final usada no render (fallback para quando não há busca)
   const listaParaExibir = searchTerm.trim()
@@ -218,7 +211,11 @@ export default function AdicionarJogadoresDialog({
       maxWidth="md"
       fullWidth
       PaperProps={{
-        sx: { height: '80vh' }
+        sx: {
+          height: '80vh',
+          display: 'flex',
+          flexDirection: 'column'
+        }
       }}
     >
       <DialogTitle>
@@ -240,7 +237,10 @@ export default function AdicionarJogadoresDialog({
         </Box>
       </DialogTitle>
 
-      <DialogContent dividers sx={{ overflowY: 'auto' }}>
+      <DialogContent
+        dividers
+        sx={{ flex: 1, overflowY: 'auto', pb: 6 }}
+      >
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -302,25 +302,8 @@ export default function AdicionarJogadoresDialog({
 
         <Divider sx={{ mb: 3 }} />
 
-        {/* DEBUG: remover após resolver */}
-        {process.env.NODE_ENV !== 'production' && listaParaExibir.length > 0 && (
-          <pre
-            style={{
-              color: '#0f0',
-              fontSize: 11,
-              maxHeight: 180,
-              overflow: 'auto',
-              background: '#111',
-              padding: 8,
-              marginBottom: 16
-            }}
-          >
-            {JSON.stringify(listaParaExibir, null, 2)}
-          </pre>
-        )}
 
         {/* Lista de Jogadores */}
-        {void console.log('loading (render):', loading)}
         {loading && (
           <Box display="flex" justifyContent="center" py={4}>
             <Typography>Carregando jogadores...</Typography>
@@ -343,7 +326,6 @@ export default function AdicionarJogadoresDialog({
             gap={2}
           >
             {listaParaExibir.map((jogador) => {
-              console.log('render card', jogador.id, jogador.nome);
               return (
                 <Card key={jogador.id} variant="outlined" sx={{ height: '100%', border: '1px solid #ccc' }}>
                   <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -373,7 +355,16 @@ export default function AdicionarJogadoresDialog({
         )}
       </DialogContent>
 
-      <DialogActions sx={{ p: 3 }}>
+      <DialogActions
+        sx={{
+          p: 3,
+          position: 'sticky',
+          bottom: 0,
+          backgroundColor: (theme) => theme.palette.background.paper,
+          borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+          zIndex: 2
+        }}
+      >
         <Button onClick={onClose} disabled={loading}>
           Cancelar
         </Button>
