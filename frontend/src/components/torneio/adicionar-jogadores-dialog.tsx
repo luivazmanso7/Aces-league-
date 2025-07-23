@@ -58,10 +58,10 @@ export default function AdicionarJogadoresDialog({
 
   const [mostrarLista, setMostrarLista] = useState(false);
 
-  // Lista final usada no render (fallback para quando não há busca)
+  // Lista só aparece quando há termo digitado
   const listaParaExibir = searchTerm.trim()
     ? filteredJogadores
-    : jogadoresDisponiveis;
+    : [];
 
   // Carregar jogadores disponíveis
   useEffect(() => {
@@ -113,7 +113,8 @@ export default function AdicionarJogadoresDialog({
   // Filtrar jogadores por busca
   useEffect(() => {
     if (!searchTerm.trim()) {
-      setFilteredJogadores(jogadoresDisponiveis);
+      // sem busca: não exibiremos lista, então zera o filtrado
+      setFilteredJogadores([]);
     } else {
       const filtered = jogadoresDisponiveis.filter(jogador =>
         jogador.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -123,6 +124,11 @@ export default function AdicionarJogadoresDialog({
       setFilteredJogadores(filtered);
     }
   }, [searchTerm, jogadoresDisponiveis]);
+
+  // Exibir/ocultar lista conforme há termo de busca
+  useEffect(() => {
+    setMostrarLista(!!searchTerm.trim());
+  }, [searchTerm]);
 
   // Reset ao fechar
   useEffect(() => {
@@ -333,7 +339,7 @@ export default function AdicionarJogadoresDialog({
         )}
 
         {listaParaExibir.length > 0 && (
-          <Collapse in={mostrarLista} unmountOnExit>
+          <Collapse in={mostrarLista && !!searchTerm.trim()} unmountOnExit>
             <Box
               display="grid"
               gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
