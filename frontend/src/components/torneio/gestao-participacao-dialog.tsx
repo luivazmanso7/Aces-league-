@@ -28,7 +28,6 @@ import {
   Card,
   CardContent,
   Badge,
-  List, ListItemButton, ListItemText,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -86,25 +85,10 @@ export default function GestaoParticipacaoDialog({
   const [participacoes, setParticipacoes] = useState<Participacao[]>([]);
   const [todosJogadores, setTodosJogadores] = useState<Jogador[]>([]);
   const [jogadoresDisponiveis, setJogadoresDisponiveis] = useState<Jogador[]>([]);
-  const [mostrarTodosJogadores, setMostrarTodosJogadores] = useState(false);
 
   const [busca, setBusca] = useState('');
 
-  // Lista base (todos ou só disponíveis)
-  const baseOptions = mostrarTodosJogadores ? todosJogadores : jogadoresDisponiveis;
-
-  // Função de filtro simples
-  const filtrarJogadores = (arr: Jogador[], q: string) => {
-    if (!q.trim()) return arr;
-    const s = q.toLowerCase();
-    return arr.filter(j =>
-      j.nome.toLowerCase().includes(s) ||
-      (j.apelido ?? '').toLowerCase().includes(s) ||
-      (j.cidade ?? '').toLowerCase().includes(s)
-    );
-  };
-
-  const listaFiltrada = filtrarJogadores(baseOptions, busca);
+  // Filtro de jogadores removido junto com a lista
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -419,17 +403,8 @@ export default function GestaoParticipacaoDialog({
                 Selecione os jogadores cadastrados que deseja adicionar a este torneio. É possível buscar pelo nome, apelido ou cidade.
               </Typography>
               
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setMostrarTodosJogadores(!mostrarTodosJogadores)}
-                >
-                  {mostrarTodosJogadores ? 'Mostrar disponíveis' : 'Mostrar todos'}
-                </Button>
-              </Box>
               
-              {/* Lista de jogadores (minimalista) */}
+              {/* Barra de busca de jogadores (lista removida) */}
               <Box mt={2}>
                 <TextField
                   placeholder="Buscar jogador..."
@@ -437,48 +412,7 @@ export default function GestaoParticipacaoDialog({
                   fullWidth
                   value={busca}
                   onChange={(e) => setBusca(e.target.value)}
-                  sx={{ mb: 1 }}
                 />
-
-                {listaFiltrada.length === 0 ? (
-                  <Typography variant="body2" color="text.secondary">
-                    Nenhum jogador encontrado.
-                  </Typography>
-                ) : (
-                  <List
-                    dense
-                    sx={{
-                      maxHeight: 260,
-                      overflowY: 'auto',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 1,
-                    }}
-                  >
-                    {listaFiltrada.map((j) => {
-                      const checked = selectedJogadores.some((s) => s.id === j.id);
-                      const disabled = participacoes.some((p) => p.id_jogador === j.id);
-                      return (
-                        <ListItemButton
-                          key={j.id}
-                          onClick={() =>
-                            setSelectedJogadores((prev) =>
-                              checked ? prev.filter((s) => s.id !== j.id) : [...prev, j]
-                            )
-                          }
-                          dense
-                          disabled={disabled}
-                          selected={checked}
-                        >
-                          <ListItemText
-                            primary={j.nome}
-                            secondary={[j.apelido, j.cidade].filter(Boolean).join(' • ')}
-                          />
-                        </ListItemButton>
-                      );
-                    })}
-                  </List>
-                )}
               </Box>
             </Box>
 
