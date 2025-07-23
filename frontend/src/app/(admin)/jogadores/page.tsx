@@ -32,7 +32,7 @@ import {
   Person as PersonIcon,
   EmojiEvents as TrophyIcon,
   TrendingUp as TrendingUpIcon,
-  Download as DownloadIcon,
+  
 } from '@mui/icons-material';
 
 import type { Jogador, JogadorFilters } from '@/types/jogador';
@@ -205,14 +205,7 @@ export default function JogadoresPage() {
         </Typography>
         
         <Box sx={{ display: 'flex', gap: 1 }}>
-          {/* Removido botão Importar */}
-          <Button
-            variant="outlined"
-            startIcon={<DownloadIcon />}
-            sx={{ display: { xs: 'none', sm: 'flex' } }}
-          >
-            Exportar
-          </Button>
+        
           <Button
             variant="contained"
             startIcon={<AddIcon />}
