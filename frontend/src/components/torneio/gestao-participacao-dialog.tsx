@@ -28,8 +28,10 @@ import {
   Card,
   CardContent,
   Badge,
-  List, ListItemButton, ListItemText,
+  List, ListItemButton, ListItemText, useMediaQuery,
 } from '@mui/material';
+
+import { useTheme } from '@mui/material/styles';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -89,6 +91,9 @@ export default function GestaoParticipacaoDialog({
   const [mostrarTodosJogadores, setMostrarTodosJogadores] = useState(false);
 
   const [busca, setBusca] = useState('');
+  const exibirLista = !!busca.trim();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Lista base (todos ou só disponíveis)
   const baseOptions = mostrarTodosJogadores ? todosJogadores : jogadoresDisponiveis;
@@ -104,7 +109,7 @@ export default function GestaoParticipacaoDialog({
     );
   };
 
-  const listaFiltrada = filtrarJogadores(baseOptions, busca);
+  const listaFiltrada = busca.trim() ? filtrarJogadores(baseOptions, busca) : [];
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -355,8 +360,14 @@ export default function GestaoParticipacaoDialog({
       onClose={onCloseAction}
       maxWidth="lg"
       fullWidth
+      fullScreen={isMobile}
       PaperProps={{
-        sx: { height: '90vh' }
+        sx: {
+          height: { xs: '100vh', md: '90vh' },
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative'
+        }
       }}
     >
       <DialogTitle sx={{ pb: 1, bgcolor: 'rgba(0, 0, 0, 0.04)' }}>
@@ -398,7 +409,7 @@ export default function GestaoParticipacaoDialog({
         </Tabs>
       </Box>
 
-      <DialogContent sx={{ p: 0, overflow: 'hidden' }}>
+      <DialogContent sx={{ p: 0, flex: 1, overflowY: 'auto', position: 'relative', pb: isMobile ? 12 : 2 }}>
         {error && (
           <Alert severity="error" sx={{ m: 2 }}>
             {error}
@@ -440,44 +451,46 @@ export default function GestaoParticipacaoDialog({
                   sx={{ mb: 1 }}
                 />
 
-                {listaFiltrada.length === 0 ? (
-                  <Typography variant="body2" color="text.secondary">
-                    Nenhum jogador encontrado.
-                  </Typography>
-                ) : (
-                  <List
-                    dense
-                    sx={{
-                      maxHeight: 260,
-                      overflowY: 'auto',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 1,
-                    }}
-                  >
-                    {listaFiltrada.map((j) => {
-                      const checked = selectedJogadores.some((s) => s.id === j.id);
-                      const disabled = participacoes.some((p) => p.id_jogador === j.id);
-                      return (
-                        <ListItemButton
-                          key={j.id}
-                          onClick={() =>
-                            setSelectedJogadores((prev) =>
-                              checked ? prev.filter((s) => s.id !== j.id) : [...prev, j]
-                            )
-                          }
-                          dense
-                          disabled={disabled}
-                          selected={checked}
-                        >
-                          <ListItemText
-                            primary={j.nome}
-                            secondary={[j.apelido, j.cidade].filter(Boolean).join(' • ')}
-                          />
-                        </ListItemButton>
-                      );
-                    })}
-                  </List>
+                {exibirLista && (
+                  listaFiltrada.length === 0 ? (
+                    <Typography variant="body2" color="text.secondary">
+                      Nenhum jogador encontrado.
+                    </Typography>
+                  ) : (
+                    <List
+                      dense
+                      sx={{
+                        maxHeight: 260,
+                        overflowY: 'auto',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 1,
+                      }}
+                    >
+                      {listaFiltrada.map((j) => {
+                        const checked = selectedJogadores.some((s) => s.id === j.id);
+                        const disabled = participacoes.some((p) => p.id_jogador === j.id);
+                        return (
+                          <ListItemButton
+                            key={j.id}
+                            onClick={() =>
+                              setSelectedJogadores((prev) =>
+                                checked ? prev.filter((s) => s.id !== j.id) : [...prev, j]
+                              )
+                            }
+                            dense
+                            disabled={disabled}
+                            selected={checked}
+                          >
+                            <ListItemText
+                              primary={j.nome}
+                              secondary={[j.apelido, j.cidade].filter(Boolean).join(' • ')}
+                            />
+                          </ListItemButton>
+                        );
+                      })}
+                    </List>
+                  )
                 )}
               </Box>
             </Box>
@@ -847,7 +860,20 @@ export default function GestaoParticipacaoDialog({
         )}
       </DialogContent>
 
-      <DialogActions sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+      <DialogActions
+        sx={{
+          p: 2,
+          position: { xs: 'fixed', sm: 'sticky' },
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: { xs: '100%', sm: 'auto' },
+          backgroundColor: (t) => t.palette.background.paper,
+          borderTop: (t) => `1px solid ${t.palette.divider}`,
+          boxShadow: (t) => `0 -2px 8px ${t.palette.action.disabledBackground}`,
+          zIndex: (t) => t.zIndex.modal + 1
+        }}
+      >
         <Button onClick={onCloseAction} disabled={loading}>
           Fechar
         </Button>
