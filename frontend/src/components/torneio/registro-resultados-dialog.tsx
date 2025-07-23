@@ -35,6 +35,7 @@ import {
   EmojiEvents as TrophyIcon,
   Undo as UndoIcon,
   Info as InfoIcon,
+  Edit as EditIcon,
 } from '@mui/icons-material';
 import { Torneio, Participacao, ParticipacaoLote } from '@/types/torneio';
 import { torneioApi } from '@/services/torneio.service';
@@ -61,6 +62,7 @@ export default function RegistroResultadosDialog({
   const [success, setSuccess] = useState<string | null>(null);
   const [autoCalculate, setAutoCalculate] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   // Carregar participações
   useEffect(() => {
@@ -102,6 +104,7 @@ export default function RegistroResultadosDialog({
       setError(null);
       setSuccess(null);
       setHasChanges(false);
+      setEditing(false);
     }
   }, [open]);
 
@@ -300,16 +303,29 @@ export default function RegistroResultadosDialog({
                         }
                         label="Calcular posições automaticamente"
                       />
-                      <Button
-                        variant="outlined"
-                        startIcon={<AutoIcon />}
-                        onClick={handleCalcularPosicoes}
-                        disabled={loading}
-                        fullWidth
-                      >
-                        Calcular Posições
-                      </Button>
-                      {hasChanges && (
+                      {editing && (
+                        <Button
+                          variant="outlined"
+                          startIcon={<AutoIcon />}
+                          onClick={handleCalcularPosicoes}
+                          disabled={loading}
+                          fullWidth
+                        >
+                          Calcular Posições
+                        </Button>
+                      )}
+                      {!editing && (
+                        <Button
+                          variant="contained"
+                          startIcon={<EditIcon />}
+                          onClick={() => setEditing(true)}
+                          disabled={loading}
+                          fullWidth
+                        >
+                          Editar Resultados
+                        </Button>
+                      )}
+                      {editing && hasChanges && (
                         <Button
                           variant="outlined"
                           startIcon={<UndoIcon />}
