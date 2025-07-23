@@ -33,7 +33,6 @@ import {
   EmojiEvents as TrophyIcon,
   TrendingUp as TrendingUpIcon,
   Download as DownloadIcon,
-  Download as DownloadIcon,
 } from "@mui/icons-material";
 
 import type { Jogador, JogadorFilters } from "@/types/jogador";
