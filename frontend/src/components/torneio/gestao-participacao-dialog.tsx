@@ -24,20 +24,18 @@ import {
   CircularProgress,
   Checkbox,
   TextField,
-  Autocomplete,
   Tab,
   Tabs,
   Card,
   CardContent,
   Badge,
-  InputAdornment,
+  List, ListItemButton, ListItemIcon, ListItemText,
 } from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   EmojiEvents as TrophyIcon,
   Person as PersonIcon,
-  Search as SearchIcon,
   Save as SaveIcon,
   PersonAdd as PersonAddIcon,
   Leaderboard as LeaderboardIcon,
@@ -53,7 +51,7 @@ import participacaoService from '@/services/participacao.service';
 
 interface GestaoParticipacaoDialogProps {
   open: boolean;
-  onCloseAction: () => void; // <-- nome correto
+  onCloseAction: () => void; //  nome correto
   torneio: Torneio | null;
   onRefresh?: () => void;
 }
@@ -90,21 +88,24 @@ export default function GestaoParticipacaoDialog({
   const [todosJogadores, setTodosJogadores] = useState<Jogador[]>([]);
   const [jogadoresDisponiveis, setJogadoresDisponiveis] = useState<Jogador[]>([]);
   const [mostrarTodosJogadores, setMostrarTodosJogadores] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  // Lista base (todos ou apenas disponíveis)
+
+  const [busca, setBusca] = useState('');
+
+  // Lista base (todos ou só disponíveis)
   const baseOptions = mostrarTodosJogadores ? todosJogadores : jogadoresDisponiveis;
 
-  // Filtra pelo termo digitado
-  const displayedOptions = searchTerm.trim()
-    ? baseOptions.filter(j => {
-        const s = searchTerm.toLowerCase();
-        return (
-          j.nome.toLowerCase().includes(s) ||
-          (j.apelido?.toLowerCase() ?? '').includes(s) ||
-          (j.cidade?.toLowerCase() ?? '').includes(s)
-        );
-      })
-    : baseOptions;
+  // Função de filtro simples
+  const filtrarJogadores = (arr: Jogador[], q: string) => {
+    if (!q.trim()) return arr;
+    const s = q.toLowerCase();
+    return arr.filter(j =>
+      j.nome.toLowerCase().includes(s) ||
+      (j.apelido ?? '').toLowerCase().includes(s) ||
+      (j.cidade ?? '').toLowerCase().includes(s)
+    );
+  };
+
+  const listaFiltrada = filtrarJogadores(baseOptions, busca);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -429,164 +430,93 @@ export default function GestaoParticipacaoDialog({
                 </Button>
               </Box>
               
-              <Autocomplete
-                multiple
-                options={displayedOptions}
-                isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                filterOptions={(opts) => opts}
-                disablePortal
-                inputValue={searchTerm}
-                onInputChange={(_, value) => setSearchTerm(value)}
-                openOnFocus
-                disableCloseOnSelect
-                getOptionLabel={(jogador) => `${jogador.nome} ${jogador.apelido ? `(${jogador.apelido})` : ''} ${jogador.cidade ? `- ${jogador.cidade}` : ''}`}
-                value={selectedJogadores}
-                onChange={(event, newValue) => {
-                  // Filtrar apenas jogadores que não estão no torneio
-                  const jogadoresValidos = newValue.filter(jogador => 
-                    !participacoes.some(p => p.id_jogador === jogador.id)
-                  );
-                  setSelectedJogadores(jogadoresValidos);
-                }}
-                getOptionDisabled={(option) => participacoes.some(p => p.id_jogador === option.id)}
-                renderInput={(params) => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const { ref, ...inputPropsWithoutRef } = params.InputProps;
-                  return (
-                    <TextField
-                      {...params}
-                      label="Pesquisar"
-                      InputProps={{
-                        ...inputPropsWithoutRef,
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <SearchIcon />
-                          </InputAdornment>
-                        ),
-                        className: 'text-sm',
-                        endAdornment: params.InputProps.endAdornment,
-                        onMouseDown: (e) => e.stopPropagation(),
-                      }}
-                    />
-                  );
-                }}
-                renderOption= {(props, jogador ) => {
-                  // Verificar se o jogador já está no torneio
-                  console.log('opt', jogador.nome)
-                  const jaNoTorneio = participacoes.some(p => p.id_jogador === jogador.id);
-                  // Calcular se jogador está disponível para adicionar
-                  const disponivel = !jaNoTorneio;
-                
-                
+              {/* Lista de jogadores (minimalista) */}
+              <Box mt={2}>
+                <TextField
+                  placeholder="Buscar jogador..."
+                  size="small"
+                  fullWidth
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
+                  sx={{ mb: 1 }}
+                />
 
-                  
+                {listaFiltrada.length === 0 ? (
+                  <Typography variant="body2" color="text.secondary">
+                    Nenhum jogador encontrado.
+                  </Typography>
+                ) : (
+                  <List
+                    dense
+                    sx={{
+                      maxHeight: 260,
+                      overflowY: 'auto',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      borderRadius: 1,
+                    }}
+                  >
+                    {listaFiltrada.map((j) => {
+                      const checked = selectedJogadores.some((s) => s.id === j.id);
+                      const disabled = participacoes.some((p) => p.id_jogador === j.id);
 
-                  return (
-                    <Box 
-                      component="li" 
-                      {...props} 
-                      sx={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: 1,
-                        opacity: disponivel ? 1 : 0.6,
-                        ...(jaNoTorneio ? {
-                          cursor: 'not-allowed',
-                          backgroundColor: 'rgba(25, 118, 210, 0.15)'
-                        } : {
-                          backgroundColor: 'rgba(0, 0, 0, 0.03)',
-                          '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                      return (
+                        <ListItemButton
+                          key={j.id}
+                          onClick={() =>
+                            setSelectedJogadores((prev) =>
+                              checked ? prev.filter((s) => s.id !== j.id) : [...prev, j]
+                            )
                           }
-                        })
-                      }}
-                    >
-                      <Avatar 
-                        sx={{ width: 32, height: 32 }}
-                      >
-                        {jogador.nome.charAt(0)}
-                      </Avatar>
-                      <Box sx={{ flex: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography variant="body2" fontWeight="bold" sx={{ color: '#000000' }}>
-                            {jogador.nome}
-                          </Typography>
-                          {jaNoTorneio && (
-                            <Chip
+                          dense
+                          disabled={disabled}
+                        >
+                          <ListItemIcon>
+                            <Checkbox
+                              edge="start"
+                              tabIndex={-1}
+                              disableRipple
+                              checked={checked}
                               size="small"
-                              label="Já adicionado"
-                              color="primary"
+                            />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={j.nome}
+                            secondary={[j.apelido, j.cidade].filter(Boolean).join(' • ')}
+                          />
+                          {disabled && (
+                            <Chip
+                              label="Já no torneio"
+                              size="small"
                               variant="outlined"
-                              sx={{ height: 20, fontSize: '0.7rem' }}
+                              sx={{ ml: 1 }}
                             />
                           )}
-                        </Box>
-                        <Box display="flex" alignItems="center" gap={1}>
-                          {jogador.apelido && (
-                            <Typography variant="caption" sx={{ color: '#333333', fontWeight: 'medium' }}>
-                              {jogador.apelido}
-                            </Typography>
-                          )}
-                          {jogador.cidade && (
-                            <Typography variant="caption" sx={{ color: '#333333', fontWeight: 'medium' }}>
-                              • {jogador.cidade}
-                            </Typography>
-                          )}
-                          {jogador.total_torneios > 0 && (
-                            <Chip 
-                              size="small" 
-                              label={`${jogador.total_torneios} torneio${jogador.total_torneios > 1 ? 's' : ''}`} 
-                              variant="outlined"
-                              sx={{ height: 20, fontSize: '0.7rem' }} 
-                            />
-                          )}
-                        </Box>
-                      </Box>
-                    </Box>
-                  );
-                }}
-                renderTags={(value, getTagProps) =>
-                  value.map((jogador, index) => (
-                    <Chip
-                      {...getTagProps({ index })}
-                      key={jogador.id}
-                      avatar={
-                        <Avatar>
-                          {jogador.nome.charAt(0)}
-                        </Avatar>
+                        </ListItemButton>
+                      );
+                    })}
+                  </List>
+                )}
+
+                <Box display="flex" justifyContent="space-between" mt={1}>
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      if (selectedJogadores.length === listaFiltrada.filter(j => !participacoes.some(p => p.id_jogador === j.id)).length) {
+                        setSelectedJogadores([]);
+                      } else {
+                        setSelectedJogadores(
+                          listaFiltrada.filter(j => !participacoes.some(p => p.id_jogador === j.id))
+                        );
                       }
-                      label={jogador.apelido || jogador.nome}
-                      variant="outlined"
-                    />
-                  ))
-                }
-                disabled={loading}
-              />
-              {/* Fallback de listagem visível (debug) */}
-              {displayedOptions.length > 0 && (
-                <Box mt={2}>
-                  {displayedOptions.map((j) => (
-                    <Box key={j.id} display="flex" alignItems="center" gap={1} mb={0.5}>
-                      <Checkbox
-                        size="small"
-                        checked={selectedJogadores.some((s) => s.id === j.id)}
-                        onChange={() => {
-                          setSelectedJogadores((prev) =>
-                            prev.some((s) => s.id === j.id)
-                              ? prev.filter((s) => s.id !== j.id)
-                              : [...prev, j]
-                          );
-                        }}
-                      />
-                      <Typography variant="body2">
-                        {j.nome}
-                        {j.apelido ? ` (${j.apelido})` : ''} 
-                        {j.cidade ? ` - ${j.cidade}` : ''}
-                      </Typography>
-                    </Box>
-                  ))}
+                    }}
+                  >
+                    {selectedJogadores.length === listaFiltrada.filter(j => !participacoes.some(p => p.id_jogador === j.id)).length
+                      ? 'Desmarcar todos'
+                      : 'Selecionar todos'}
+                  </Button>
                 </Box>
-              )}
+              </Box>
             </Box>
 
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
