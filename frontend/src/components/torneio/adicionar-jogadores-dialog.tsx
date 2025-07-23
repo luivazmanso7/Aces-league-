@@ -20,7 +20,9 @@ import {
   InputAdornment,
   Badge,
   Collapse,
+  useMediaQuery,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import {
   Search as SearchIcon,
   PersonAdd as PersonAddIcon,
@@ -57,6 +59,9 @@ export default function AdicionarJogadoresDialog({
   const [filteredJogadores, setFilteredJogadores] = useState<Jogador[]>([]);
 
   const [mostrarLista, setMostrarLista] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Lista só aparece quando há termo digitado
   const listaParaExibir = searchTerm.trim()
@@ -221,11 +226,13 @@ export default function AdicionarJogadoresDialog({
       onClose={onClose}
       maxWidth="md"
       fullWidth
+      fullScreen={isMobile}
       PaperProps={{
         sx: {
-          height: '80vh',
+          height: { xs: '100vh', md: '80vh' },
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          position: 'relative'
         }
       }}
     >
@@ -250,7 +257,7 @@ export default function AdicionarJogadoresDialog({
 
       <DialogContent
         dividers
-        sx={{ flex: 1, overflowY: 'auto', pb: (theme) => theme.spacing(14) }}
+        sx={{ flex: 1, overflowY: 'auto', pb: isMobile ? 18 : 14 }}
       >
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
@@ -375,19 +382,21 @@ export default function AdicionarJogadoresDialog({
           </Collapse>
         )}
         <Box sx={{ height: (theme) => theme.spacing(2) }} />
+        <Box sx={{ height: isMobile ? 10 : 0 }} />
       </DialogContent>
 
       <DialogActions
         sx={{
           p: 2,
-          position: 'sticky',
+          position: { xs: 'fixed', sm: 'sticky' },
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: (theme) => theme.palette.background.paper,
-          borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-          boxShadow: (theme) => `0 -2px 8px ${theme.palette.action.disabledBackground}`,
-          zIndex: 3
+          width: { xs: '100%', sm: 'auto' },
+          backgroundColor: (t) => t.palette.background.paper,
+          borderTop: (t) => `1px solid ${t.palette.divider}`,
+          boxShadow: (t) => `0 -2px 8px ${t.palette.action.disabledBackground}`,
+          zIndex: (t) => t.zIndex.modal + 1
         }}
       >
         <Button onClick={onClose} disabled={loading}>
