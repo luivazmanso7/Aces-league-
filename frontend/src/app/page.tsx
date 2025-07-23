@@ -255,14 +255,6 @@ export default function LandingPage() {
           >
             <Button
               onClick={() => scrollToSection("torneios")}
-              startIcon={
-                <TrophyIcon
-                  sx={{
-                    color: "#eab308",
-                    fontSize: { xs: "2.5rem", md: "3.5rem" },
-                  }}
-                />
-              }
               sx={{
                 color: "#333",
                 fontWeight: 600,
@@ -565,7 +557,9 @@ export default function LandingPage() {
                 },
               }}
             >
-              <ListItemIcon></ListItemIcon>
+              <ListItemIcon>
+                <TrophyIcon sx={{ color: "#eab308", fontSize: "1.5rem" }} />
+              </ListItemIcon>
               <ListItemText
                 primary="Torneios"
                 primaryTypographyProps={{
