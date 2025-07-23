@@ -22,14 +22,13 @@ import {
   Avatar,
   Alert,
   CircularProgress,
-  Checkbox,
   TextField,
   Tab,
   Tabs,
   Card,
   CardContent,
   Badge,
-  List, ListItemButton, ListItemIcon, ListItemText,
+  List, ListItemButton, ListItemText,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -459,7 +458,6 @@ export default function GestaoParticipacaoDialog({
                     {listaFiltrada.map((j) => {
                       const checked = selectedJogadores.some((s) => s.id === j.id);
                       const disabled = participacoes.some((p) => p.id_jogador === j.id);
-
                       return (
                         <ListItemButton
                           key={j.id}
@@ -470,52 +468,17 @@ export default function GestaoParticipacaoDialog({
                           }
                           dense
                           disabled={disabled}
+                          selected={checked}
                         >
-                          <ListItemIcon>
-                            <Checkbox
-                              edge="start"
-                              tabIndex={-1}
-                              disableRipple
-                              checked={checked}
-                              size="small"
-                            />
-                          </ListItemIcon>
                           <ListItemText
                             primary={j.nome}
                             secondary={[j.apelido, j.cidade].filter(Boolean).join(' • ')}
                           />
-                          {disabled && (
-                            <Chip
-                              label="Já no torneio"
-                              size="small"
-                              variant="outlined"
-                              sx={{ ml: 1 }}
-                            />
-                          )}
                         </ListItemButton>
                       );
                     })}
                   </List>
                 )}
-
-                <Box display="flex" justifyContent="space-between" mt={1}>
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      if (selectedJogadores.length === listaFiltrada.filter(j => !participacoes.some(p => p.id_jogador === j.id)).length) {
-                        setSelectedJogadores([]);
-                      } else {
-                        setSelectedJogadores(
-                          listaFiltrada.filter(j => !participacoes.some(p => p.id_jogador === j.id))
-                        );
-                      }
-                    }}
-                  >
-                    {selectedJogadores.length === listaFiltrada.filter(j => !participacoes.some(p => p.id_jogador === j.id)).length
-                      ? 'Desmarcar todos'
-                      : 'Selecionar todos'}
-                  </Button>
-                </Box>
               </Box>
             </Box>
 
