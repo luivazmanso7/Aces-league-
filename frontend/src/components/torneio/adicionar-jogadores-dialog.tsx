@@ -19,12 +19,15 @@ import {
   Divider,
   InputAdornment,
   Badge,
+  Collapse,
 } from '@mui/material';
 import {
   Search as SearchIcon,
   PersonAdd as PersonAddIcon,
   FilterList as FilterListIcon,
   Person as PersonIcon,
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
 } from '@mui/icons-material';
 import { Torneio } from '@/types/torneio';
 import { Jogador } from '@/types/jogador';
@@ -53,6 +56,7 @@ export default function AdicionarJogadoresDialog({
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredJogadores, setFilteredJogadores] = useState<Jogador[]>([]);
 
+  const [mostrarLista, setMostrarLista] = useState(false);
 
   // Lista final usada no render (fallback para quando não há busca)
   const listaParaExibir = searchTerm.trim()
@@ -127,6 +131,7 @@ export default function AdicionarJogadoresDialog({
       setSearchTerm('');
       setError(null);
       setSuccess(null);
+      setMostrarLista(false);
     }
   }, [open]);
 
@@ -239,7 +244,7 @@ export default function AdicionarJogadoresDialog({
 
       <DialogContent
         dividers
-        sx={{ flex: 1, overflowY: 'auto', pb: 6 }}
+        sx={{ flex: 1, overflowY: 'auto', pb: (theme) => theme.spacing(14) }}
       >
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
@@ -297,6 +302,14 @@ export default function AdicionarJogadoresDialog({
             >
               {selectedJogadores.size === listaParaExibir.length ? 'Desmarcar Todos' : 'Selecionar Todos'}
             </Button>
+            <Button
+              size="small"
+              startIcon={mostrarLista ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              onClick={() => setMostrarLista(!mostrarLista)}
+              disabled={listaParaExibir.length === 0}
+            >
+              {mostrarLista ? 'Ocultar lista' : `Mostrar lista (${listaParaExibir.length})`}
+            </Button>
           </Box>
         </Box>
 
@@ -320,49 +333,55 @@ export default function AdicionarJogadoresDialog({
         )}
 
         {listaParaExibir.length > 0 && (
-          <Box
-            display="grid"
-            gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
-            gap={2}
-          >
-            {listaParaExibir.map((jogador) => {
-              return (
-                <Card key={jogador.id} variant="outlined" sx={{ height: '100%', border: '1px solid #ccc' }}>
-                  <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Avatar>{(jogador.apelido ?? jogador.nome)?.charAt(0).toUpperCase()}</Avatar>
-                    <Box flex={1}>
-                      <Typography variant="subtitle1">{jogador.nome}</Typography>
-                      {jogador.apelido && (
-                        <Typography variant="body2" color="text.secondary">
-                          {jogador.apelido}
-                        </Typography>
-                      )}
-                      {jogador.cidade && (
-                        <Typography variant="body2" color="text.secondary">
-                          {jogador.cidade}
-                        </Typography>
-                      )}
-                    </Box>
-                    <Checkbox
-                      checked={selectedJogadores.has(jogador.id)}
-                      onChange={() => handleToggleJogador(jogador.id)}
-                    />
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </Box>
+          <Collapse in={mostrarLista} unmountOnExit>
+            <Box
+              display="grid"
+              gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
+              gap={2}
+            >
+              {listaParaExibir.map((jogador) => {
+                return (
+                  <Card key={jogador.id} variant="outlined" sx={{ height: '100%', border: '1px solid #ccc' }}>
+                    <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Avatar>{(jogador.apelido ?? jogador.nome)?.charAt(0).toUpperCase()}</Avatar>
+                      <Box flex={1}>
+                        <Typography variant="subtitle1">{jogador.nome}</Typography>
+                        {jogador.apelido && (
+                          <Typography variant="body2" color="text.secondary">
+                            {jogador.apelido}
+                          </Typography>
+                        )}
+                        {jogador.cidade && (
+                          <Typography variant="body2" color="text.secondary">
+                            {jogador.cidade}
+                          </Typography>
+                        )}
+                      </Box>
+                      <Checkbox
+                        checked={selectedJogadores.has(jogador.id)}
+                        onChange={() => handleToggleJogador(jogador.id)}
+                      />
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </Box>
+          </Collapse>
         )}
+        <Box sx={{ height: (theme) => theme.spacing(2) }} />
       </DialogContent>
 
       <DialogActions
         sx={{
-          p: 3,
+          p: 2,
           position: 'sticky',
           bottom: 0,
+          left: 0,
+          right: 0,
           backgroundColor: (theme) => theme.palette.background.paper,
           borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-          zIndex: 2
+          boxShadow: (theme) => `0 -2px 8px ${theme.palette.action.disabledBackground}`,
+          zIndex: 3
         }}
       >
         <Button onClick={onClose} disabled={loading}>
