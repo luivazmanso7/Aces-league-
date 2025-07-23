@@ -1,69 +1,11 @@
 'use client';
 
-import { useState,} from 'react';
 import {
   Typography,
   Box,
-  Paper,
-  LinearProgress,
 } from '@mui/material';
 
-
 export default function DashboardPage() {
-  const [loading,] = useState(true);
-  
-  
-
-  if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="60vh"
-        className="animate-fadeInUp"
-      >
-        <Paper
-          elevation={0}
-          sx={{
-            p: 4,
-            textAlign: 'center',
-            background: 'linear-gradient(145deg, rgba(30, 30, 30, 0.8) 0%, rgba(42, 42, 42, 0.8) 100%)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(245, 158, 11, 0.2)',
-            borderRadius: 3,
-          }}
-        >
-          <Box sx={{ mb: 3 }}>
-            <Typography
-              variant="h6"
-              sx={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 600,
-              }}
-            >
-              Carregando ACES POKER Dashboard...
-            </Typography>
-          </Box>
-          <LinearProgress
-            sx={{
-              width: 250,
-              height: 6,
-              borderRadius: 3,
-              backgroundColor: 'rgba(245, 158, 11, 0.2)',
-              '& .MuiLinearProgress-bar': {
-                background: 'linear-gradient(135deg, #7c2d12 0%, #f59e0b 100%)',
-                borderRadius: 3,
-              },
-            }}
-          />
-        </Paper>
-      </Box>
-    );
-  }
-
   return (
     <Box sx={{ flexGrow: 1 }} className="animate-fadeInUp">
       {/* Header */}
