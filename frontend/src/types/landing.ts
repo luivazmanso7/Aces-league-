@@ -39,6 +39,7 @@ export interface EstatisticasLanding {
 export interface JogadorRanking {
   id: number;
   nome: string;
+  apelido?: string;
   pontuacao: number;
   posicao: number;
   torneiosParticipados: number;

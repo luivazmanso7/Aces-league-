@@ -1,3 +1,4 @@
+
 export interface Temporada {
   id: number;
   nome: string;

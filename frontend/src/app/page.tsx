@@ -48,16 +48,19 @@ import {
 import { PublicApiService } from "@/services/publicApi";
 import { temporadaApi } from "@/services/temporada.service";
 import { ProximoTorneio } from "@/types/landing";
-import { Ranking } from "@/types/temporada";
+import { JogadorRanking } from "@/types/landing";
 import { Logo } from "@/components/ui/Logo";
 import TournamentCard from "@/components/ui/TournamentCard";
 import { openWhatsAppForTournament } from "@/utils/whatsapp";
 
+
+
 export default function LandingPage() {
+
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [currentSeasonRanking, setCurrentSeasonRanking] = useState<Ranking[]>(
+  const [currentSeasonRanking, setCurrentSeasonRanking] = useState<JogadorRanking[]>(
     []
   );
   const [proximoTorneio, setProximoTorneio] = useState<ProximoTorneio | null>(
@@ -79,19 +82,14 @@ export default function LandingPage() {
     const carregarDados = async () => {
       try {
         setLoading(true);
-        const [currentSeasonData, torneioData] = await Promise.all([
-          temporadaApi.getTop10CurrentSeason(),
-          PublicApiService.getProximoTorneio(),
-        ]);
+        const temporadaAtual = await temporadaApi.findCurrent();
+        const rankingData = temporadaAtual
+          ? await PublicApiService.getRankingJogadores(temporadaAtual.id)
+          : [];
+        const torneioData = await PublicApiService.getProximoTorneio();
 
-        setCurrentSeasonRanking(currentSeasonData); // Top 10 da temporada atual
+        setCurrentSeasonRanking(rankingData);
         setProximoTorneio(torneioData);
-
-        // Debug: Log dos dados carregados
-        console.log("Dados carregados:", {
-          ranking: currentSeasonData,
-          torneio: torneioData,
-        });
       } catch (error) {
         console.error("Erro ao carregar dados da landing page:", error);
       } finally {
@@ -1651,7 +1649,7 @@ export default function LandingPage() {
                                 fontWeight: 600,
                               }}
                             >
-                              {(jogador.jogador?.nome || "J")
+                              {(jogador.nome || "J")
                                 .charAt(0)
                                 .toUpperCase()}
                             </Avatar>
@@ -1664,9 +1662,9 @@ export default function LandingPage() {
                                   lineHeight: 1.2,
                                 }}
                               >
-                                {jogador.jogador?.nome || "Jogador Anônimo"}
+                                {jogador.nome || "Jogador Anônimo"}
                               </Typography>
-                              {jogador.jogador?.apelido && (
+                              {jogador.apelido && (
                                 <Typography
                                   variant="body2"
                                   sx={{
@@ -1675,7 +1673,7 @@ export default function LandingPage() {
                                     fontStyle: "italic",
                                   }}
                                 >
-                                  &ldquo;{jogador.jogador.apelido}&rdquo;
+                                  &ldquo;{jogador.apelido}&rdquo;
                                 </Typography>
                               )}
                             </Box>

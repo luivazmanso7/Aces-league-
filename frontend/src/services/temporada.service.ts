@@ -51,14 +51,16 @@ export const temporadaApi = {
 
   // Buscar ranking da temporada atual
   getCurrentSeasonRanking: async (): Promise<Ranking[]> => {
-    const response = await api.get('/temporadas/current');
-    const temporadaAtual = response.data;
-    
-    if (temporadaAtual?.rankings) {
-      return temporadaAtual.rankings;
+    try {
+      const temporadaAtual = await temporadaApi.findCurrent();
+      if (temporadaAtual) {
+        return await temporadaApi.getRanking(temporadaAtual.id);
+      }
+      return [];
+    } catch (error) {
+      console.error('Erro ao buscar ranking da temporada atual:', error);
+      return [];
     }
-    
-    return [];
   },
 
   // Buscar top 10 da temporada atual especificamente

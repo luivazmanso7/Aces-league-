@@ -41,10 +41,10 @@ export class PublicApiService {
     }
   }
 
-  // Buscar ranking de jogadores da API
-  static async getRankingJogadores(): Promise<JogadorRanking[]> {
+  // Buscar ranking de jogadores da API para uma temporada específica
+  static async getRankingJogadores(temporadaId: number): Promise<JogadorRanking[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/public/api/ranking`);
+      const response = await fetch(`${API_BASE_URL}/public/api/temporadas/${temporadaId}/ranking`);
       if (!response.ok) throw new Error('Erro ao buscar ranking de jogadores');
       return await response.json();
     } catch (error) {
