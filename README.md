@@ -1,5 +1,5 @@
 #Plataforma de gerenciamento de liga de poker 
-https://www.acesleague.com.br/
+
 **
 [![Status](https://img.shields.io/badge/Status-Desenvolvido-brightgreen.svg)](https://github.com)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2015-black.svg)](https://nextjs.org/)
@@ -7,6 +7,9 @@ https://www.acesleague.com.br/
 [![Database](https://img.shields.io/badge/Database-MySQL-blue.svg)](https://www.mysql.com/)
 
 ## 📋 Sobre o Projeto
+
+
+https://www.acesleague.com.br/
 
 é uma plataforma completa desenvolvida para gerenciar uma liga de poker profissional. O sistema oferece uma landing page pública moderna para divulgação da liga  e um painel administrativo  para gestão completa de torneios, jogadores, temporadas e galeria de fotos.
 
