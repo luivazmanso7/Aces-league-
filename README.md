@@ -1,6 +1,5 @@
 #Plataforma de gerenciamento de liga de poker 
 
-**
 [![Status](https://img.shields.io/badge/Status-Desenvolvido-brightgreen.svg)](https://github.com)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2015-black.svg)](https://nextjs.org/)
 [![Backend](https://img.shields.io/badge/Backend-NestJS-red.svg)](https://nestjs.com/)
