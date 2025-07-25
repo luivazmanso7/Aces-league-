@@ -1,7 +1,7 @@
 #Plataforma de gerenciamento de liga de poker 
-
-
-[![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow.svg)](https://github.com)
+https://www.acesleague.com.br/
+**
+[![Status](https://img.shields.io/badge/Status-Desenvolvido-brightgreen.svg)](https://github.com)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2015-black.svg)](https://nextjs.org/)
 [![Backend](https://img.shields.io/badge/Backend-NestJS-red.svg)](https://nestjs.com/)
 [![Database](https://img.shields.io/badge/Database-MySQL-blue.svg)](https://www.mysql.com/)
@@ -42,18 +42,15 @@
 ## Funcionalidades Principais
 
 ###  Landing Page Pública
-- **Hero Section**: Apresentação visual impactante do clube
 - **Próximos Torneios**: Lista de eventos programados
 - **Rankings TOP 10**: Classificação dos melhores jogadores
-- **Galeria de Fotos**: Momentos marcantes organizados por categoria
 - **Design Responsivo**: Otimizado para todos os dispositivos
 
-### 🛠️ Painel Administrativo
+### Painel Administrativo
 - **Dashboard**: Visão geral com estatísticas e métricas
 - **Gestão de Jogadores**: CRUD completo com histórico de performance
 - **Controle de Torneios**: Criação, edição e gerenciamento de participações
 - **Temporadas**: Sistema de ciclos com reset automático de rankings
-- **Galeria Admin**: Upload e organização de fotos por categorias
 
 ### 📊 Sistema de Pontuação
 - **Regra Base**: 1 temporada = 12 torneios completos
@@ -107,10 +104,9 @@
 - **Jogadores**: Perfis completos com estatísticas
 - **Torneios**: Eventos com participações e resultados
 - **Temporadas**: Ciclos de competição com rankings
-- **Fotos**: Galeria organizada por categorias e eventos
 
 
-## Projeto em  Desenvolvimento
+## Projeto Desenvolvido
 
 
 
